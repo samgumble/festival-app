@@ -50,6 +50,11 @@ export function parseIso(s: string): Date {
   return new Date(t);
 }
 
+/** Epoch milliseconds of an ISO-with-offset timestamp (validated). The one way set times become numbers. */
+export function isoMs(s: string): number {
+  return parseIso(s).getTime();
+}
+
 export function formatTime(d: Date): string {
   return norm(TIME.format(d));
 }

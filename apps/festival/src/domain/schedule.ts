@@ -1,5 +1,5 @@
 import type { Artist, DayId, Festival, FestivalDay, FestivalSet, Stage } from "@bb/shared";
-import { dayWindow, fromDenver, minutesBetween, parseIso } from "./time";
+import { dayWindow, fromDenver, isoMs, minutesBetween, parseIso } from "./time";
 
 export type FestivalState = "pre" | "live" | "post";
 
@@ -18,7 +18,7 @@ export function festivalState(festival: Pick<Festival, "days">, now: Date): Fest
 export const setStart = (s: FestivalSet): Date => parseIso(s.start);
 export const setEnd = (s: FestivalSet): Date => parseIso(s.end);
 
-const byStart = (a: FestivalSet, b: FestivalSet) => Date.parse(a.start) - Date.parse(b.start);
+const byStart = (a: FestivalSet, b: FestivalSet) => isoMs(a.start) - isoMs(b.start);
 
 export function setsForDay(sets: FestivalSet[], dayId: DayId): FestivalSet[] {
   return sets.filter((s) => s.dayId === dayId).sort(byStart);
@@ -35,7 +35,7 @@ export function groupByStage(sets: FestivalSet[], stages: Stage[]): StageGroup[]
 
 export function nowPlaying(sets: FestivalSet[], now: Date): FestivalSet[] {
   const t = now.getTime();
-  return sets.filter((s) => Date.parse(s.start) <= t && t < Date.parse(s.end)).sort(byStart);
+  return sets.filter((s) => isoMs(s.start) <= t && t < isoMs(s.end)).sort(byStart);
 }
 
 /** Next sets to start, at most one per stage, soonest first. */
@@ -44,7 +44,7 @@ export function upNext(sets: FestivalSet[], now: Date, limit = 2): FestivalSet[]
   const taken = new Set<string>();
   const out: FestivalSet[] = [];
   for (const s of [...sets].sort(byStart)) {
-    if (Date.parse(s.start) <= t || taken.has(s.stageId)) continue;
+    if (isoMs(s.start) <= t || taken.has(s.stageId)) continue;
     taken.add(s.stageId);
     out.push(s);
     if (out.length >= limit) break;
@@ -53,11 +53,12 @@ export function upNext(sets: FestivalSet[], now: Date, limit = 2): FestivalSet[]
 }
 
 export function progress(set: FestivalSet, now: Date): number {
-  const a = Date.parse(set.start), b = Date.parse(set.end);
+  const a = isoMs(set.start), b = isoMs(set.end);
+  if (b <= a) return 1;
   return Math.max(0, Math.min(1, (now.getTime() - a) / (b - a)));
 }
 
-export const isEnded = (set: FestivalSet, now: Date): boolean => now.getTime() >= Date.parse(set.end);
+export const isEnded = (set: FestivalSet, now: Date): boolean => now.getTime() >= isoMs(set.end);
 export const minutesLeft = (set: FestivalSet, now: Date): number => minutesBetween(now, setEnd(set));
 
 export function headliners(artists: Artist[]): Artist[] {

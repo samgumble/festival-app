@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Festival } from "@bb/shared";
-import { dayIdFor, dayWindow, festivalNow, formatRange, formatTime, fromDenver, minutesBetween, norm, parseIso, toDenverParts } from "./time";
+import { dayIdFor, dayWindow, festivalNow, formatRange, formatTime, fromDenver, isoMs, minutesBetween, norm, parseIso, toDenverParts } from "./time";
 
 const festival = {
   days: [
@@ -24,6 +24,11 @@ describe("time (America/Denver)", () => {
   it("parses ISO with offset and rejects garbage", () => {
     expect(parseIso("2026-09-19T16:30:00-06:00").toISOString()).toBe("2026-09-19T22:30:00.000Z");
     expect(() => parseIso("Saturday 4:30 PM")).toThrow();
+  });
+
+  it("isoMs validates like parseIso", () => {
+    expect(isoMs("2026-09-19T16:30:00-06:00")).toBe(Date.UTC(2026, 8, 19, 22, 30));
+    expect(() => isoMs("2026-09-19T16:30:00")).toThrow();
   });
 
   it("formats times and ranges in Denver", () => {
