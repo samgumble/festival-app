@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Festival } from "@bb/shared";
-import { dayIdFor, dayWindow, festivalNow, formatRange, formatTime, fromDenver, isoMs, minutesBetween, norm, parseIso, toDenverParts } from "./time";
+import { dayIdFor, dayWindow, festivalNow, formatDuration, formatRange, formatTime, fromDenver, isoMs, minutesBetween, norm, parseIso, toDenverParts } from "./time";
 
 const festival = {
   days: [
@@ -73,5 +73,14 @@ describe("time (America/Denver)", () => {
     const w = dayWindow("2026-09-19");
     expect(w.start.toISOString()).toBe("2026-09-19T10:00:00.000Z");
     expect(w.end.toISOString()).toBe("2026-09-20T10:00:00.000Z");
+  });
+
+  it("formatDuration gives human-relative lead time for 'next up' copy", () => {
+    expect(formatDuration(-5)).toBe("on now");
+    expect(formatDuration(50)).toBe("in 50 min");
+    expect(formatDuration(95)).toBe("in 1h 35m");
+    expect(formatDuration(120)).toBe("in 2h");
+    expect(formatDuration(1560)).toBe("in 1 day");
+    expect(formatDuration(3000)).toBe("in 2 days");
   });
 });

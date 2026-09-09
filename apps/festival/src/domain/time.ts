@@ -84,3 +84,15 @@ export function dayWindow(dateKey: string): { start: Date; end: Date } {
 export function festivalNow(override?: string | null): Date {
   return override ? parseIso(override) : new Date();
 }
+
+/** Human-relative lead time for "next up" copy. */
+export function formatDuration(minutes: number): string {
+  if (minutes <= 0) return "on now";
+  if (minutes < 90) return `in ${minutes} min`;
+  if (minutes < 24 * 60) {
+    const h = Math.floor(minutes / 60), m = minutes % 60;
+    return m ? `in ${h}h ${m}m` : `in ${h}h`;
+  }
+  const d = Math.round(minutes / (24 * 60));
+  return `in ${d} day${d === 1 ? "" : "s"}`;
+}
