@@ -3,13 +3,13 @@
 You are working in the official companion-app monorepo for the Telluride Blues & Brews Festival (SBG Productions). Read `docs/HANDOFF.md` first, then `docs/PLAN.md`. Log every material decision in `docs/DECISIONS.md` and update the HANDOFF status board when a phase lands.
 
 ## Stack
-React 19 + Vite 8 + TypeScript (strict) · Tailwind v4 tokens · `motion` · React Router 7 · Zustand · Zod · Firebase (Auth, Firestore, Cloud Messaging, Functions v2, Hosting, App Check) · Capacitor 8 (iOS/Android) · Vitest · Playwright. npm workspaces: `apps/festival`, `apps/admin`, `packages/shared`, `packages/content`, `functions`.
+React 19 + Vite 8 + TypeScript (strict) · Tailwind v4 tokens · `motion` · React Router 7 · Zustand · Zod · Firebase (Auth, Firestore, Cloud Messaging, Functions v2, Hosting, App Check) · Capacitor 8 (iOS/Android) · Vitest · Playwright. npm workspaces: `apps/festival`, `packages/shared`, `packages/content` (admin console lives in the separate festival-admin repo, D-018).
 
 ## Rules
 - Never commit: `*.psd`, `google-services.json`, `GoogleService-Info.plist`, `*.p8`, `*.p12`, `*.keystore`, `*.jks`, `.env*`.
 - Never invent festival content (artists, times, stages, bios, images). Data comes from `packages/content` (seeded from official sources) or the admin console.
 - No analytics/ads/tracking SDKs. Firebase Analytics stays off.
-- All schedule time math goes through `packages/shared/src/time.ts` in `America/Denver`.
+- All schedule time math goes through `apps/festival/src/domain/time.ts` in `America/Denver`.
 - Remote content must pass the Zod schema in `packages/shared/src/schema.ts` before replacing cached content.
 - Firestore writes only via rules-protected paths and the `publishContent` callable. Do not loosen `firebase/firestore.rules`.
 - Every animation has a `prefers-reduced-motion` fallback; every screen renders from `bundled.json` offline.
@@ -24,4 +24,4 @@ React 19 + Vite 8 + TypeScript (strict) · Tailwind v4 tokens · `motion` · Rea
 - Default festival "now" in dev: `VITE_FESTIVAL_NOW=2026-09-19T15:40:00-06:00` for live-state demos; production ignores it.
 
 ## Commands
-`npm run dev` · `npm run dev:admin` · `npm run emulators` · `npm run seed` · `npm run test` · `npm run test:rules` · `npm run build` · `npm run cap:sync` · `npm run cap:ios` · `npm run cap:android`
+`npm run dev` · `npm test` · `npm run typecheck` · `npm run build` · `npm run content:build` · `npm run screenshots` (the Firebase/Capacitor commands return when those days land).

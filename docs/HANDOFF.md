@@ -38,12 +38,12 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Area | State | Notes |
 |---|---|---|
 | Plan approved | ✅ Sep 9 | stack, backend, scope, timeline chosen with Sam |
-| Repo scaffold | 🟡 | GitHub repos created Sep 9; monorepo scaffold is Task 1 of the design-pass plan |
+| Repo scaffold | ✅ Sep 9 | npm workspaces: apps/festival, packages/shared, packages/content (`festival-app`) |
 | Firebase project + rules | ⬜ | Day 0; Blaze plan needed for Functions |
-| Design tokens + fonts | 🟡 | Palette locked D-016; spec approved; implementation next (design pass) |
-| Content seed | ⬜ | Day 0; re-verify against official schedule first |
-| Now / Lineup | ⬜ | Day 1 |
-| Plan / Alerts / Info / PWA | ⬜ | Day 2 |
+| Design tokens + fonts | ✅ | Palette locked D-016; Tailwind v4 theme; Bungee/Bungee Shade/Michroma/DM Sans bundled |
+| Content seed | ✅ (bundled) | `packages/content/content-2026.json` from Sep 8 verified data + poster comedy names; Firestore seed still Day 3; re-verify vs official schedule before beta |
+| Now / Lineup | ✅ design pass | all states via dev clock; screenshots in `docs/screens/design-pass/` |
+| Plan / Alerts / Info / PWA | 🟡 | Plan/Alerts/Info at rough fidelity (alerts from fixture); PWA/service worker not started |
 | Admin console + Functions | ⬜ | Day 3 |
 | Web beta live for SBG | ⬜ | Sat Sep 12 |
 | Native (icons, push, notifications) | ⬜ | Day 4 |
@@ -111,3 +111,4 @@ Apple Silicon. Node 22.x, npm 10.x. Xcode 26.x installed, license accepted; **iO
 | 2026-09-09 | Fable 5.1 / Cowork | Fresh-start plan approved: React+Vite+Capacitor, Firebase, new repo, store attempt by Sep 14; docs written |
 | 2026-09-09 | Fable 5.1 / Cowork | Store gap review → `STORE-CHECKLIST.md`; PLAN §8 corrected (age rating, iPhone-only, targetSdk 36, 5.2.1 authorization); D-015 |
 | 2026-09-09 | Fable 5.1 / Claude Code | Working tree cleared of the old prototype; design-system + five-screen mockups approved; palette locked (D-016); local design-pass spec written (D-017) |
+| 2026-09-09 | Claude Code | Design pass implemented per `docs/superpowers/plans/2026-09-09-festival-app-design-pass.md`: tokens, ornaments, primitives, shell, five screens, domain tests, screenshots |
