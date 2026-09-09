@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { Festival } from "@bb/shared";
-import { dayIdFor, festivalNow, formatRange, formatTime, fromDenver, minutesBetween, norm, parseIso, toDenverParts } from "./time";
+import { dayIdFor, dayWindow, festivalNow, formatRange, formatTime, fromDenver, minutesBetween, norm, parseIso, toDenverParts } from "./time";
 
 const festival = {
   days: [
@@ -49,5 +49,24 @@ describe("time (America/Denver)", () => {
   it("festivalNow honors an override", () => {
     expect(festivalNow("2026-09-19T15:40:00-06:00").toISOString()).toBe("2026-09-19T21:40:00.000Z");
     expect(Math.abs(festivalNow(null).getTime() - Date.now())).toBeLessThan(1000);
+  });
+
+  it("parseIso rejects timestamps without an explicit offset", () => {
+    expect(() => parseIso("2026-09-19T16:30:00")).toThrow();
+    expect(() => parseIso("2026-09-19T16:30:00.000")).toThrow();
+    expect(parseIso("2026-09-19T22:30:00Z").toISOString()).toBe("2026-09-19T22:30:00.000Z");
+  });
+
+  it("fromDenver is exact across the spring-forward transition", () => {
+    // 2026-03-08 02:00 MST → 03:00 MDT. 03:30 local is MDT (UTC-6) = 09:30Z.
+    expect(fromDenver("2026-03-08", "03:30").toISOString()).toBe("2026-03-08T09:30:00.000Z");
+    // Fall-back day, unambiguous afternoon time: 2026-11-01 15:00 MST (UTC-7) = 22:00Z.
+    expect(fromDenver("2026-11-01", "15:00").toISOString()).toBe("2026-11-01T22:00:00.000Z");
+  });
+
+  it("dayWindow spans 4 AM to 4 AM Denver", () => {
+    const w = dayWindow("2026-09-19");
+    expect(w.start.toISOString()).toBe("2026-09-19T10:00:00.000Z");
+    expect(w.end.toISOString()).toBe("2026-09-20T10:00:00.000Z");
   });
 });

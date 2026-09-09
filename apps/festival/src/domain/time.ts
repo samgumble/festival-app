@@ -29,19 +29,24 @@ export function toDenverParts(d: Date): DenverParts {
   };
 }
 
-/** Instant for a Denver wall-clock time. Correct away from DST transitions (the festival is mid-September). */
+/** Instant for a Denver wall-clock time. Two-pass offset resolution keeps it exact across DST transitions. */
 export function fromDenver(dateKey: string, hhmm: string): Date {
   const [y, m, d] = dateKey.split("-").map(Number) as [number, number, number];
   const [hh, mm] = hhmm.split(":").map(Number) as [number, number];
   const guess = Date.UTC(y, m - 1, d, hh, mm);
-  const p = toDenverParts(new Date(guess));
-  const asUtc = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute);
-  return new Date(guess - (asUtc - guess));
+  const offsetAt = (ms: number) => {
+    const p = toDenverParts(new Date(ms));
+    return Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute) - ms;
+  };
+  const first = guess - offsetAt(guess);
+  return new Date(guess - offsetAt(first));
 }
+
+const ISO_WITH_OFFSET = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?(Z|[+-]\d{2}:\d{2})$/;
 
 export function parseIso(s: string): Date {
   const t = Date.parse(s);
-  if (Number.isNaN(t) || !/^\d{4}-\d{2}-\d{2}T/.test(s)) throw new Error(`Not an ISO timestamp: ${s}`);
+  if (Number.isNaN(t) || !ISO_WITH_OFFSET.test(s)) throw new Error(`Not an ISO timestamp with offset: ${s}`);
   return new Date(t);
 }
 
