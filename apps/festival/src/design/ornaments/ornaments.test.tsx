@@ -19,4 +19,20 @@ describe("ornaments", () => {
     rerender(<SunRays spinning={false} />);
     expect(container.querySelector(".animate-rays")).toBeNull();
   });
+
+  it("RainbowArch scopes its pattern id per instance", () => {
+    const { container } = render(<div><RainbowArch /><RainbowArch /></div>);
+    const ids = [...container.querySelectorAll("pattern")].map((p) => p.id);
+    expect(ids.length).toBe(2);
+    expect(new Set(ids).size).toBe(2);
+    const refs = [...container.querySelectorAll("path[stroke^='url(#']")].map((p) => p.getAttribute("stroke"));
+    expect(refs).toEqual(ids.map((id) => `url(#${id})`));
+  });
+
+  it("Butterfly drifts only when asked", () => {
+    const { container, rerender } = render(<Butterfly />);
+    expect(container.querySelector(".animate-drift")).not.toBeNull();
+    rerender(<Butterfly drifting={false} />);
+    expect(container.querySelector(".animate-drift")).toBeNull();
+  });
 });
