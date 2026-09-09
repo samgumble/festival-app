@@ -24,3 +24,6 @@ android/app/build/
 
 # Licensed editable artwork stays local/source-only; never commit or ship it.
 SBG Content/*.psd
+
+# brainstorming visual companion sessions
+.superpowers/

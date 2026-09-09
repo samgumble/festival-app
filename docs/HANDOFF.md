@@ -1,0 +1,112 @@
+# HANDOFF — Telluride Blues & Brews Festival App
+
+**Read this first in every new session (Claude Code, Codex, Cowork, Fable).** Keep it current: whenever a decision changes or a milestone lands, edit this file and append to `DECISIONS.md` in the same commit.
+
+Last updated: 2026-09-09 (planning session, Fable 5.1 in Cowork) · Next owner: Claude Code (implementation, Day 0–1)
+
+---
+
+## 1. Thirty-second brief
+
+Sam Gumble is building, as a favor for SBG Productions (the festival's producer), the official companion app for the **Telluride Blues & Brews Festival, Sep 18–20, 2026**. Two deliverables:
+
+1. **Fan app** — React 19 + Vite 8 PWA wrapped with Capacitor 8 for iOS and Android. Offline-first. Tabs: Now · Lineup · Plan · Alerts · Info. No fan accounts, no analytics, no ads.
+2. **Admin console** — separate React app on Firebase Hosting, Firebase Auth (email/password, 1–3 named SBG staff), edits lineup/schedule in Firestore and sends push alerts through one Cloud Function. Changes reach fans without an app update.
+
+Target: attempt store submission **Mon Sep 14**; the web app on GitHub Pages ships **Sat Sep 12** no matter what. Stores are expected to be fully live before the January 2027 lineup announcement.
+
+This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/music-app` repo (`main` = vanilla JS + Capacitor, `expo-v2` = Expo Router). Do not copy code from them. Do reuse: the verified content data (`data/content.json` on old `main`), the font-license notes (`FONT_LICENSES.md`), and the App Review notes as a starting point.
+
+## 2. Where things are
+
+| Thing | Location |
+|---|---|
+| Plan, decisions, asset brief, store checklist | `docs/PLAN.md`, `docs/DECISIONS.md`, `docs/ASSET-BRIEF.md`, `docs/STORE-CHECKLIST.md` (this folder) |
+| Repo rules for agents | `CLAUDE.md` at repo root |
+| Licensed artwork (never commit the PSD) | `SBG Content/` on Sam's Mac: `16x28 commemorative poster.psd` (1.74 GB), `2026-poster-logo-png.png` (800×350 lockup), `2026-Dates-Center.png` (1350×506 sun lockup), `SBG-logo-png.png` (312×312), `poster-preview-1080x1890.png` (flattened derivative) |
+| Exported poster layers (as they land) | `apps/festival/public/art/` per naming in `ASSET-BRIEF.md` |
+| Old prototype (reference only) | github.com/samgumble/music-app — `main` and `expo-v2` |
+| New repo | *(Sam creates; private; record the URL here)* |
+| Firebase project | *(record project ID here once created; console owner: Sam → SBG)* |
+| Store records | Apple + Google accounts pending approval as of Sep 9; record team IDs / app IDs here when created |
+| Official content sources | tellurideblues.com `/lineup`, `/schedule`, `/faqs`, the 2026 festival guide news post |
+| Claude Project | "Blues and Brews Fable 5.1" — mirrors these docs |
+
+## 3. Status board
+
+| Area | State | Notes |
+|---|---|---|
+| Plan approved | ✅ Sep 9 | stack, backend, scope, timeline chosen with Sam |
+| Repo scaffold | ⬜ | Day 0 |
+| Firebase project + rules | ⬜ | Day 0; Blaze plan needed for Functions |
+| Design tokens + fonts | 🟡 | Palette locked D-016; spec approved; implementation next (design pass) |
+| Content seed | ⬜ | Day 0; re-verify against official schedule first |
+| Now / Lineup | ⬜ | Day 1 |
+| Plan / Alerts / Info / PWA | ⬜ | Day 2 |
+| Admin console + Functions | ⬜ | Day 3 |
+| Web beta live for SBG | ⬜ | Sat Sep 12 |
+| Native (icons, push, notifications) | ⬜ | Day 4 |
+| TestFlight / Play closed test | ⬜ | Mon Sep 14 |
+| iOS submitted | ⬜ | Mon Sep 14 — follow `STORE-CHECKLIST.md` §8 |
+| Store accounts / ownership decided | ⬜ | STORE-CHECKLIST §0 — urgent: SBG vs Sam accounts, Play account type, authorization letter |
+| Poster layers exported | ⬜ | Sam, in parallel — see ASSET-BRIEF |
+| Generated supporting art | ⬜ | Sam via ChatGPT — see ASSET-BRIEF |
+
+## 4. How we work
+
+- **Fable 5.1 (Cowork)** plans, designs, reviews screenshots and docs, writes copy. **Claude Code** (with the GSD workflow: `/gsd:new-project` → discuss → plan → execute per phase) implements. Sam runs Xcode/Android Studio, Firebase console, store consoles, and Photoshop.
+- Small, atomic commits with conventional prefixes (`feat(lineup): …`, `chore(ci): …`). PRs optional while solo; CI must be green on `main` because `main` deploys.
+- Every feature phase ends with: unit tests for domain logic, a 390×844 and 1440×900 screenshot set in `docs/screens/<phase>/`, and a HANDOFF status update.
+- Ask Sam before: adding any third-party SDK beyond the approved list, changing the content schema after Day 3 (admin depends on it), any store-console action, anything that costs money.
+
+## 5. Guardrails (non-negotiable)
+
+1. **Never commit** the PSD, `google-services.json`, `GoogleService-Info.plist`, `.p8`/`.p12`/keystores, or `.env*`. `.gitignore` covers them; check anyway.
+2. **Never invent content.** Artist names, set times, stages, venue facts come only from official SBG sources or the admin console. No AI-generated bios, genres, or artist imagery. Generated art is limited to supporting illustration in the poster's style (ASSET-BRIEF §3).
+3. **No analytics, ads, or tracking SDKs.** Firebase Analytics stays disabled (`analytics` not initialized; on native, set `FirebaseAppDelegateProxyEnabled`/analytics collection flags off). Push topic subscription only; no fan identifiers stored by us.
+4. **Official lockups are images, unmodified.** No re-typesetting "Telluride Blues & Brews" in a substitute font as a logo.
+5. **All schedule math in `America/Denver`** through `packages/shared/time.ts`. Never `new Date(string)` on wall-clock strings.
+6. **Remote content is validated with Zod before it can replace cached content.** Invalid remote data never wins.
+7. **Reduced motion and offline** are first-class: every animation has a static fallback; every screen renders from the bundled snapshot with no network.
+8. **Admin writes only through rules-protected paths and the `publishContent` callable.** Never widen Firestore rules to make a demo work.
+
+## 6. Approved dependency list
+
+`react`, `react-dom`, `react-router`, `zustand`, `zod`, `motion`, `tailwindcss` (v4) + `@tailwindcss/vite`, `firebase` (app, auth, firestore, messaging, functions, app-check), `vite`, `vite-plugin-pwa`, `@capacitor/core|cli|ios|android`, `@capacitor/local-notifications`, `@capacitor/haptics`, `@capacitor/preferences`, `@capacitor/share`, `@capacitor/status-bar`, `@capacitor/splash-screen`, `@capacitor/app`, `@capacitor-firebase/messaging`, `vitest`, `@playwright/test`, `@firebase/rules-unit-testing`, `firebase-tools`, `firebase-functions`, `firebase-admin`, `eslint`, `prettier`, `typescript`. Pin exact versions at install time (registry lookups were unavailable from the planning sandbox; expect Capacitor 8.5.x, Vite 8.x, React 19.2.x, Firebase JS SDK 12.x). Anything else: ask.
+
+## 7. Commands (target shape — make these real on Day 0)
+
+```bash
+npm install                          # workspaces
+npm run dev                          # festival app on http://localhost:5173
+npm run dev:admin                    # admin console on :5174 (uses Firebase emulators if FIREBASE_EMULATOR=1)
+npm run emulators                    # firestore + auth + functions emulators with seed data
+npm run seed                         # packages/content → Firestore (emulator or --project)
+npm run test                         # vitest across workspaces
+npm run test:rules                   # firestore rules against emulator
+npm run build                        # festival app → apps/festival/dist (+ bundled.json refreshed)
+npm run build:admin
+npm run cap:sync                     # build + npx cap sync
+npm run cap:ios / cap:android        # open Xcode / Android Studio
+npm run screenshots                  # playwright device-size screenshots into docs/screens
+```
+
+## 8. Environment on Sam's Mac (from the Sep 8 prototype; re-verify)
+
+Apple Silicon. Node 22.x, npm 10.x. Xcode 26.x installed, license accepted; **iOS platform/Simulator runtime may still need installing** (Xcode → Settings → Components). CocoaPods present (Capacitor 8 iOS uses SPM). Android Studio: an Intel build was installed by mistake earlier — **install the Apple Silicon (ARM64) build**, then SDK + JDK 21 via its wizard. Photoshop available for PSD layer export.
+
+## 9. Next actions (in order)
+
+1. Sam: answer the open questions in `PLAN.md §12` (Play account type is the urgent one); create the private repo; create the Firebase project on Blaze; start the PSD layer export from `ASSET-BRIEF.md`.
+2. Claude Code Day 0: scaffold per `PLAN.md §3.2`, tokens/fonts, content package + seed, rules + tests, CI + Pages deploy, update this file's Status board and record repo/project IDs above.
+3. Fable: review Day 1 screenshots against `PLAN.md §5`; write store listing copy and privacy policy into `docs/store/`.
+
+## 10. Session log
+
+| Date | Who | What |
+|---|---|---|
+| 2026-09-01 | Cowork | First plan (Expo two-tier) — superseded |
+| 2026-09-08 | Codex | Vanilla-JS/Capacitor flagship UI deployed to Pages; Expo v2 branch — both superseded |
+| 2026-09-09 | Fable 5.1 / Cowork | Fresh-start plan approved: React+Vite+Capacitor, Firebase, new repo, store attempt by Sep 14; docs written |
+| 2026-09-09 | Fable 5.1 / Cowork | Store gap review → `STORE-CHECKLIST.md`; PLAN §8 corrected (age rating, iPhone-only, targetSdk 36, 5.2.1 authorization); D-015 |
+| 2026-09-09 | Fable 5.1 / Claude Code | Working tree cleared of the old prototype; design-system + five-screen mockups approved; palette locked (D-016); local design-pass spec written (D-017) |
