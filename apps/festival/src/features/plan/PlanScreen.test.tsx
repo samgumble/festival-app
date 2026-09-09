@@ -30,6 +30,8 @@ describe("Plan", () => {
     fireEvent.click(screen.getByRole("button", { name: /swap/i }));
     expect(usePlanStore.getState().resolutions).toEqual({ [`${ALBERT}|${MUSSEL}`]: ALBERT });
     expect(screen.getByText(/keeping albert white/i)).toBeInTheDocument();
+    // the loser nests under its new winner — still two rows (pair + Taj), not three
+    expect(screen.getAllByTestId("plan-row").length).toBe(2);
   });
 
   it("day control carries per-day counts", async () => {
@@ -51,11 +53,29 @@ describe("Plan", () => {
 
   it("renders a chain where the middle set loses (orphan loser still gets a Swap)", async () => {
     // Nigel Wearne Camp 12:30–1:30 × Derrick Dove Blues 1:00–2:00 × Judith Hill Main 1:30–2:30 (Nigel and Judith don't overlap)
-    usePlanStore.setState({ favorites: ["sat-nigel-wearne-camp-1230", "sat-derrick-dove-blues-1300", "sat-judith-hill-main-1330"] });
+    usePlanStore.setState({
+      favorites: ["sat-nigel-wearne-camp-1230", "sat-derrick-dove-blues-1300", "sat-judith-hill-main-1330"],
+      settings: { leadMinutes: 15, bufferMinutes: 0 },
+    });
     renderAt("/plan");
     expect(await screen.findByText("Nigel Wearne & The Spectres")).toBeInTheDocument();
     expect(screen.getByText("Derrick Dove & The Peacekeepers")).toBeInTheDocument();
     expect(screen.getByText("Judith Hill")).toBeInTheDocument();
     expect(screen.getAllByRole("button", { name: /swap/i }).length).toBe(2);
+    // Nigel keeps Dove beneath him; Judith (only opponent Dove is lost) stands alone with a Swap
+    expect(screen.getAllByTestId("plan-row").length).toBe(2);
+  });
+
+  it("after swapping in a chain, the swapped-in set claims its loser", async () => {
+    usePlanStore.setState({
+      favorites: ["sat-nigel-wearne-camp-1230", "sat-derrick-dove-blues-1300", "sat-judith-hill-main-1330"],
+      settings: { leadMinutes: 15, bufferMinutes: 0 },
+      resolutions: { "sat-derrick-dove-blues-1300|sat-judith-hill-main-1330": "sat-judith-hill-main-1330" },
+    });
+    renderAt("/plan");
+    await screen.findByText("Judith Hill");
+    // Nigel (kept) claims Dove (lost); Judith (kept) has no lost partner left → 2 rows, 1 Swap
+    expect(screen.getAllByTestId("plan-row").length).toBe(2);
+    expect(screen.getAllByRole("button", { name: /swap/i }).length).toBe(1);
   });
 });

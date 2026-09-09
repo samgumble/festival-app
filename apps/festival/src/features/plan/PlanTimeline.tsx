@@ -43,29 +43,34 @@ export function PlanTimeline({ sets, now }: { sets: FestivalSet[]; now: Date }) 
   const lostIds = lostSetIds(conflicts, resolutions);
   const conflictsOf = (id: string) => conflicts.filter((c) => c.a.id === id || c.b.id === id);
   const other = (c: Conflict, id: string) => (c.a.id === id ? c.b : c.a);
-  const rendered = new Set<string>();
-  const rows: { lead: FestivalSet; leadConflict?: Conflict; lost: { set: FestivalSet; conflict: Conflict }[] }[] = [];
+
+  // Pass 1: every kept set claims the lost opponents nobody has claimed yet (in start order, so the
+  // earliest winner takes a shared loser). Pass 2 renders in start order: kept sets solid with their
+  // claimed losers dashed beneath; a loser whose opponents are all lost themselves renders on its own.
+  const claimedBy = new Map<string, string>();
   for (const s of sets) {
-    if (rendered.has(s.id)) continue;
-    rendered.add(s.id);
-    const mine = conflictsOf(s.id);
-    if (lostIds.has(s.id)) {
-      // orphan loser: every opponent is itself lost; show it dashed with Swap against the first conflict it lost
-      rows.push({ lead: s, leadConflict: mine[0], lost: [] });
-      continue;
+    if (lostIds.has(s.id)) continue;
+    for (const c of conflictsOf(s.id)) {
+      const o = other(c, s.id);
+      if (lostIds.has(o.id) && !claimedBy.has(o.id)) claimedBy.set(o.id, s.id);
     }
-    const lost = mine
-      .map((c) => ({ set: other(c, s.id), conflict: c }))
-      .filter(({ set }) => lostIds.has(set.id) && !rendered.has(set.id));
-    for (const l of lost) rendered.add(l.set.id);
-    rows.push({ lead: s, leadConflict: mine[0], lost });
   }
+  const rows = sets
+    .filter((s) => !lostIds.has(s.id) || !claimedBy.has(s.id))
+    .map((lead) => {
+      const mine = conflictsOf(lead.id);
+      const lost = lostIds.has(lead.id)
+        ? []
+        : mine.map((c) => ({ set: other(c, lead.id), conflict: c })).filter(({ set }) => claimedBy.get(set.id) === lead.id);
+      return { lead, leadConflict: mine[0], lost };
+    });
+
   return (
     <div className="mt-4">
       {rows.map(({ lead, leadConflict, lost }) => {
         const leadLost = lostIds.has(lead.id);
         return (
-          <div key={lead.id} className="relative grid grid-cols-[56px_1fr] gap-2.5">
+          <div key={lead.id} data-testid="plan-row" className="relative grid grid-cols-[56px_1fr] gap-2.5">
             <div className="pt-3 text-[13px] font-semibold leading-4 text-fg-soft tabular-nums">{formatTime(parseIso(lead.start)).replace(" ", "\n")}</div>
             <span aria-hidden="true" className={`absolute left-[46px] top-4 h-2.5 w-2.5 rounded-chip border-2 border-surface ${leadConflict ? "bg-ember" : "bg-sky"}`} />
             <span aria-hidden="true" className="absolute -bottom-3 left-[50px] top-6 w-0.5 bg-hair" />
