@@ -26,7 +26,8 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Licensed artwork (never commit the PSD) | `SBG Content/` on Sam's Mac: `16x28 commemorative poster.psd` (1.74 GB), `2026-poster-logo-png.png` (800×350 lockup), `2026-Dates-Center.png` (1350×506 sun lockup), `SBG-logo-png.png` (312×312), `poster-preview-1080x1890.png` (flattened derivative) |
 | Exported poster layers (as they land) | `apps/festival/public/art/` per naming in `ASSET-BRIEF.md` |
 | Old prototype (reference only) | github.com/samgumble/music-app — `main` and `expo-v2` |
-| New repo | *(Sam creates; private; record the URL here)* |
+| Fan app repo | https://github.com/samgumble/festival-app (public, generic name for now) — this monorepo |
+| Admin console repo | https://github.com/samgumble/festival-admin (public; built Day 3, separate from the monorepo per D-018) |
 | Firebase project | *(record project ID here once created; console owner: Sam → SBG)* |
 | Store records | Apple + Google accounts pending approval as of Sep 9; record team IDs / app IDs here when created |
 | Official content sources | tellurideblues.com `/lineup`, `/schedule`, `/faqs`, the 2026 festival guide news post |
@@ -37,7 +38,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Area | State | Notes |
 |---|---|---|
 | Plan approved | ✅ Sep 9 | stack, backend, scope, timeline chosen with Sam |
-| Repo scaffold | ⬜ | Day 0 |
+| Repo scaffold | 🟡 | GitHub repos created Sep 9; monorepo scaffold is Task 1 of the design-pass plan |
 | Firebase project + rules | ⬜ | Day 0; Blaze plan needed for Functions |
 | Design tokens + fonts | 🟡 | Palette locked D-016; spec approved; implementation next (design pass) |
 | Content seed | ⬜ | Day 0; re-verify against official schedule first |

@@ -69,3 +69,8 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **D-017 · 2026-09-09 · Accepted** — **First implementation pass is a local design pass: real code, all five tabs at rough fidelity, no backend.** Repo shape: monorepo with only `apps/festival`, `packages/shared`, `packages/content`; `apps/admin`, `functions`, `firebase/` are created on their plan days. Hero art uses flattened-poster crops under the ASSET-BRIEF file names; all other ornaments are code-drawn SVG/CSS. Spec: `docs/superpowers/specs/2026-09-09-festival-app-design-pass-design.md`.
 *Alternatives:* mockups-then-code; Now + Lineup only; flat single app refactored later.
 *Consequences:* design decisions land as shippable components; Firestore/Capacitor/PWA attach behind existing interfaces (`ContentRepository`, `platform/`) without screen changes.
+
+**D-018 · 2026-09-09 · Accepted** — **Two public GitHub repositories with generic names: `samgumble/festival-app` (fan app monorepo: `apps/festival`, `packages/shared`, `packages/content`) and `samgumble/festival-admin` (SBG console).** Supersedes the single-private-repo assumption in D-001/D-009 and removes `apps/admin` from the monorepo layout in PLAN §3.2.
+*Context:* Sam wants the app and the admin console in separate repos, public for now, with names that don't advertise the festival until launch.
+*Alternatives:* one private monorepo (original plan); private repos.
+*Consequences:* the admin console must consume `@bb/shared` (schema, tokens) from another repo — decide on Day 3 between publishing `@bb/shared` to GitHub Packages or vendoring via git subtree. Licensed artwork derivatives (poster preview, lockups) are publicly visible; the PSD remains git-ignored and local. `docs/HANDOFF.md §2` records both URLs.
