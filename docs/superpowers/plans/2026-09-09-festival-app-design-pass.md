@@ -142,6 +142,8 @@ docs/screens/design-pass/            screenshots (committed)
 save-exact=true
 ```
 
+(Note: the festival `test` script carries `NODE_OPTIONS=--no-experimental-webstorage` because Node ≥ 22 exposes an experimental global `localStorage` that shadows jsdom's inside Vitest; without the flag `zustand/persist` has no working storage. Discovered in Task 11.)
+
 - [ ] **Step 2: packages/shared skeleton**
 
 `packages/shared/package.json`:
@@ -197,7 +199,7 @@ export const SHARED_OK = true;
     "dev": "vite --host --port 5173",
     "build": "tsc -p tsconfig.json && vite build",
     "preview": "vite preview --port 5173",
-    "test": "vitest run",
+    "test": "NODE_OPTIONS=--no-experimental-webstorage vitest run",
     "typecheck": "tsc -p tsconfig.json",
     "screenshots": "playwright test"
   },
@@ -310,9 +312,21 @@ export function App() {
 }
 ```
 
-`apps/festival/src/test/setup.ts`:
+`apps/festival/src/test/setup.ts` (final form — the cleanup and matchMedia shims were added in Task 12 when the shell tests first ran):
 ```ts
 import "@testing-library/jest-dom/vitest";
+import { afterEach } from "vitest";
+import { cleanup } from "@testing-library/react";
+
+// Vitest runs without `test.globals`, so @testing-library/react's automatic afterEach cleanup never registers.
+afterEach(() => cleanup());
+
+// jsdom does not implement matchMedia; useApplyTheme() needs it.
+if (!window.matchMedia) {
+  window.matchMedia = (query: string) =>
+    ({ matches: false, media: query, onchange: null, addListener: () => {}, removeListener: () => {},
+       addEventListener: () => {}, removeEventListener: () => {}, dispatchEvent: () => false }) as MediaQueryList;
+}
 ```
 
 - [ ] **Step 5: Move CLAUDE.md, extend .gitignore**
@@ -1109,7 +1123,7 @@ git commit -m "feat(design): locked tokens as tailwind theme, bundled OFL fonts,
 - Test: `apps/festival/src/design/ornaments/ornaments.test.tsx`
 
 **Interfaces:**
-- Produces: `CheckerRibbon({ className?, rows? })`, `RainbowArch({ className?, width?, height? })` (frames its parent: absolutely positioned SVG with `preserveAspectRatio="none"`), `SunRays({ size?, className?, spinning? })`, `Columbine({ size?, className? })`, `Mountains({ className? })`, `Butterfly({ className?, drifting? })`. All `aria-hidden`.
+- Produces: `CheckerRibbon({ className?, rows? })`, `RainbowArch({ className? })` (frames its parent: absolutely positioned SVG with `preserveAspectRatio="none"`; pattern id scoped per instance with `useId`), `SunRays({ size?, className?, spinning? })`, `Columbine({ size?, className? })`, `Mountains({ className? })`, `Butterfly({ className?, drifting?, size? })`. All `aria-hidden`.
 
 - [ ] **Step 1: Write the failing test**
 
@@ -1410,14 +1424,13 @@ const VARIANT = {
 };
 const SIZE = { md: "h-12 px-5 text-[16px] rounded-ctl", sm: "h-9 px-3.5 text-[14px] rounded-[10px]" };
 
+/** The button look as a class string — for `Link`s that must look like buttons without nesting a <button> in an <a>. */
+export function buttonClasses({ variant = "ghost", size = "md", full = false, className = "" }: Pick<Props, "variant" | "size" | "full" | "className"> = {}): string {
+  return `inline-flex items-center justify-center gap-2 font-semibold leading-6 transition-transform duration-150 active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 disabled:opacity-50 ${VARIANT[variant]} ${SIZE[size]} ${full ? "w-full" : ""} ${className}`;
+}
+
 export function Button({ variant = "ghost", size = "md", full = false, className = "", type = "button", ...rest }: Props) {
-  return (
-    <button
-      type={type}
-      className={`inline-flex items-center justify-center gap-2 font-semibold leading-6 transition-transform duration-150 active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 disabled:opacity-50 ${VARIANT[variant]} ${SIZE[size]} ${full ? "w-full" : ""} ${className}`}
-      {...rest}
-    />
-  );
+  return <button type={type} className={buttonClasses({ variant, size, full, className })} {...rest} />;
 }
 ```
 
@@ -1490,7 +1503,7 @@ export function Heart({ on, onToggle, label }: { on: boolean; onToggle: () => vo
     <button type="button" aria-pressed={on} aria-label={label} onClick={onToggle}
       className="grid h-12 w-12 shrink-0 place-items-center rounded-chip border border-hair bg-surface">
       <motion.span key={on ? "bloom" : "heart"} className="grid place-items-center"
-        initial={ok ? { scale: 0.8 } : false} animate={{ scale: [0.8, 1.15, 1] }} transition={ok ? SPRING_BLOOM : { duration: 0 }}>
+        initial={ok ? { scale: 0.8 } : false} animate={{ scale: 1 }} transition={ok ? SPRING_BLOOM : { duration: 0 }}> {/* the underdamped spring overshoots past 1 and settles — Motion springs accept only two keyframes */}
         {on ? (
           <Columbine size={26} />
         ) : (
@@ -1569,7 +1582,7 @@ export function Sheet({ onClose, title, children }: { onClose: () => void; title
 
 `apps/festival/src/design/index.ts`:
 ```ts
-export { Button } from "./Button";
+export { Button, buttonClasses } from "./Button";
 export { Card } from "./Card";
 export { Chip, type ChipTone } from "./Chip";
 export { Eyebrow } from "./Eyebrow";
@@ -1607,7 +1620,7 @@ git commit -m "feat(design): primitives (button, card, chip, segmented, heart→
 - Test: `apps/festival/src/domain/time.test.ts`
 
 **Interfaces:**
-- Produces: `TZ`, `toDenverParts(d: Date): DenverParts`, `fromDenver(dateKey: string, hhmm: string): Date`, `parseIso(s: string): Date`, `formatTime(d: Date): string` ("4:30 PM"), `formatRange(a: Date, b: Date): string` ("4:30 – 5:40 PM"), `minutesBetween(a: Date, b: Date): number`, `dayIdFor(now: Date, festival: Festival): DayId | null` (4 AM rollover), `festivalNow(override?: string | null): Date`, `norm(s: string): string` (whitespace normalizer used by tests and UI).
+- Produces: `TZ`, `toDenverParts(d: Date): DenverParts`, `fromDenver(dateKey: string, hhmm: string): Date`, `parseIso(s: string): Date`, `formatTime(d: Date): string` ("4:30 PM"), `formatRange(a: Date, b: Date): string` ("4:30 – 5:40 PM"), `minutesBetween(a: Date, b: Date): number`, `dayIdFor(now: Date, festival: Festival): DayId | null` (4 AM rollover), `festivalNow(override?: string | null): Date`, `norm(s: string): string` (whitespace normalizer used by tests and UI), `isoMs(s: string): number` (validated epoch ms — the only way set times become numbers; added during Task 8 review).
 
 - [ ] **Step 1: Write the failing tests**
 
@@ -1708,19 +1721,25 @@ export function toDenverParts(d: Date): DenverParts {
   };
 }
 
-/** Instant for a Denver wall-clock time. Correct away from DST transitions (the festival is mid-September). */
+/** Instant for a Denver wall-clock time. Two-pass offset resolution keeps it exact across DST transitions. */
 export function fromDenver(dateKey: string, hhmm: string): Date {
   const [y, m, d] = dateKey.split("-").map(Number) as [number, number, number];
   const [hh, mm] = hhmm.split(":").map(Number) as [number, number];
   const guess = Date.UTC(y, m - 1, d, hh, mm);
-  const p = toDenverParts(new Date(guess));
-  const asUtc = Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute);
-  return new Date(guess - (asUtc - guess));
+  const offsetAt = (ms: number) => {
+    const p = toDenverParts(new Date(ms));
+    return Date.UTC(p.year, p.month - 1, p.day, p.hour, p.minute) - ms;
+  };
+  const first = guess - offsetAt(guess);
+  return new Date(guess - offsetAt(first));
 }
 
+const ISO_WITH_OFFSET = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}(:\d{2}(\.\d{1,3})?)?(Z|[+-]\d{2}:\d{2})$/;
+
+/** Accepts only timestamps with an explicit offset (or Z); wall-clock strings would parse in the host zone. */
 export function parseIso(s: string): Date {
   const t = Date.parse(s);
-  if (Number.isNaN(t) || !/^\d{4}-\d{2}-\d{2}T/.test(s)) throw new Error(`Not an ISO timestamp: ${s}`);
+  if (Number.isNaN(t) || !ISO_WITH_OFFSET.test(s)) throw new Error(`Not an ISO timestamp with offset: ${s}`);
   return new Date(t);
 }
 
@@ -2025,6 +2044,7 @@ Expected: FAIL — cannot resolve `./conflicts`.
 `apps/festival/src/domain/conflicts.ts`:
 ```ts
 import type { FestivalSet } from "@bb/shared";
+import { isoMs } from "./time";
 
 export interface Conflict {
   key: string;
@@ -2041,19 +2061,18 @@ export function conflictKey(a: FestivalSet, b: FestivalSet): string {
 }
 
 export function detectConflicts(sets: FestivalSet[], bufferMinutes: number): Conflict[] {
-  const sorted = [...sets].sort((x, y) => Date.parse(x.start) - Date.parse(y.start));
+  const sorted = [...sets].sort((x, y) => isoMs(x.start) - isoMs(y.start));
   const buffer = bufferMinutes * 60_000;
   const out: Conflict[] = [];
   for (let i = 0; i < sorted.length; i++) {
     for (let j = i + 1; j < sorted.length; j++) {
       const a = sorted[i]!, b = sorted[j]!;
-      if (a.stageId === b.stageId && a.id === b.id) continue;
-      const aEnd = Date.parse(a.end), bStart = Date.parse(b.start);
+      if (a.id === b.id) continue;
+      const aEnd = isoMs(a.end), bStart = isoMs(b.start);
       const gap = bStart - aEnd; // negative = overlap
-      if (gap >= buffer && !(gap < 0)) continue;
-      if (gap >= 0 && gap >= buffer) continue;
+      if (gap >= buffer) continue; // conflict iff gap < buffer
       const overlap = Math.max(0, Math.round(-gap / 60_000));
-      out.push({ key: conflictKey(a, b), a, b, overlapMinutes: overlap, bufferOnly: overlap === 0 });
+      out.push({ key: conflictKey(a, b), a, b, overlapMinutes: overlap, bufferOnly: gap >= 0 });
     }
   }
   return out;
@@ -2080,17 +2099,17 @@ export function nextUp(sets: FestivalSet[], now: Date, resolutions: Resolutions,
   const t = now.getTime();
   return (
     [...sets]
-      .filter((s) => !lost.has(s.id) && Date.parse(s.end) > t)
-      .sort((x, y) => Date.parse(x.start) - Date.parse(y.start))[0] ?? null
+      .filter((s) => !lost.has(s.id) && isoMs(s.end) > t)
+      .sort((x, y) => isoMs(x.start) - isoMs(y.start))[0] ?? null
   );
 }
 
 export function leaveBy(set: FestivalSet, bufferMinutes: number): Date {
-  return new Date(Date.parse(set.start) - bufferMinutes * 60_000);
+  return new Date(isoMs(set.start) - bufferMinutes * 60_000);
 }
 ```
 
-Note on `detectConflicts`: a pair conflicts when `gap < buffer` — i.e. a true overlap (`gap < 0`) or a gap shorter than the buffer. Simplify the two `continue` lines to the single condition `if (gap >= buffer) continue;` — it is equivalent, keep whichever reads better, but the tests above must pass.
+Note on `detectConflicts`: a pair conflicts when `gap < buffer` — a true overlap (`gap < 0`) or a gap shorter than the buffer. `bufferOnly` is derived from the sign of `gap`, not from the rounded `overlapMinutes`, so a 15-second true overlap is never mislabeled as buffer-only.
 
 - [ ] **Step 4: Run tests**
 
@@ -2163,7 +2182,7 @@ Expected: FAIL — cannot resolve `./ics`.
 `apps/festival/src/domain/ics.ts`:
 ```ts
 import type { Artist, Festival, FestivalSet, Stage } from "@bb/shared";
-import { formatRange, parseIso } from "./time";
+import { formatRange, isoMs, parseIso } from "./time";
 
 const utcStamp = (d: Date) => d.toISOString().replace(/[-:]/g, "").replace(/\.\d{3}Z$/, "Z");
 const esc = (s: string) => s.replace(/\\/g, "\\\\").replace(/;/g, "\;").replace(/,/g, "\\,").replace(/\n/g, "\\n");
@@ -2171,7 +2190,7 @@ const esc = (s: string) => s.replace(/\\/g, "\\\\").replace(/;/g, "\;").replace(
 export function planToIcs(sets: FestivalSet[], artistsById: Map<string, Artist>, stagesById: Map<string, Stage>, festival: Festival): string {
   const lines = ["BEGIN:VCALENDAR", "VERSION:2.0", "PRODID:-//SBG Productions//Telluride Blues & Brews//EN", "CALSCALE:GREGORIAN"];
   const stamp = utcStamp(new Date());
-  for (const s of [...sets].sort((a, b) => Date.parse(a.start) - Date.parse(b.start))) {
+  for (const s of [...sets].sort((a, b) => isoMs(a.start) - isoMs(b.start))) {
     const artist = artistsById.get(s.artistId)?.name ?? s.artistId;
     const stage = stagesById.get(s.stageId)?.name ?? s.stageId;
     lines.push(
@@ -2193,7 +2212,7 @@ export function planToIcs(sets: FestivalSet[], artistsById: Map<string, Artist>,
 export function planToText(sets: FestivalSet[], artistsById: Map<string, Artist>, stagesById: Map<string, Stage>, festival: Festival): string {
   const out = [`My ${festival.name} plan`];
   for (const day of festival.days) {
-    const daySets = sets.filter((s) => s.dayId === day.id).sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
+    const daySets = sets.filter((s) => s.dayId === day.id).sort((a, b) => isoMs(a.start) - isoMs(b.start));
     if (daySets.length === 0) continue;
     out.push("", day.label);
     for (const s of daySets) {
@@ -2299,6 +2318,7 @@ Expected: FAIL — modules not found.
 ```ts
 import { useMemo, useSyncExternalStore } from "react";
 import { Content, type Artist, type DayId, type FestivalSet, type Stage } from "@bb/shared";
+import { isoMs } from "@/domain/time";
 import bundled from "./bundled.json";
 
 export interface ContentRepository {
@@ -2327,7 +2347,7 @@ export interface ContentIndex {
 }
 
 export function buildIndex(c: Content): ContentIndex {
-  const byStart = (a: FestivalSet, b: FestivalSet) => Date.parse(a.start) - Date.parse(b.start);
+  const byStart = (a: FestivalSet, b: FestivalSet) => isoMs(a.start) - isoMs(b.start);
   const setsByDay = { fri: [], sat: [], sun: [] } as Record<DayId, FestivalSet[]>;
   const setsByArtist = new Map<string, FestivalSet[]>();
   for (const s of c.sets) {
@@ -2367,6 +2387,7 @@ export function useContentIndex(): ContentIndex {
 import { useSyncExternalStore } from "react";
 import { Alert } from "@bb/shared";
 import { z } from "zod";
+import { isoMs } from "@/domain/time";
 import fixture from "./alerts.fixture.json";
 
 export interface AlertsRepository {
@@ -2374,7 +2395,7 @@ export interface AlertsRepository {
   subscribe(cb: () => void): () => void;
 }
 
-const alerts = z.array(Alert).parse(fixture).sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
+const alerts = z.array(Alert).parse(fixture).sort((a, b) => isoMs(b.publishedAt) - isoMs(a.publishedAt));
 
 export const alertsRepository: AlertsRepository = { getAlerts: () => alerts, subscribe: () => () => {} };
 
@@ -2384,7 +2405,7 @@ export function useAlerts(): Alert[] {
 
 export function activeUrgent(list: Alert[], now: Date): Alert | null {
   const t = now.getTime();
-  return list.find((a) => a.severity === "urgent" && Date.parse(a.publishedAt) <= t && (!a.expiresAt || Date.parse(a.expiresAt) > t)) ?? null;
+  return list.find((a) => a.severity === "urgent" && isoMs(a.publishedAt) <= t && (!a.expiresAt || isoMs(a.expiresAt) > t)) ?? null;
 }
 ```
 
@@ -2983,10 +3004,10 @@ const LAYERS = [
 export function Hero({ compact = false, children }: { compact?: boolean; children?: ReactNode }) {
   const ok = useMotionOk();
   const { scrollY } = useScroll();
-  const cap = 24;
-  const y0 = useTransform(scrollY, [0, 300], [0, ok ? Math.min(cap, 300 * 0.15) : 0]);
-  const y1 = useTransform(scrollY, [0, 300], [0, ok ? Math.min(cap, 300 * 0.35) : 0]);
-  const y2 = useTransform(scrollY, [0, 300], [0, ok ? Math.min(cap, 300 * 0.6) : 0]);
+  const cap = 24; // each layer moves at its rate until it has travelled 24 px, then holds
+  const y0 = useTransform(scrollY, [0, cap / LAYERS[0].rate], [0, ok ? cap : 0], { clamp: true });
+  const y1 = useTransform(scrollY, [0, cap / LAYERS[1].rate], [0, ok ? cap : 0], { clamp: true });
+  const y2 = useTransform(scrollY, [0, cap / LAYERS[2].rate], [0, ok ? cap : 0], { clamp: true });
   const ys = [y0, y1, y2];
   return (
     <div className={`relative overflow-hidden rounded-hero bg-night ${compact ? "h-[250px]" : "h-[420px]"}`}>
@@ -3064,7 +3085,7 @@ export function SetCard({ set, artist, stage, now, emphasis = "plain" }: {
 `apps/festival/src/features/now/NowPre.tsx`:
 ```tsx
 import { Link } from "react-router";
-import { Button, Card, Eyebrow, Heart } from "@/design";
+import { buttonClasses, Card, Eyebrow, Heart } from "@/design";
 import { useContentIndex, useContent } from "@/data/content";
 import { gatesOpenAt, headliners } from "@/domain/schedule";
 import { formatTime } from "@/domain/time";
@@ -3104,7 +3125,7 @@ export function NowPre({ now }: { now: Date }) {
         })}
       </div>
       {favorites.length === 0 && (
-        <Link to="/lineup" className="mt-3 block"><Button variant="sun" full>Build your plan</Button></Link>
+        <Link to="/lineup" className={buttonClasses({ variant: "sun", full: true, className: "mt-3" })}>Build your plan</Link>
       )}
     </>
   );
@@ -3114,7 +3135,7 @@ export function NowPre({ now }: { now: Date }) {
 `apps/festival/src/features/now/NowLive.tsx`:
 ```tsx
 import { Link } from "react-router";
-import { Button, Card, Chip, Eyebrow } from "@/design";
+import { buttonClasses, Card, Chip, Eyebrow } from "@/design";
 import { activeUrgent, useAlerts } from "@/data/alerts";
 import { useContent, useContentIndex } from "@/data/content";
 import { nextUp } from "@/domain/conflicts";
@@ -3172,10 +3193,10 @@ export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
               <div className="text-[16px] font-semibold leading-5">{p.artist.name}</div>
               <div className="text-[13px] text-fg-soft tabular-nums">in {minutesBetween(now, parseIso(myNext.start))} min · {formatRange(parseIso(myNext.start), parseIso(myNext.end))} · {p.stage.name}</div>
             </Link>
-            <Link to="/plan"><Button size="sm">Plan</Button></Link>
+            <Link to="/plan" className={buttonClasses({ size: "sm" })}>Plan</Link>
           </Card>
         ); })() : (
-          <Link to="/lineup" className="block"><Card className="flex items-center gap-3"><div className="flex-1 text-[15px] text-fg-soft">No favorites yet — tap the heart on any set.</div><Button variant="sun" size="sm">Lineup</Button></Card></Link>
+          <Card className="flex items-center gap-3"><div className="flex-1 text-[15px] text-fg-soft">No favorites yet — tap the heart on any set.</div><Link to="/lineup" className={buttonClasses({ variant: "sun", size: "sm" })}>Lineup</Link></Card>
         )}
       </div>
     </>
@@ -3193,7 +3214,9 @@ export function NowPost() {
   const { festival } = useContent();
   const share = async () => {
     const text = `Thank you, ${festival.name} ${festival.year}. See you in ${festival.year + 1}. ${festival.links.site}`;
-    if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
+    try {
+      if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
+    } catch { /* user cancelled the share sheet */ }
   };
   return (
     <>
@@ -3220,7 +3243,7 @@ import { Card, Eyebrow } from "@/design";
 import { useAlerts } from "@/data/alerts";
 import { useContent } from "@/data/content";
 import { useFestivalClock } from "@/app/clock";
-import { formatTime, parseIso } from "@/domain/time";
+import { formatTime, isoMs, parseIso } from "@/domain/time";
 import { NowLive } from "./NowLive";
 import { NowPost } from "./NowPost";
 import { NowPre } from "./NowPre";
@@ -3228,7 +3251,7 @@ import { NowPre } from "./NowPre";
 export function NowScreen() {
   const { now, state, dayId } = useFestivalClock();
   const { festival } = useContent();
-  const alerts = useAlerts().filter((a) => Date.parse(a.publishedAt) <= now.getTime()).slice(0, 2);
+  const alerts = useAlerts().filter((a) => isoMs(a.publishedAt) <= now.getTime()).slice(0, 2);
   return (
     <div className="pt-3">
       <h1 className="sr-only">Now</h1>
@@ -3578,7 +3601,7 @@ import { useNavigate } from "react-router";
 import { Button, Eyebrow } from "@/design";
 import { useContent, useContentIndex } from "@/data/content";
 import { groupByStage, isEnded } from "@/domain/schedule";
-import { formatTime } from "@/domain/time";
+import { formatTime, isoMs, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
 
 const HOUR = 3_600_000;
@@ -3586,7 +3609,8 @@ const LABEL_W = 70;
 const BLOCK_GAP = 4;
 
 export function gridLayout(sets: FestivalSet[], pxPerHour: number) {
-  const starts = sets.map((s) => Date.parse(s.start)), ends = sets.map((s) => Date.parse(s.end));
+  if (sets.length === 0) return { startMs: 0, endMs: 0, hours: [] as Date[], left: () => 0, width: () => 0, x: () => 0 };
+  const starts = sets.map((s) => isoMs(s.start)), ends = sets.map((s) => isoMs(s.end));
   const first = Math.min(...starts), last = Math.max(...ends);
   const startMs = Math.floor(first / HOUR) * HOUR;
   const endMs = Math.ceil(last / HOUR) * HOUR;
@@ -3594,8 +3618,8 @@ export function gridLayout(sets: FestivalSet[], pxPerHour: number) {
   for (let t = startMs; t < endMs; t += HOUR) hours.push(new Date(t));
   return {
     startMs, endMs, hours,
-    left: (s: FestivalSet) => ((Date.parse(s.start) - startMs) / HOUR) * pxPerHour,
-    width: (s: FestivalSet) => ((Date.parse(s.end) - Date.parse(s.start)) / HOUR) * pxPerHour - BLOCK_GAP,
+    left: (s: FestivalSet) => ((isoMs(s.start) - startMs) / HOUR) * pxPerHour,
+    width: (s: FestivalSet) => ((isoMs(s.end) - isoMs(s.start)) / HOUR) * pxPerHour - BLOCK_GAP,
     x: (ms: number) => ((ms - startMs) / HOUR) * pxPerHour,
   };
 }
@@ -3637,13 +3661,17 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
                 {grp.sets.map((s) => {
                   const artist = idx.artistsById.get(s.artistId)!;
                   const fav = favorites.includes(s.id);
+                  const time = formatTime(parseIso(s.start));
+                  const width = g.width(s);
+                  // 30-minute sets are 32 px wide; extend the hit area invisibly to the 44 px floor
+                  const hitArea = width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : "";
                   return (
                     <button key={s.id} type="button" data-favorite={fav} onClick={() => navigate(`/lineup/artist/${artist.id}`)}
-                      aria-label={`${artist.name}, ${formatTime(new Date(s.start))}, ${grp.stage.name}`}
-                      style={{ left: g.left(s), width: g.width(s) }}
-                      className={`absolute top-2 h-12 overflow-hidden rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] text-white ${STAGE_BG[grp.stage.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-60" : ""}`}>
+                      aria-label={`${artist.name}, ${time}, ${grp.stage.name}`}
+                      style={{ left: g.left(s), width }}
+                      className={`absolute top-2 h-12 overflow-hidden rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] text-white ${STAGE_BG[grp.stage.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-60" : ""} ${hitArea}`}>
                       <span className="block truncate">{artist.name}</span>
-                      <span className="block text-[10px] font-normal opacity-85 tabular-nums">{formatTime(new Date(s.start))}{fav ? " ♥" : ""}</span>
+                      <span className="block text-[10px] font-normal opacity-85 tabular-nums">{time}{fav ? " ♥" : ""}</span>
                     </button>
                   );
                 })}
@@ -3747,10 +3775,10 @@ Expected: FAIL.
 ```tsx
 import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
-import { Button, Chip, Eyebrow, Heart, Sheet, Toggle } from "@/design";
+import { Button, buttonClasses, Chip, Eyebrow, Heart, Sheet, Toggle } from "@/design";
 import { useFestivalClock } from "@/app/clock";
 import { useContent, useContentIndex } from "@/data/content";
-import { formatRange, parseIso } from "@/domain/time";
+import { formatRange, formatTime, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
 
 const TIER_LABEL = { headliner: "Headliner", featured: "Featured", lineup: "Lineup", comedy: "Comedy", musicmaker: "Music Maker Foundation" } as const;
@@ -3772,7 +3800,9 @@ export function ArtistSheet() {
   const share = async () => {
     const lines = sets.map((s) => `${dayLabel(s.dayId)} ${formatRange(parseIso(s.start), parseIso(s.end))} · ${idx.stagesById.get(s.stageId)?.name}`);
     const text = `${artist.name} — ${content.festival.name}\n${lines.join("\n")}\n${content.festival.links.lineup}`;
-    if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
+    try {
+      if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
+    } catch { /* user cancelled the share sheet */ }
   };
   return (
     <Sheet onClose={onClose} title={artist.name}>
@@ -3804,9 +3834,9 @@ export function ArtistSheet() {
       )}
       <div className="mt-3 flex gap-2">
         <Button size="sm" onClick={share}>Share ↗</Button>
-        <a className="inline-flex h-9 items-center rounded-[10px] border-[1.5px] border-hair px-3.5 text-[14px] font-semibold text-structure-2" href={content.festival.links.lineup} target="_blank" rel="noreferrer">Official lineup ↗</a>
+        <a className={buttonClasses({ size: "sm" })} href={content.festival.links.lineup} target="_blank" rel="noreferrer">Official lineup ↗</a>
       </div>
-      <p className="mt-3 text-[12px] text-fg-soft">Times shown in Telluride (Mountain) time. Now: {formatRange(now, now).split(" – ")[0]}</p>
+      <p className="mt-3 text-[12px] text-fg-soft">Times shown in Telluride (Mountain) time. Now: {formatTime(now)}</p>
     </Sheet>
   );
 }
@@ -3968,7 +3998,7 @@ import type { FestivalSet } from "@bb/shared";
 import { Link } from "react-router";
 import { Button, Chip, Toggle } from "@/design";
 import { useContentIndex } from "@/data/content";
-import { detectConflicts, keptSet, type Conflict } from "@/domain/conflicts";
+import { detectConflicts, lostSetIds, type Conflict } from "@/domain/conflicts";
 import { isEnded } from "@/domain/schedule";
 import { formatRange, formatTime, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
@@ -4006,25 +4036,40 @@ function SetCardRow({ set, lost, conflict, now, onSwap }: { set: FestivalSet; lo
 export function PlanTimeline({ sets, now }: { sets: FestivalSet[]; now: Date }) {
   const { resolutions, resolve, settings } = usePlanStore();
   const conflicts = detectConflicts(sets, settings.bufferMinutes);
-  const conflictFor = (id: string) => conflicts.find((c) => c.a.id === id || c.b.id === id);
-  const lostIds = new Set(conflicts.map((c) => (keptSet(c, resolutions).id === c.a.id ? c.b.id : c.a.id)));
-  const rendered = new Set<string>();
+  const lostIds = lostSetIds(conflicts, resolutions);
+  const conflictsOf = (id: string) => conflicts.filter((c) => c.a.id === id || c.b.id === id);
+  const other = (c: Conflict, id: string) => (c.a.id === id ? c.b : c.a);
+
+  // Pass 1: every kept set claims the lost opponents nobody has claimed yet (in start order, so the
+  // earliest winner takes a shared loser). Pass 2 renders in start order: kept sets solid with their
+  // claimed losers dashed beneath; a loser whose opponents are all lost themselves renders on its own.
+  const claimedBy = new Map<string, string>();
+  for (const s of sets) {
+    if (lostIds.has(s.id)) continue;
+    for (const c of conflictsOf(s.id)) {
+      const o = other(c, s.id);
+      if (lostIds.has(o.id) && !claimedBy.has(o.id)) claimedBy.set(o.id, s.id);
+    }
+  }
+  const rows = sets
+    .filter((s) => !lostIds.has(s.id) || !claimedBy.has(s.id))
+    .map((lead) => {
+      const mine = conflictsOf(lead.id);
+      const lost = lostIds.has(lead.id) ? [] : mine.map((c) => ({ set: other(c, lead.id), conflict: c })).filter(({ set }) => claimedBy.get(set.id) === lead.id);
+      return { lead, leadConflict: mine[0], lost };
+    });
   return (
     <div className="mt-4">
-      {sets.map((s) => {
-        if (rendered.has(s.id) || lostIds.has(s.id)) return null;
-        rendered.add(s.id);
-        const c = conflictFor(s.id);
-        const partner = c ? (c.a.id === s.id ? c.b : c.a) : undefined;
-        if (partner) rendered.add(partner.id);
+      {rows.map(({ lead, leadConflict, lost }) => {
+        const leadLost = lostIds.has(lead.id);
         return (
-          <div key={s.id} className="relative grid grid-cols-[56px_1fr] gap-2.5">
-            <div className="pt-3 text-[13px] font-semibold leading-4 text-fg-soft tabular-nums">{formatTime(parseIso(s.start)).replace(" ", "\n")}</div>
-            <span aria-hidden="true" className={`absolute left-[46px] top-4 h-2.5 w-2.5 rounded-chip border-2 border-surface ${c ? "bg-ember" : "bg-sky"}`} />
+          <div key={lead.id} data-testid="plan-row" className="relative grid grid-cols-[56px_1fr] gap-2.5">
+            <div className="pt-3 text-[13px] font-semibold leading-4 text-fg-soft tabular-nums">{formatTime(parseIso(lead.start)).replace(" ", "\n")}</div>
+            <span aria-hidden="true" className={`absolute left-[46px] top-4 h-2.5 w-2.5 rounded-chip border-2 border-surface ${leadConflict ? "bg-ember" : "bg-sky"}`} />
             <span aria-hidden="true" className="absolute -bottom-3 left-[50px] top-6 w-0.5 bg-hair" />
             <div>
-              <SetCardRow set={s} lost={false} conflict={c} now={now} />
-              {partner && c && <SetCardRow set={partner} lost conflict={c} now={now} onSwap={() => resolve(c.key, partner.id)} />}
+              <SetCardRow set={lead} lost={leadLost} conflict={leadConflict} now={now} onSwap={leadLost && leadConflict ? () => resolve(leadConflict.key, lead.id) : undefined} />
+              {lost.map(({ set, conflict }) => <SetCardRow key={set.id} set={set} lost conflict={conflict} now={now} onSwap={() => resolve(conflict.key, set.id)} />)}
             </div>
           </div>
         );
@@ -4043,7 +4088,7 @@ import { useFestivalClock } from "@/app/clock";
 import { useContent, useContentIndex } from "@/data/content";
 import { detectConflicts, leaveBy, nextUp } from "@/domain/conflicts";
 import { planToIcs, planToText } from "@/domain/ics";
-import { formatRange, formatTime, minutesBetween, parseIso } from "@/domain/time";
+import { formatRange, formatTime, isoMs, minutesBetween, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
 import type { DayId } from "@bb/shared";
 import { downloadText } from "./download";
@@ -4057,7 +4102,7 @@ export function PlanScreen() {
   const idx = useContentIndex();
   const { favorites, resolutions, settings } = usePlanStore();
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const mine = favorites.map((id) => idx.setsById.get(id)).filter((s): s is NonNullable<typeof s> => !!s).sort((a, b) => Date.parse(a.start) - Date.parse(b.start));
+  const mine = favorites.map((id) => idx.setsById.get(id)).filter((s): s is NonNullable<typeof s> => !!s).sort((a, b) => isoMs(a.start) - isoMs(b.start));
   const firstDayWithSets = content.festival.days.find((d) => mine.some((s) => s.dayId === d.id))?.id ?? "fri";
   const [day, setDay] = useState<DayId>(state === "live" && dayId ? dayId : firstDayWithSets);
   const daySets = mine.filter((s) => s.dayId === day);
@@ -4073,7 +4118,9 @@ export function PlanScreen() {
   const exportIcs = () => downloadText("blues-and-brews-plan.ics", "text/calendar", planToIcs(mine, idx.artistsById, idx.stagesById, content.festival));
   const share = async () => {
     const text = planToText(mine, idx.artistsById, idx.stagesById, content.festival);
-    if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
+    try {
+      if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
+    } catch { /* user cancelled the share sheet */ }
   };
   return (
     <div>
@@ -4182,10 +4229,10 @@ Expected: FAIL.
 import { useEffect, useState } from "react";
 import { useMatch, useNavigate } from "react-router";
 import type { Alert } from "@bb/shared";
-import { Button, Card, Chip, Eyebrow } from "@/design";
+import { Button, buttonClasses, Card, Chip, Eyebrow } from "@/design";
 import { useFestivalClock } from "@/app/clock";
 import { useAlerts } from "@/data/alerts";
-import { formatTime, parseIso, toDenverParts } from "@/domain/time";
+import { formatTime, isoMs, parseIso, toDenverParts } from "@/domain/time";
 import { useAlertsStore } from "@/state/alerts";
 
 const SEV = {
@@ -4197,17 +4244,18 @@ const SEV = {
 function AlertCard({ alert, expanded, unread, onToggle }: { alert: Alert; expanded: boolean; unread: boolean; onToggle: () => void }) {
   const sev = SEV[alert.severity];
   return (
-    <Card className={`border-l-[5px] ${sev.bar} ${expanded ? "" : "py-3"}`}>
-      <button type="button" onClick={onToggle} aria-expanded={expanded} className="flex w-full items-center gap-2 text-left">
+    <Card className={`border-l-[5px] ${sev.bar}`}>
+      {/* min-h-11 keeps the expand control at the 44 px tap floor even for one-line titles */}
+      <button type="button" onClick={onToggle} aria-expanded={expanded} className="flex min-h-11 w-full items-center gap-2 text-left">
         {unread && <span aria-label="Unread" className="h-2 w-2 shrink-0 rounded-chip bg-ember" />}
         <b data-testid="alert-title" className="min-w-0 flex-1 text-[16px] leading-5">{alert.title}</b>
+        <Chip tone={sev.tone}>{sev.label}</Chip>
         <Eyebrow>{formatTime(parseIso(alert.publishedAt))}</Eyebrow>
       </button>
       {expanded && (
         <div className="mt-2">
-          <Chip tone={sev.tone}>{sev.label}</Chip>
-          <p className="mt-2 text-[15px] leading-5 text-fg-soft">{alert.body}</p>
-          {alert.url && <a href={alert.url} target="_blank" rel="noreferrer" className="mt-2 inline-flex h-9 items-center rounded-[10px] border-[1.5px] border-hair px-3.5 text-[14px] font-semibold text-structure-2">Details ↗</a>}
+          <p className="text-[15px] leading-5 text-fg-soft">{alert.body}</p>
+          {alert.url && <a href={alert.url} target="_blank" rel="noreferrer" className={buttonClasses({ size: "sm", className: "mt-2" })}>Details ↗</a>}
         </div>
       )}
     </Card>
@@ -4219,7 +4267,7 @@ export function AlertsScreen() {
   const navigate = useNavigate();
   const match = useMatch("/alerts/:id");
   const routeId = match?.params.id ?? null;
-  const all = useAlerts().filter((a) => Date.parse(a.publishedAt) <= now.getTime());
+  const all = useAlerts().filter((a) => isoMs(a.publishedAt) <= now.getTime());
   const { readIds, pushOptIn, markRead, setPushOptIn } = useAlertsStore();
   const [expandedId, setExpandedId] = useState<string | null>(routeId);
   useEffect(() => { if (routeId) { setExpandedId(routeId); markRead(routeId); } }, [routeId, markRead]);
@@ -4328,6 +4376,9 @@ import { useAlertsStore } from "@/state/alerts";
 import { usePlanStore } from "@/state/plan";
 import { useUiStore } from "@/state/ui";
 
+// Inline text buttons in an 18 px line: extend the hit area invisibly to the 44 px floor (18 + 13 + 13).
+const INLINE_LINK = "relative inline-block underline before:absolute before:inset-x-0 before:-inset-y-[13px] before:content-['']";
+
 const FONTS = [
   ["Bungee", "SIL Open Font License 1.1"], ["Bungee Shade", "SIL Open Font License 1.1"],
   ["Michroma", "SIL Open Font License 1.1"], ["DM Sans", "SIL Open Font License 1.1"],
@@ -4383,8 +4434,8 @@ export function InfoScreen() {
       <Card className="mt-4 flex items-center gap-3">
         <img src="/art/sbg.png" alt="SBG Productions" className="h-11 w-11 rounded-[10px]" />
         <div className="flex-1 text-[13px] leading-[18px] text-fg-soft">Official app of the {festival.name}<br />© {festival.year} SBG Productions ·{" "}
-          <button type="button" className="underline" onClick={() => setPrivacy(!privacy)}>Privacy</button> ·{" "}
-          <button type="button" className="underline" onClick={() => setLicenses(!licenses)}>Licenses</button>
+          <button type="button" className={INLINE_LINK} onClick={() => setPrivacy(!privacy)}>Privacy</button> ·{" "}
+          <button type="button" className={INLINE_LINK} onClick={() => setLicenses(!licenses)}>Licenses</button>
         </div>
       </Card>
       {privacy && (
