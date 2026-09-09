@@ -1,0 +1,7 @@
+[
+  { "id": "fx-005", "title": "Lightning hold — Main Stage paused", "body": "Please move away from stage structures and metal fencing. We'll resume as soon as the 30-minute all-clear passes.", "severity": "urgent", "publishedAt": "2026-09-19T15:22:00-06:00", "publishedBy": "fixture", "expiresAt": "2026-09-19T17:00:00-06:00", "push": true },
+  { "id": "fx-004", "title": "Truck Stage running 15 min late", "body": "Sets on the Truck Stage are shifted by 15 minutes this afternoon. Check the schedule for updated times.", "severity": "important", "publishedAt": "2026-09-19T14:48:00-06:00", "publishedBy": "fixture", "push": true },
+  { "id": "fx-003", "title": "Tasting session 2 opens at 4:00", "body": "Wristbands at the Grand Tasting entrance. Bring your glass.", "severity": "info", "url": "https://www.tellurideblues.com/faqs", "publishedAt": "2026-09-19T13:05:00-06:00", "publishedBy": "fixture", "push": false },
+  { "id": "fx-002", "title": "Welcome to Day 2", "body": "Gates are open. Hydrate — you're at 8,750 ft.", "severity": "info", "publishedAt": "2026-09-19T11:30:00-06:00", "publishedBy": "fixture", "push": false },
+  { "id": "fx-001", "title": "Gates open at 11:30", "body": "Welcome to the 32nd Telluride Blues & Brews Festival. Have your ticket ready and enjoy Town Park.", "severity": "info", "publishedAt": "2026-09-18T11:30:00-06:00", "publishedBy": "fixture", "push": true }
+]
