@@ -12,6 +12,7 @@ const LABEL_W = 70;
 const BLOCK_GAP = 4;
 
 export function gridLayout(sets: FestivalSet[], pxPerHour: number) {
+  if (sets.length === 0) return { startMs: 0, endMs: 0, hours: [] as Date[], left: () => 0, width: () => 0, x: () => 0 };
   const starts = sets.map((s) => isoMs(s.start)), ends = sets.map((s) => isoMs(s.end));
   const first = Math.min(...starts), last = Math.max(...ends);
   const startMs = Math.floor(first / HOUR) * HOUR;
@@ -63,13 +64,15 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
                 {grp.sets.map((s) => {
                   const artist = idx.artistsById.get(s.artistId)!;
                   const fav = favorites.includes(s.id);
+                  const time = formatTime(parseIso(s.start));
+                  const width = g.width(s);
                   return (
                     <button key={s.id} type="button" data-favorite={fav} onClick={() => navigate(`/lineup/artist/${artist.id}`)}
-                      aria-label={`${artist.name}, ${formatTime(parseIso(s.start))}, ${grp.stage.name}`}
-                      style={{ left: g.left(s), width: g.width(s) }}
-                      className={`absolute top-2 h-12 overflow-hidden rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] text-white ${STAGE_BG[grp.stage.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-60" : ""}`}>
+                      aria-label={`${artist.name}, ${time}, ${grp.stage.name}`}
+                      style={{ left: g.left(s), width }}
+                      className={`absolute top-2 h-12 overflow-hidden rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] text-white ${STAGE_BG[grp.stage.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-60" : ""} ${width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : ""}`}>
                       <span className="block truncate">{artist.name}</span>
-                      <span className="block text-[10px] font-normal opacity-85 tabular-nums">{formatTime(parseIso(s.start))}{fav ? " ♥" : ""}</span>
+                      <span className="block text-[10px] font-normal opacity-85 tabular-nums">{time}{fav ? " ♥" : ""}</span>
                     </button>
                   );
                 })}

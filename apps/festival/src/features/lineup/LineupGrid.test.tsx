@@ -21,6 +21,14 @@ describe("gridLayout", () => {
   });
 });
 
+describe("gridLayout edge cases", () => {
+  it("returns an empty layout for no sets", () => {
+    const g = gridLayout([], 72);
+    expect(g.hours).toEqual([]);
+    expect(g.startMs).toBe(0);
+  });
+});
+
 describe("LineupGrid", () => {
   beforeEach(() => {
     useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00", lineupView: "grid" });
@@ -34,5 +42,14 @@ describe("LineupGrid", () => {
     expect(block).toHaveAttribute("data-favorite", "true");
     fireEvent.click(block);
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
+  });
+
+  it("short sets get an invisible hit-area extension", async () => {
+    useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00", lineupView: "grid" });
+    renderAt("/lineup");
+    const short = await screen.findByRole("button", { name: /Derrick Dove & The Peacekeepers, 5:40 PM/ });
+    expect(short.className).toMatch(/before:-inset-x-1\.5\b/);
+    const long = screen.getByRole("button", { name: /Charlie Musselwhite & GA-20/ });
+    expect(long.className).not.toMatch(/before:-inset-x/);
   });
 });
