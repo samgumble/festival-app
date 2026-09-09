@@ -16,8 +16,9 @@ const SEV = {
 function AlertCard({ alert, expanded, unread, onToggle }: { alert: Alert; expanded: boolean; unread: boolean; onToggle: () => void }) {
   const sev = SEV[alert.severity];
   return (
-    <Card className={`border-l-[5px] ${sev.bar} ${expanded ? "" : "py-3"}`}>
-      <button type="button" onClick={onToggle} aria-expanded={expanded} className="flex w-full items-center gap-2 text-left">
+    <Card className={`border-l-[5px] ${sev.bar}`}>
+      {/* min-h-11 keeps the expand control at the 44 px tap floor even for one-line titles */}
+      <button type="button" onClick={onToggle} aria-expanded={expanded} className="flex min-h-11 w-full items-center gap-2 text-left">
         {unread && <span aria-label="Unread" className="h-2 w-2 shrink-0 rounded-chip bg-ember" />}
         <b data-testid="alert-title" className="min-w-0 flex-1 text-[16px] leading-5">{alert.title}</b>
         <Eyebrow>{formatTime(parseIso(alert.publishedAt))}</Eyebrow>
@@ -28,7 +29,7 @@ function AlertCard({ alert, expanded, unread, onToggle }: { alert: Alert; expand
       {expanded && (
         <div className="mt-2">
           <p className="text-[15px] leading-5 text-fg-soft">{alert.body}</p>
-          {alert.url && <a href={alert.url} target="_blank" rel="noreferrer" className={buttonClasses({ size: "sm" })}>Details ↗</a>}
+          {alert.url && <a href={alert.url} target="_blank" rel="noreferrer" className={buttonClasses({ size: "sm", className: "mt-2" })}>Details ↗</a>}
         </div>
       )}
     </Card>

@@ -38,4 +38,11 @@ describe("Alerts", () => {
     renderAt("/alerts");
     expect(await screen.findByText(/all quiet in town park/i)).toBeInTheDocument();
   });
+
+  it("expand controls carry the 44px minimum height", async () => {
+    renderAt("/alerts");
+    const titles = await screen.findAllByTestId("alert-title");
+    const btn = titles[0]!.closest("button")!;
+    expect(btn.className).toMatch(/\bmin-h-11\b/);
+  });
 });
