@@ -11,7 +11,11 @@ const VARIANT = {
   ink: "bg-structure-2 text-bg",
   ghost: "bg-transparent text-structure-2 border-[1.5px] border-hair",
 };
-const SIZE = { md: "h-12 px-5 text-[16px] rounded-ctl", sm: "h-9 px-3.5 text-[14px] rounded-[10px]" };
+const SIZE = {
+  md: "h-12 px-5 text-[16px] rounded-ctl",
+  // invisible hit area: 36 px visual → 44 px target (36 + 4 + 4)
+  sm: "h-9 px-3.5 text-[14px] rounded-[10px] relative before:absolute before:inset-x-0 before:-inset-y-1 before:content-['']",
+};
 
 export function Button({ variant = "ghost", size = "md", full = false, className = "", type = "button", ...rest }: Props) {
   return (

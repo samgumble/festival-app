@@ -65,3 +65,18 @@ describe("Button", () => {
     expect(screen.getByRole("button", { name: "Remind me" })).toBeInTheDocument();
   });
 });
+
+describe("touch targets", () => {
+  it("small controls carry a 44 px hit-area extension", () => {
+    render(
+      <>
+        <Button size="sm">Small</Button>
+        <SegmentedControl label="Day" value="a" onChange={() => {}} options={[{ value: "a", label: "A" }]} />
+        <Toggle on={false} onChange={() => {}} label="Switch" />
+      </>,
+    );
+    expect(screen.getByRole("button", { name: "Small" }).className).toMatch(/before:-inset-y-1\b/);
+    expect(screen.getByRole("radio", { name: "A" }).className).toMatch(/before:-inset-y-0\.5\b/);
+    expect(screen.getByRole("switch", { name: "Switch" }).className).toMatch(/before:-inset-y-2\b/);
+  });
+});
