@@ -1,0 +1,580 @@
+{
+  "meta": {
+    "contentVersion": "2026.09.09.1",
+    "publishedAt": "2026-09-09T12:00:00-06:00",
+    "publishedBy": "seed",
+    "sources": [
+      "https://www.tellurideblues.com/lineup",
+      "https://www.tellurideblues.com/schedule",
+      "https://www.tellurideblues.com/news/the-official-telluride-blues-brews-festival-guide"
+    ]
+  },
+  "festival": {
+    "year": 2026,
+    "name": "Telluride Blues & Brews Festival",
+    "edition": "32nd Annual",
+    "venue": "Telluride Town Park",
+    "city": "Telluride, Colorado",
+    "altitudeFt": 8750,
+    "timezone": "America/Denver",
+    "days": [
+      {
+        "id": "fri",
+        "date": "2026-09-18",
+        "label": "Friday",
+        "gatesOpen": "11:30"
+      },
+      {
+        "id": "sat",
+        "date": "2026-09-19",
+        "label": "Saturday",
+        "gatesOpen": "11:30"
+      },
+      {
+        "id": "sun",
+        "date": "2026-09-20",
+        "label": "Sunday",
+        "gatesOpen": "11:30"
+      }
+    ],
+    "links": {
+      "site": "https://www.tellurideblues.com",
+      "lineup": "https://www.tellurideblues.com/lineup",
+      "schedule": "https://www.tellurideblues.com/schedule",
+      "faq": "https://www.tellurideblues.com/faqs",
+      "guide": "https://www.tellurideblues.com/news/the-official-telluride-blues-brews-festival-guide"
+    }
+  },
+  "stages": [
+    {
+      "id": "main",
+      "name": "Main Stage",
+      "shortName": "Main",
+      "color": "sky",
+      "sortOrder": 1
+    },
+    {
+      "id": "blues",
+      "name": "Blues Stage",
+      "shortName": "Blues",
+      "color": "plum",
+      "sortOrder": 2
+    },
+    {
+      "id": "truck",
+      "name": "Truck Stage",
+      "shortName": "Truck",
+      "color": "pine",
+      "sortOrder": 3
+    },
+    {
+      "id": "camp",
+      "name": "Campground Sessions",
+      "shortName": "Camp",
+      "color": "violet",
+      "sortOrder": 4
+    }
+  ],
+  "artists": [
+    {
+      "id": "marcus-king-band",
+      "name": "Marcus King Band",
+      "tier": "headliner"
+    },
+    {
+      "id": "taj-mahal-keb-mo",
+      "name": "Taj Mahal & Keb’ Mo’",
+      "tier": "headliner"
+    },
+    {
+      "id": "jon-batiste",
+      "name": "Jon Batiste",
+      "tier": "headliner"
+    },
+    {
+      "id": "daniel-donato",
+      "name": "Daniel Donato’s Cosmic Country",
+      "tier": "lineup"
+    },
+    {
+      "id": "record-company",
+      "name": "The Record Company",
+      "tier": "lineup"
+    },
+    {
+      "id": "samantha-fish",
+      "name": "Samantha Fish",
+      "tier": "lineup"
+    },
+    {
+      "id": "g-love",
+      "name": "G. Love & Special Sauce",
+      "tier": "lineup"
+    },
+    {
+      "id": "charlie-musselwhite-ga20",
+      "name": "Charlie Musselwhite & GA-20",
+      "tier": "lineup"
+    },
+    {
+      "id": "tab-benoit",
+      "name": "Tab Benoit",
+      "tier": "lineup"
+    },
+    {
+      "id": "eggy",
+      "name": "Eggy",
+      "tier": "lineup"
+    },
+    {
+      "id": "eddie-9v",
+      "name": "Eddie 9V",
+      "tier": "lineup"
+    },
+    {
+      "id": "greyhounds",
+      "name": "Greyhounds",
+      "tier": "lineup"
+    },
+    {
+      "id": "judith-hill",
+      "name": "Judith Hill",
+      "tier": "lineup"
+    },
+    {
+      "id": "nether-hour",
+      "name": "Nether Hour",
+      "tier": "lineup"
+    },
+    {
+      "id": "myron-elkins",
+      "name": "Myron Elkins",
+      "tier": "lineup"
+    },
+    {
+      "id": "dk-harrell",
+      "name": "DK Harrell",
+      "tier": "lineup"
+    },
+    {
+      "id": "harlem-gospel-travelers",
+      "name": "The Harlem Gospel Travelers",
+      "tier": "lineup"
+    },
+    {
+      "id": "j-causeways",
+      "name": "J & The Causeways",
+      "tier": "lineup"
+    },
+    {
+      "id": "kirk-fletcher",
+      "name": "Kirk Fletcher",
+      "tier": "lineup"
+    },
+    {
+      "id": "david-jacobs-strain",
+      "name": "David Jacobs-Strain and Bob Beach",
+      "tier": "lineup"
+    },
+    {
+      "id": "zac-schulze-gang",
+      "name": "The Zac Schulze Gang",
+      "tier": "lineup"
+    },
+    {
+      "id": "derrick-dove",
+      "name": "Derrick Dove & The Peacekeepers",
+      "tier": "lineup"
+    },
+    {
+      "id": "ken-valdez",
+      "name": "Ken Valdez",
+      "tier": "lineup"
+    },
+    {
+      "id": "nigel-wearne",
+      "name": "Nigel Wearne & The Spectres",
+      "tier": "lineup"
+    },
+    {
+      "id": "katie-skene",
+      "name": "Katie Skene",
+      "tier": "lineup"
+    },
+    {
+      "id": "alex-maryol",
+      "name": "Alex Maryol",
+      "tier": "lineup"
+    },
+    {
+      "id": "little-willie-farmer",
+      "name": "Little Willie Farmer",
+      "tier": "musicmaker"
+    },
+    {
+      "id": "albert-white",
+      "name": "Albert White",
+      "tier": "musicmaker"
+    },
+    {
+      "id": "terry-bean",
+      "name": "Terry “Harmonica” Bean",
+      "tier": "musicmaker"
+    },
+    {
+      "id": "scramble-campbell",
+      "name": "Scramble Campbell",
+      "tier": "lineup"
+    },
+    {
+      "id": "troy-walker",
+      "name": "Troy Walker",
+      "tier": "comedy"
+    },
+    {
+      "id": "hannah-jones",
+      "name": "Hannah Jones",
+      "tier": "comedy"
+    },
+    {
+      "id": "baron-vaughn",
+      "name": "Baron Vaughn",
+      "tier": "comedy"
+    },
+    {
+      "id": "kiran-deol",
+      "name": "Kiran Deol",
+      "tier": "comedy"
+    }
+  ],
+  "sets": [
+    {
+      "id": "fri-myron-elkins-main-1200",
+      "artistId": "myron-elkins",
+      "stageId": "main",
+      "dayId": "fri",
+      "start": "2026-09-18T12:00:00-06:00",
+      "end": "2026-09-18T13:00:00-06:00"
+    },
+    {
+      "id": "fri-nigel-wearne-blues-1300",
+      "artistId": "nigel-wearne",
+      "stageId": "blues",
+      "dayId": "fri",
+      "start": "2026-09-18T13:00:00-06:00",
+      "end": "2026-09-18T14:00:00-06:00"
+    },
+    {
+      "id": "fri-greyhounds-main-1330",
+      "artistId": "greyhounds",
+      "stageId": "main",
+      "dayId": "fri",
+      "start": "2026-09-18T13:30:00-06:00",
+      "end": "2026-09-18T14:30:00-06:00"
+    },
+    {
+      "id": "fri-derrick-dove-camp-1400",
+      "artistId": "derrick-dove",
+      "stageId": "camp",
+      "dayId": "fri",
+      "start": "2026-09-18T14:00:00-06:00",
+      "end": "2026-09-18T15:00:00-06:00"
+    },
+    {
+      "id": "fri-katie-skene-blues-1430",
+      "artistId": "katie-skene",
+      "stageId": "blues",
+      "dayId": "fri",
+      "start": "2026-09-18T14:30:00-06:00",
+      "end": "2026-09-18T15:30:00-06:00"
+    },
+    {
+      "id": "fri-kirk-fletcher-truck-1430",
+      "artistId": "kirk-fletcher",
+      "stageId": "truck",
+      "dayId": "fri",
+      "start": "2026-09-18T14:30:00-06:00",
+      "end": "2026-09-18T15:30:00-06:00"
+    },
+    {
+      "id": "fri-eggy-main-1500",
+      "artistId": "eggy",
+      "stageId": "main",
+      "dayId": "fri",
+      "start": "2026-09-18T15:00:00-06:00",
+      "end": "2026-09-18T16:00:00-06:00"
+    },
+    {
+      "id": "fri-albert-white-camp-1530",
+      "artistId": "albert-white",
+      "stageId": "camp",
+      "dayId": "fri",
+      "start": "2026-09-18T15:30:00-06:00",
+      "end": "2026-09-18T16:30:00-06:00"
+    },
+    {
+      "id": "fri-david-jacobs-strain-blues-1600",
+      "artistId": "david-jacobs-strain",
+      "stageId": "blues",
+      "dayId": "fri",
+      "start": "2026-09-18T16:00:00-06:00",
+      "end": "2026-09-18T17:00:00-06:00"
+    },
+    {
+      "id": "fri-ken-valdez-truck-1600",
+      "artistId": "ken-valdez",
+      "stageId": "truck",
+      "dayId": "fri",
+      "start": "2026-09-18T16:00:00-06:00",
+      "end": "2026-09-18T16:30:00-06:00"
+    },
+    {
+      "id": "fri-g-love-main-1630",
+      "artistId": "g-love",
+      "stageId": "main",
+      "dayId": "fri",
+      "start": "2026-09-18T16:30:00-06:00",
+      "end": "2026-09-18T17:40:00-06:00"
+    },
+    {
+      "id": "fri-little-willie-farmer-blues-1730",
+      "artistId": "little-willie-farmer",
+      "stageId": "blues",
+      "dayId": "fri",
+      "start": "2026-09-18T17:30:00-06:00",
+      "end": "2026-09-18T18:30:00-06:00"
+    },
+    {
+      "id": "fri-daniel-donato-main-1810",
+      "artistId": "daniel-donato",
+      "stageId": "main",
+      "dayId": "fri",
+      "start": "2026-09-18T18:10:00-06:00",
+      "end": "2026-09-18T19:20:00-06:00"
+    },
+    {
+      "id": "fri-marcus-king-band-main-2000",
+      "artistId": "marcus-king-band",
+      "stageId": "main",
+      "dayId": "fri",
+      "start": "2026-09-18T20:00:00-06:00",
+      "end": "2026-09-18T21:30:00-06:00"
+    },
+    {
+      "id": "sat-j-causeways-main-1200",
+      "artistId": "j-causeways",
+      "stageId": "main",
+      "dayId": "sat",
+      "start": "2026-09-19T12:00:00-06:00",
+      "end": "2026-09-19T13:00:00-06:00"
+    },
+    {
+      "id": "sat-nigel-wearne-camp-1230",
+      "artistId": "nigel-wearne",
+      "stageId": "camp",
+      "dayId": "sat",
+      "start": "2026-09-19T12:30:00-06:00",
+      "end": "2026-09-19T13:30:00-06:00"
+    },
+    {
+      "id": "sat-derrick-dove-blues-1300",
+      "artistId": "derrick-dove",
+      "stageId": "blues",
+      "dayId": "sat",
+      "start": "2026-09-19T13:00:00-06:00",
+      "end": "2026-09-19T14:00:00-06:00"
+    },
+    {
+      "id": "sat-judith-hill-main-1330",
+      "artistId": "judith-hill",
+      "stageId": "main",
+      "dayId": "sat",
+      "start": "2026-09-19T13:30:00-06:00",
+      "end": "2026-09-19T14:30:00-06:00"
+    },
+    {
+      "id": "sat-david-jacobs-strain-camp-1400",
+      "artistId": "david-jacobs-strain",
+      "stageId": "camp",
+      "dayId": "sat",
+      "start": "2026-09-19T14:00:00-06:00",
+      "end": "2026-09-19T15:00:00-06:00"
+    },
+    {
+      "id": "sat-kirk-fletcher-blues-1430",
+      "artistId": "kirk-fletcher",
+      "stageId": "blues",
+      "dayId": "sat",
+      "start": "2026-09-19T14:30:00-06:00",
+      "end": "2026-09-19T15:30:00-06:00"
+    },
+    {
+      "id": "sat-katie-skene-truck-1430",
+      "artistId": "katie-skene",
+      "stageId": "truck",
+      "dayId": "sat",
+      "start": "2026-09-19T14:30:00-06:00",
+      "end": "2026-09-19T15:30:00-06:00"
+    },
+    {
+      "id": "sat-nether-hour-main-1500",
+      "artistId": "nether-hour",
+      "stageId": "main",
+      "dayId": "sat",
+      "start": "2026-09-19T15:00:00-06:00",
+      "end": "2026-09-19T16:00:00-06:00"
+    },
+    {
+      "id": "sat-nigel-wearne-truck-1600",
+      "artistId": "nigel-wearne",
+      "stageId": "truck",
+      "dayId": "sat",
+      "start": "2026-09-19T16:00:00-06:00",
+      "end": "2026-09-19T16:30:00-06:00"
+    },
+    {
+      "id": "sat-charlie-musselwhite-ga20-main-1630",
+      "artistId": "charlie-musselwhite-ga20",
+      "stageId": "main",
+      "dayId": "sat",
+      "start": "2026-09-19T16:30:00-06:00",
+      "end": "2026-09-19T17:40:00-06:00"
+    },
+    {
+      "id": "sat-albert-white-blues-1730",
+      "artistId": "albert-white",
+      "stageId": "blues",
+      "dayId": "sat",
+      "start": "2026-09-19T17:30:00-06:00",
+      "end": "2026-09-19T18:30:00-06:00"
+    },
+    {
+      "id": "sat-derrick-dove-truck-1740",
+      "artistId": "derrick-dove",
+      "stageId": "truck",
+      "dayId": "sat",
+      "start": "2026-09-19T17:40:00-06:00",
+      "end": "2026-09-19T18:10:00-06:00"
+    },
+    {
+      "id": "sat-record-company-main-1810",
+      "artistId": "record-company",
+      "stageId": "main",
+      "dayId": "sat",
+      "start": "2026-09-19T18:10:00-06:00",
+      "end": "2026-09-19T19:20:00-06:00"
+    },
+    {
+      "id": "sat-taj-mahal-keb-mo-main-2000",
+      "artistId": "taj-mahal-keb-mo",
+      "stageId": "main",
+      "dayId": "sat",
+      "start": "2026-09-19T20:00:00-06:00",
+      "end": "2026-09-19T21:30:00-06:00"
+    },
+    {
+      "id": "sun-harlem-gospel-travelers-main-1200",
+      "artistId": "harlem-gospel-travelers",
+      "stageId": "main",
+      "dayId": "sun",
+      "start": "2026-09-20T12:00:00-06:00",
+      "end": "2026-09-20T13:00:00-06:00"
+    },
+    {
+      "id": "sun-zac-schulze-gang-blues-1300",
+      "artistId": "zac-schulze-gang",
+      "stageId": "blues",
+      "dayId": "sun",
+      "start": "2026-09-20T13:00:00-06:00",
+      "end": "2026-09-20T14:00:00-06:00"
+    },
+    {
+      "id": "sun-dk-harrell-main-1330",
+      "artistId": "dk-harrell",
+      "stageId": "main",
+      "dayId": "sun",
+      "start": "2026-09-20T13:30:00-06:00",
+      "end": "2026-09-20T14:30:00-06:00"
+    },
+    {
+      "id": "sun-alex-maryol-camp-1400",
+      "artistId": "alex-maryol",
+      "stageId": "camp",
+      "dayId": "sun",
+      "start": "2026-09-20T14:00:00-06:00",
+      "end": "2026-09-20T15:00:00-06:00"
+    },
+    {
+      "id": "sun-ken-valdez-blues-1430",
+      "artistId": "ken-valdez",
+      "stageId": "blues",
+      "dayId": "sun",
+      "start": "2026-09-20T14:30:00-06:00",
+      "end": "2026-09-20T15:30:00-06:00"
+    },
+    {
+      "id": "sun-eddie-9v-main-1500",
+      "artistId": "eddie-9v",
+      "stageId": "main",
+      "dayId": "sun",
+      "start": "2026-09-20T15:00:00-06:00",
+      "end": "2026-09-20T16:00:00-06:00"
+    },
+    {
+      "id": "sun-little-willie-farmer-camp-1530",
+      "artistId": "little-willie-farmer",
+      "stageId": "camp",
+      "dayId": "sun",
+      "start": "2026-09-20T15:30:00-06:00",
+      "end": "2026-09-20T16:30:00-06:00"
+    },
+    {
+      "id": "sun-derrick-dove-truck-1600",
+      "artistId": "derrick-dove",
+      "stageId": "truck",
+      "dayId": "sun",
+      "start": "2026-09-20T16:00:00-06:00",
+      "end": "2026-09-20T16:30:00-06:00"
+    },
+    {
+      "id": "sun-samantha-fish-main-1630",
+      "artistId": "samantha-fish",
+      "stageId": "main",
+      "dayId": "sun",
+      "start": "2026-09-20T16:30:00-06:00",
+      "end": "2026-09-20T17:40:00-06:00"
+    },
+    {
+      "id": "sun-terry-bean-blues-1730",
+      "artistId": "terry-bean",
+      "stageId": "blues",
+      "dayId": "sun",
+      "start": "2026-09-20T17:30:00-06:00",
+      "end": "2026-09-20T18:30:00-06:00"
+    },
+    {
+      "id": "sun-zac-schulze-gang-truck-1740",
+      "artistId": "zac-schulze-gang",
+      "stageId": "truck",
+      "dayId": "sun",
+      "start": "2026-09-20T17:40:00-06:00",
+      "end": "2026-09-20T18:10:00-06:00"
+    },
+    {
+      "id": "sun-tab-benoit-main-1810",
+      "artistId": "tab-benoit",
+      "stageId": "main",
+      "dayId": "sun",
+      "start": "2026-09-20T18:10:00-06:00",
+      "end": "2026-09-20T19:20:00-06:00"
+    },
+    {
+      "id": "sun-jon-batiste-main-2000",
+      "artistId": "jon-batiste",
+      "stageId": "main",
+      "dayId": "sun",
+      "start": "2026-09-20T20:00:00-06:00",
+      "end": "2026-09-20T21:30:00-06:00"
+    }
+  ]
+}
