@@ -16,7 +16,7 @@ No account, payment, ticket storage, precise location, analytics, or personal-da
 - `admin.html`: local/public-safe content publisher. It validates and downloads JSON but cannot mutate GitHub or hold credentials.
 - `privacy.html`: public privacy policy matching the current implementation.
 - `ios/`, `android/`: generated Capacitor 8 native projects.
-- `assets/poster-source-preview.png`: a 1080×1890 derivative of the licensed layered PSD, used intact and full-bleed as the on-device share-image template. The 1.6 GB source PSD is untouched in `SBG Content/`.
+- `assets/poster-source-preview.png`: a 1080×1890 derivative of the licensed layered PSD, used intact and full-bleed as the on-device share-image template. The roughly 1.74 GB source PSD is untouched in `SBG Content/`.
 - `assets/fonts/`: locally bundled OFL fonts and exact license files. See `FONT_LICENSES.md`.
 
 The referenced “SVG content folder” was not present when this handoff was written (`find . -iname '*.svg'` returned no files). If the layered SVG arrives later, preserve it and treat it as a source asset only. The current personalized edition keeps the official illustration, border, annual badge, and brewers banner intact. It cleans only the poster’s existing printed-lineup zone with a feathered paper field reconstructed from the light pixels and grain colors sampled from that exact zone, then typesets “MY FESTIVAL PICKS” and the user’s current favorites in the same compact uppercase composition. It adds no card, new panel, or full-frame color wash.
@@ -48,9 +48,11 @@ Schedule data is explicitly subject to change. `meta.verifiedAt` and `meta.conte
 
 The publisher intentionally does not write directly to GitHub. That keeps credentials and write authority out of a public page. The repository’s review/branch protections are the publication gate.
 
-To enable Pages: repository **Settings → Pages → Build and deployment → Source: GitHub Actions**. The workflow is `.github/workflows/pages.yml`. Relative URLs make project-site hosting work without a custom base path. Official reference: [GitHub Pages custom workflow documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
+Production repository: [samgumble/music-app](https://github.com/samgumble/music-app). Production site: [samgumble.github.io/music-app](https://samgumble.github.io/music-app/). Pages is configured for GitHub Actions with `.github/workflows/pages.yml`, HTTPS enforcement, and `main` as the durable branch. Official reference: [GitHub Pages custom workflow documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/using-custom-workflows-with-github-pages).
 
-Recommended repository name: `music-app`. The generic repository name does not anonymize the actual app—the deployed experience intentionally retains the complete Blues & Brews name, licensed artwork, and official festival content. The owning GitHub username or organization remains visible in a default Pages URL such as `https://ACCOUNT.github.io/music-app/`; use a custom domain or an appropriate organization account if ownership privacy matters. No external repository has been created or pushed.
+The generic repository name does not anonymize the actual app—the deployed experience intentionally retains the complete Blues & Brews name, licensed artwork, and official festival content. The owning GitHub username remains visible in the default Pages URL; move the repository to an appropriate organization account or use a custom domain if ownership privacy requirements change.
+
+Deployment verification on September 8, 2026 confirmed the public repository is `PUBLIC`, Pages uses the workflow build type, and the deployment for commit `004b93a` completed successfully. Home, Lineup, My Plan, Guide, and the organizer publisher rendered from the public site. The versioned CSS and JavaScript, manifest, service worker, official content JSON, privacy page, runtime poster, and local font assets all returned HTTPS 200. The remote tree contains the runtime poster derivative, workflow, font licenses, and native iOS/Android source; it contains no PSD master, dependencies, generated `dist/`, credentials, signing material, or caches.
 
 The build has no root-absolute asset URLs. Manifest start URL, app assets, privacy/admin links, content fetch, and service-worker registration/scope are relative, so the app is compatible with the `/music-app/` project subpath.
 
