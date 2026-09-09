@@ -6,7 +6,15 @@ export function NowPost() {
   const { festival } = useContent();
   const share = async () => {
     const text = `Thank you, ${festival.name} ${festival.year}. See you in ${festival.year + 1}. ${festival.links.site}`;
-    if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
+    if (navigator.share) {
+      try {
+        await navigator.share({ text });
+      } catch {
+        /* user cancelled */
+      }
+    } else {
+      await navigator.clipboard?.writeText(text);
+    }
   };
   return (
     <>

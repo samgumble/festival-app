@@ -31,4 +31,12 @@ describe("Now screen states", () => {
     renderAt("/");
     expect(await screen.findByText(/see you in 2027/i)).toBeInTheDocument();
   });
+
+  it("never nests a button inside a link", async () => {
+    useUiStore.setState({ devNow: "2026-09-17T18:00:00-06:00" });
+    const { container } = renderAt("/");
+    await screen.findByText(/gates open in/i);
+    expect(container.querySelectorAll("a button").length).toBe(0);
+    useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00" });
+  });
 });

@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Button, Card, Chip, Eyebrow } from "@/design";
+import { buttonClasses, Card, Chip, Eyebrow } from "@/design";
 import { activeUrgent, useAlerts } from "@/data/alerts";
 import { useContent, useContentIndex } from "@/data/content";
 import { nextUp } from "@/domain/conflicts";
@@ -57,10 +57,13 @@ export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
               <div className="text-[16px] font-semibold leading-5">{p.artist.name}</div>
               <div className="text-[13px] text-fg-soft tabular-nums">in {minutesBetween(now, parseIso(myNext.start))} min · {formatRange(parseIso(myNext.start), parseIso(myNext.end))} · {p.stage.name}</div>
             </Link>
-            <Link to="/plan"><Button size="sm">Plan</Button></Link>
+            <Link to="/plan" className={buttonClasses({ size: "sm" })}>Plan</Link>
           </Card>
         ); })() : (
-          <Link to="/lineup" className="block"><Card className="flex items-center gap-3"><div className="flex-1 text-[15px] text-fg-soft">No favorites yet — tap the heart on any set.</div><Button variant="sun" size="sm">Lineup</Button></Card></Link>
+          <Card className="flex items-center gap-3">
+            <div className="flex-1 text-[15px] text-fg-soft">No favorites yet — tap the heart on any set.</div>
+            <Link to="/lineup" className={buttonClasses({ variant: "sun", size: "sm" })}>Lineup</Link>
+          </Card>
         )}
       </div>
     </>

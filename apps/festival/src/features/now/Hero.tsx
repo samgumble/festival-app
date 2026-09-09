@@ -13,9 +13,9 @@ export function Hero({ compact = false, children }: { compact?: boolean; childre
   const ok = useMotionOk();
   const { scrollY } = useScroll();
   const cap = 24;
-  const y0 = useTransform(scrollY, [0, 300], [0, ok ? Math.min(cap, 300 * 0.15) : 0]);
-  const y1 = useTransform(scrollY, [0, 300], [0, ok ? Math.min(cap, 300 * 0.35) : 0]);
-  const y2 = useTransform(scrollY, [0, 300], [0, ok ? Math.min(cap, 300 * 0.6) : 0]);
+  const y0 = useTransform(scrollY, [0, cap / LAYERS[0].rate], [0, ok ? cap : 0], { clamp: true });
+  const y1 = useTransform(scrollY, [0, cap / LAYERS[1].rate], [0, ok ? cap : 0], { clamp: true });
+  const y2 = useTransform(scrollY, [0, cap / LAYERS[2].rate], [0, ok ? cap : 0], { clamp: true });
   const ys = [y0, y1, y2];
   return (
     <div className={`relative overflow-hidden rounded-hero bg-night ${compact ? "h-[250px]" : "h-[420px]"}`}>

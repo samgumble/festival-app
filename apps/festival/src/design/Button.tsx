@@ -17,11 +17,20 @@ const SIZE = {
   sm: "h-9 px-3.5 text-[14px] rounded-[10px] relative before:absolute before:inset-x-0 before:-inset-y-1 before:content-['']",
 };
 
+export function buttonClasses({ variant = "ghost", size = "md", full = false, className = "" }: {
+  variant?: "sun" | "ink" | "ghost";
+  size?: "md" | "sm";
+  full?: boolean;
+  className?: string;
+} = {}): string {
+  return `inline-flex items-center justify-center gap-2 font-semibold leading-6 transition-transform duration-150 active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 disabled:opacity-50 ${VARIANT[variant]} ${SIZE[size]} ${full ? "w-full" : ""} ${className}`;
+}
+
 export function Button({ variant = "ghost", size = "md", full = false, className = "", type = "button", ...rest }: Props) {
   return (
     <button
       type={type}
-      className={`inline-flex items-center justify-center gap-2 font-semibold leading-6 transition-transform duration-150 active:scale-[0.97] motion-reduce:transition-none motion-reduce:active:scale-100 disabled:opacity-50 ${VARIANT[variant]} ${SIZE[size]} ${full ? "w-full" : ""} ${className}`}
+      className={buttonClasses({ variant, size, full, className })}
       {...rest}
     />
   );

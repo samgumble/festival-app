@@ -1,5 +1,5 @@
 import { Link } from "react-router";
-import { Button, Card, Eyebrow, Heart } from "@/design";
+import { buttonClasses, Card, Eyebrow, Heart } from "@/design";
 import { useContentIndex, useContent } from "@/data/content";
 import { gatesOpenAt, headliners } from "@/domain/schedule";
 import { formatTime, parseIso } from "@/domain/time";
@@ -39,7 +39,7 @@ export function NowPre({ now }: { now: Date }) {
         })}
       </div>
       {favorites.length === 0 && (
-        <Link to="/lineup" className="mt-3 block"><Button variant="sun" full>Build your plan</Button></Link>
+        <Link to="/lineup" className={`mt-3 ${buttonClasses({ variant: "sun", full: true })}`}>Build your plan</Link>
       )}
     </>
   );

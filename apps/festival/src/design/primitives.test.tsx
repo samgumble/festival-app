@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { Badge, Button, Heart, SegmentedControl, Sheet, Toggle } from "./index";
+import { Badge, Button, buttonClasses, Heart, SegmentedControl, Sheet, Toggle } from "./index";
 
 describe("Heart", () => {
   it("exposes pressed state and calls onToggle", () => {
@@ -63,6 +63,13 @@ describe("Button", () => {
   it("renders as a native button with text", () => {
     render(<Button variant="sun">Remind me</Button>);
     expect(screen.getByRole("button", { name: "Remind me" })).toBeInTheDocument();
+  });
+});
+
+describe("buttonClasses", () => {
+  it("matches the classes Button renders", () => {
+    render(<Button variant="sun" size="sm">X</Button>);
+    expect(screen.getByRole("button", { name: "X" }).className).toBe(buttonClasses({ variant: "sun", size: "sm" }));
   });
 });
 
