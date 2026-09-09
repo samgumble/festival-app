@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
-import { Button, Chip, Eyebrow, Heart, Sheet, Toggle } from "@/design";
+import { Button, buttonClasses, Chip, Eyebrow, Heart, Sheet, Toggle } from "@/design";
 import { useFestivalClock } from "@/app/clock";
 import { useContent, useContentIndex } from "@/data/content";
 import { formatRange, formatTime, parseIso } from "@/domain/time";
@@ -25,7 +25,15 @@ export function ArtistSheet() {
   const share = async () => {
     const lines = sets.map((s) => `${dayLabel(s.dayId)} ${formatRange(parseIso(s.start), parseIso(s.end))} · ${idx.stagesById.get(s.stageId)?.name}`);
     const text = `${artist.name} — ${content.festival.name}\n${lines.join("\n")}\n${content.festival.links.lineup}`;
-    if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
+    if (navigator.share) {
+      try {
+        await navigator.share({ text });
+      } catch {
+        /* user cancelled the share sheet */
+      }
+    } else {
+      await navigator.clipboard?.writeText(text);
+    }
   };
   return (
     <Sheet onClose={onClose} title={artist.name}>
@@ -57,7 +65,7 @@ export function ArtistSheet() {
       )}
       <div className="mt-3 flex gap-2">
         <Button size="sm" onClick={share}>Share ↗</Button>
-        <a className="inline-flex h-9 items-center rounded-[10px] border-[1.5px] border-hair px-3.5 text-[14px] font-semibold text-structure-2" href={content.festival.links.lineup} target="_blank" rel="noreferrer">Official lineup ↗</a>
+        <a className={buttonClasses({ size: "sm" })} href={content.festival.links.lineup} target="_blank" rel="noreferrer">Official lineup ↗</a>
       </div>
       <p className="mt-3 text-[12px] text-fg-soft">Times shown in Telluride (Mountain) time. Now: {formatTime(now)}</p>
     </Sheet>

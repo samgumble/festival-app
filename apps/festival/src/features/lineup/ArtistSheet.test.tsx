@@ -39,4 +39,18 @@ describe("ArtistSheet", () => {
     fireEvent.keyDown(document, { key: "Escape" });
     expect(router.state.location.pathname).toBe("/lineup");
   });
+
+  it("external link carries the 44px hit-area and share survives a cancelled sheet", async () => {
+    const original = navigator.share;
+    Object.defineProperty(navigator, "share", { value: () => Promise.reject(new DOMException("cancelled", "AbortError")), configurable: true });
+    try {
+      renderAt("/lineup/artist/eggy");
+      const dialog = await screen.findByRole("dialog");
+      expect(within(dialog).getByRole("link", { name: /official lineup/i }).className).toMatch(/before:-inset-y-1\b/);
+      fireEvent.click(within(dialog).getByRole("button", { name: /share/i }));
+      await new Promise((r) => setTimeout(r, 0)); // let the rejected promise settle without an unhandled rejection
+    } finally {
+      Object.defineProperty(navigator, "share", { value: original, configurable: true });
+    }
+  });
 });
