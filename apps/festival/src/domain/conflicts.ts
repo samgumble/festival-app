@@ -22,12 +22,12 @@ export function detectConflicts(sets: FestivalSet[], bufferMinutes: number): Con
   for (let i = 0; i < sorted.length; i++) {
     for (let j = i + 1; j < sorted.length; j++) {
       const a = sorted[i]!, b = sorted[j]!;
-      if (a.stageId === b.stageId && a.id === b.id) continue;
+      if (a.id === b.id) continue;
       const aEnd = isoMs(a.end), bStart = isoMs(b.start);
       const gap = bStart - aEnd; // negative = overlap
       if (gap >= buffer) continue;
       const overlap = Math.max(0, Math.round(-gap / 60_000));
-      out.push({ key: conflictKey(a, b), a, b, overlapMinutes: overlap, bufferOnly: overlap === 0 });
+      out.push({ key: conflictKey(a, b), a, b, overlapMinutes: overlap, bufferOnly: gap >= 0 });
     }
   }
   return out;

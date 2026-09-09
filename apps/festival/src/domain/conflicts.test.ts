@@ -25,6 +25,13 @@ describe("detectConflicts", () => {
     expect(c).toHaveLength(1);
     expect(c[0]).toMatchObject({ overlapMinutes: 0, bufferOnly: true });
   });
+  it("a sub-minute true overlap is not buffer-only", () => {
+    const base = byId.get(MUSSEL)!; // Sat 16:30–17:40
+    const late = { ...base, id: "test-late", stageId: "blues", start: "2026-09-19T17:39:45-06:00", end: "2026-09-19T18:30:00-06:00" };
+    const c = detectConflicts([base, late], 0);
+    expect(c).toHaveLength(1);
+    expect(c[0]).toMatchObject({ overlapMinutes: 0, bufferOnly: false });
+  });
   it("keys are order-independent", () => {
     expect(conflictKey(byId.get(ALBERT)!, byId.get(MUSSEL)!)).toBe(conflictKey(byId.get(MUSSEL)!, byId.get(ALBERT)!));
   });
