@@ -1,0 +1,8 @@
+{
+  "appId": "com.sbgproductions.bluesandbrews",
+  "appName": "Blues & Brews",
+  "webDir": "dist",
+  "server": {"androidScheme":"https"},
+  "ios": {"contentInset":"always"},
+  "android": {"allowMixedContent":false}
+}

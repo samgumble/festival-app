@@ -1,0 +1,13 @@
+{
+  "name": "Telluride Blues & Brews",
+  "short_name": "Blues & Brews",
+  "description": "Your pocket guide to the Telluride Blues & Brews Festival.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#f7eedc",
+  "theme_color": "#18164b",
+  "icons": [
+    {"src":"assets/sbg-logo.png","sizes":"312x312","type":"image/png","purpose":"any"},
+    {"src":"assets/sbg-logo.png","sizes":"312x312","type":"image/png","purpose":"maskable"}
+  ]
+}

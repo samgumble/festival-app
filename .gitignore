@@ -1,0 +1,26 @@
+node_modules/
+dist/
+.DS_Store
+.env
+.env.*
+!.env.example
+*.log
+*.pem
+*.key
+*.p12
+*.p8
+*.mobileprovision
+*.keystore
+*.jks
+google-services.json
+GoogleService-Info.plist
+*.xcuserstate
+xcuserdata/
+*.xcuserdatad/
+ios/App/DerivedData/
+android/.gradle/
+android/local.properties
+android/app/build/
+
+# Licensed editable artwork stays local/source-only; never commit or ship it.
+SBG Content/*.psd

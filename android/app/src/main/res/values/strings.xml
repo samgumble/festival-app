@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">Blues &amp; Brews</string>
+    <string name="title_activity_main">Blues &amp; Brews</string>
+    <string name="package_name">com.sbgproductions.bluesandbrews</string>
+    <string name="custom_url_scheme">com.sbgproductions.bluesandbrews</string>
+</resources>

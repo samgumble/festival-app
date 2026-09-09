@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <link rel="icon" href="assets/sbg-logo.png" />
+  <link rel="stylesheet" href="admin.css?v=12" />
+  <title>Festival Content Publisher</title>
+</head>
+<body>
+  <header>
+    <img src="assets/festival-logo.png" alt="Telluride Blues & Brews" />
+    <span>Content Publisher</span>
+  </header>
+  <main>
+    <section class="intro">
+      <p class="eyebrow">NO LOGIN · NO DATABASE</p>
+      <h1>Fresh updates,<br><em>without the fuss.</em></h1>
+      <p>Edit and validate the festival’s public content, then download one safe JSON file to publish through GitHub.</p>
+    </section>
+    <section class="panel">
+      <div class="step"><span>1</span><div><h2>Quick announcement</h2><p>Updates the announcement fields in the content file below.</p></div></div>
+      <div class="form-grid">
+        <label><span>Label</span><input id="announcementLabel" maxlength="40" /></label>
+        <label><span>Updated date</span><input id="announcementDate" type="date" /></label>
+        <label class="wide"><span>Message</span><textarea id="announcementMessage" rows="3" maxlength="240"></textarea></label>
+        <label class="check"><input id="announcementActive" type="checkbox" /><span>Show announcement in the app</span></label>
+        <label class="check"><input id="announcementUrgent" type="checkbox" /><span>Mark as urgent</span></label>
+      </div>
+      <button class="secondary" id="applyAnnouncement">Apply to content</button>
+    </section>
+    <section class="panel">
+      <div class="step"><span>2</span><div><h2>Review public content</h2><p>Lineup, set times, guide details, and announcements all live here.</p></div></div>
+      <div class="toolbar"><button class="ghost" id="formatJson">Format JSON</button><label class="file-label">Open JSON<input type="file" id="openJson" accept="application/json" /></label></div>
+      <textarea id="jsonEditor" class="code" spellcheck="false" aria-label="Festival content JSON"></textarea>
+      <div id="validation" class="validation">Loading official content…</div>
+    </section>
+    <section class="panel publish-panel">
+      <div class="step"><span>3</span><div><h2>Publish the update</h2><p>Download, replace <code>data/content.json</code> in GitHub, review the diff, and commit. The app refreshes online and keeps the last good copy offline.</p></div></div>
+      <button class="primary" id="downloadJson">Download content.json <span>↓</span></button>
+      <button class="ghost full" id="copyJson">Copy JSON to clipboard</button>
+    </section>
+    <aside><strong>Why no password?</strong> This page makes files but cannot change the live site. GitHub permissions remain the only publishing gate, so the festival app never handles credentials.</aside>
+  </main>
+  <script src="admin.js?v=12"></script>
+</body>
+</html>
