@@ -1,0 +1,7 @@
+{
+  "name": "@bb/content",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "dependencies": { "@bb/shared": "*", "zod": "4.6.0" }
+}

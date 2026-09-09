@@ -27,3 +27,8 @@ SBG Content/*.psd
 
 # brainstorming visual companion sessions
 .superpowers/
+
+# build + tool output
+apps/festival/dist/
+apps/festival/test-results/
+apps/festival/playwright-report/

@@ -1,0 +1,16 @@
+{
+  "name": "bb-festival",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "engines": { "node": ">=22.18" },
+  "workspaces": ["apps/*", "packages/*"],
+  "scripts": {
+    "dev": "npm run dev -w @bb/festival",
+    "build": "npm run content:build && npm run build -w @bb/festival",
+    "content:build": "node packages/content/scripts/build.ts",
+    "test": "npm run content:build && npm run test --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present",
+    "screenshots": "npm run screenshots -w @bb/festival"
+  }
+}
