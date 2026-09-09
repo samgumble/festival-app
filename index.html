@@ -8,7 +8,7 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="assets/sbg-logo.png" />
     <link rel="icon" href="assets/sbg-logo.png" />
-    <link rel="stylesheet" href="styles.css?v=17" />
+    <link rel="stylesheet" href="styles.css?v=18" />
     <title>Blues & Brews 2026</title>
   </head>
   <body class="app-loading">
@@ -122,7 +122,7 @@
           <div class="page-intro plan-intro">
             <p class="eyebrow">YOUR WEEKEND, REMIXED</p>
             <h1>My Plan <span id="favoriteCount">0 picks</span></h1>
-            <p>Choose a mood. Your schedule is built privately on this device—no account, no tracking.</p>
+            <p>Choose a mood. Your schedule updates instantly on this device—no account, no tracking.</p>
           </div>
           <section class="tuner-card">
             <div class="tuner-title">
@@ -140,7 +140,7 @@
                 <button data-pace="full" class="selected">Full send</button>
               </div>
             </div>
-            <button class="primary-button sun-button" id="generatePlan">Build my festival flow <span>✦</span></button>
+            <p class="auto-plan-note" id="planAutoStatus" role="status" aria-live="polite">Your schedule updates automatically as you tune it.</p>
             <p class="privacy-note">Recommendations happen locally. Your choices never leave this device.</p>
           </section>
           <section class="section plan-results" id="planResults"></section>
@@ -185,6 +185,6 @@
     </dialog>
     <div class="update-notice" id="updateNotice" hidden><span>A fresh festival guide is ready.</span><button id="applyUpdate">Refresh now</button></div>
     <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
-    <script src="app.js?v=17" defer></script>
+    <script src="app.js?v=18" defer></script>
   </body>
 </html>

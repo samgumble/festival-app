@@ -74,8 +74,8 @@ Three experience promises govern every screen:
 ## My Plan / Festival Flow
 
 - Desktop uses a two-column workbench: the tuner remains visible while results, next set, and schedule occupy the larger column. Mobile remains linear.
-- The current favorite count is visible in the intro and tuner. Before a plan exists, the empty state clearly sends people to the lineup or builds from saved picks.
-- Building a plan gives immediate pressed/busy feedback, then reveals the summary with a restrained entrance.
+- The current favorite count is visible in the intro and tuner. The full personalized schedule is generated automatically when My Plan opens and remains fully expanded; there is no separate build/reveal step.
+- Any favorite, mood, or pace change recomputes the schedule immediately with the existing conflict rules, persists the resulting local plan, and updates the visible summary, recommendation, days, and set rows in place.
 - Conflict resolution is explicit: show the count and explain that higher-priority/non-overlapping sets were kept. Zero conflicts is celebrated without overclaiming.
 - “What should I see next?” is the strongest result card, with time, stage, and concise reason.
 - Reminder/calendar/share actions use clear success/error feedback. Share-poster generation shows a temporary “Building poster…” state, disables duplicate activation, opens a polished preview, and restores controls on error.
@@ -115,7 +115,7 @@ Three experience promises govern every screen:
   - Initial loading: **“Tuning the festival guide…”** with supporting **“Loading the official 2026 lineup and your saved picks.”** No button while a request is active.
   - Fatal content failure: **“Festival guide unavailable”** with **“Reconnect once to save the guide for offline use.”** and button **“Try again.”**
   - Empty lineup result: **“No artists match”** with **“Try another name or reset your day filters.”** and button **“Clear filters.”**
-  - No favorites/plan: **“Your weekend starts here”** with button **“Choose artists.”** Saved favorites without a plan: **“Your picks are ready”** with button **“Build my festival flow.”**
+  - No favorites/plan: **“Your weekend starts here”** with button **“Choose artists.”** The tuner status says **“Your schedule will appear as soon as you save an artist.”** If active preferences exclude every published favorite set, show **“No sets fit these choices”** with button **“Show all my picks.”**
   - Share generation: button **“Building poster…”** while busy; success heading **“My Festival Picks”**; failure toast **“Poster couldn’t be built. Try again.”**
   - Offline pill: **“Offline · guide saved.”** Offline toast: **“Offline — your saved guide is ready.”** Update notice: **“A fresh festival guide is ready.”** with button **“Refresh now.”**
 - Loading content renders the branded status above instead of a blank shell. Offline mode continues to use cached content and app shell.
@@ -130,7 +130,7 @@ This is a vanilla HTML/CSS/JavaScript design system. No shadcn registry, third-p
 - Home, Lineup, My Plan, Guide, publisher, privacy, install, offline, update, empty, error, and share-preview states follow this contract.
 - Mobile screenshots at 390×844 and desktop screenshots at 1440×1000 show intentional layouts with no covered content or phone-frame desktop treatment.
 - The poster assembly is visually verified in Chromium and WebKit where available, remains compositor-friendly during scroll, and resolves to a coherent static scene in reduced-motion/small-device fallback conditions.
-- Favorite toggles propagate synchronously to all dependent UI and reconcile a built plan.
-- Search/day filters, plan builder, FAQ, reminder/calendar fallbacks, and poster generation remain functional.
+- Favorite toggles and planning preferences propagate synchronously to all dependent UI and regenerate the persisted plan without a build button, accordion, or extra reveal step.
+- Search/day filters, automatic plan generation, FAQ, reminder/calendar fallbacks, and poster generation remain functional.
 - Build and syntax checks pass; PWA paths remain relative; service-worker cache keys and asset versions are bumped for changed production assets.
 - No analytics, accounts, network personalization, remote fonts, credentials, or source PSD enter the implementation or public bundle.

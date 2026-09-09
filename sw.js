@@ -1,6 +1,6 @@
-const CACHE = "blues-brews-2026-v17";
+const CACHE = "blues-brews-2026-v18";
 const APP_SHELL = [
-  "./", "./index.html", "./styles.css?v=17", "./app.js?v=17", "./privacy.html", "./manifest.webmanifest",
+  "./", "./index.html", "./styles.css?v=18", "./app.js?v=18", "./privacy.html", "./manifest.webmanifest",
   "./admin.html", "./admin.css?v=17", "./admin.js?v=17",
   "./data/content.json", "./assets/festival-logo.png", "./assets/festival-lockup.png", "./assets/sbg-logo.png", "./assets/poster-source-preview.png",
   "./assets/fonts/archivo-black/ArchivoBlack-Regular.ttf", "./assets/fonts/dm-sans/DMSans-Variable.ttf", "./assets/fonts/rye/Rye-Regular.ttf", "./assets/fonts/michroma/Michroma-Regular.ttf", "./assets/fonts/jost/Jost-Variable.ttf"

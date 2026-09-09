@@ -85,7 +85,7 @@ function navigate(route) {
   const heading = next.querySelector("h1");
   heading?.setAttribute("tabindex", "-1");
   heading?.focus({ preventScroll: true });
-  if (route === "plan") renderPlan();
+  if (route === "plan") syncPlanToInputs();
 }
 
 function favoriteButton(id, label) {
@@ -107,34 +107,14 @@ function toggleFavorite(id) {
   }
   localStorage.setItem(STORAGE.favorites, JSON.stringify([...state.favorites]));
   invalidateSharePreview();
-  reconcilePlanWithFavorites();
   updateFavoriteUI();
   renderHome();
   renderLineup();
-  renderPlan();
+  syncPlanToInputs({ announce: true });
   window.setTimeout(() => {
     state.lastFavoriteId = null;
     document.querySelectorAll(".favorite-pop").forEach(button => button.classList.remove("favorite-pop"));
   }, 360);
-}
-
-function reconcilePlanWithFavorites() {
-  if (!state.plan) return;
-  if (!state.favorites.size) {
-    state.plan = null;
-    localStorage.removeItem(STORAGE.plan);
-    return;
-  }
-  const result = resolveConflicts(getCandidateEvents());
-  state.plan = {
-    ...state.plan,
-    eventIds: result.selected.map(event => event.id),
-    conflicts: result.conflicts.length,
-    builtAt: new Date().toISOString(),
-    pace: state.pace,
-    moods: [...state.moods]
-  };
-  localStorage.setItem(STORAGE.plan, JSON.stringify(state.plan));
 }
 
 function updateFavoriteUI() {
@@ -261,32 +241,39 @@ function resolveConflicts(events) {
   return { selected: selected.sort((a,b) => days.indexOf(a.day) - days.indexOf(b.day) || timeValue(a.start) - timeValue(b.start)), conflicts };
 }
 
-async function buildPlan() {
+function syncPlanToInputs({ announce = false } = {}) {
+  if (!state.content) return;
+  const status = document.getElementById("planAutoStatus");
   if (!state.favorites.size) {
-    showToast("Heart a few artists first");
-    navigate("lineup");
+    state.plan = null;
+    localStorage.removeItem(STORAGE.plan);
+    renderPlan();
+    if (status) status.textContent = "Your schedule will appear as soon as you save an artist.";
     return;
   }
-  const button = document.getElementById("generatePlan");
-  const original = button?.innerHTML;
-  if (button) {
-    button.disabled = true;
-    button.setAttribute("aria-busy", "true");
-    button.innerHTML = "Building your flow… <span>✦</span>";
-  }
-  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    await new Promise(resolve => window.setTimeout(resolve, 180));
-  }
   const result = resolveConflicts(getCandidateEvents());
-  state.plan = { eventIds: result.selected.map(event => event.id), conflicts: result.conflicts.length, builtAt: new Date().toISOString(), pace: state.pace, moods: [...state.moods] };
+  const eventIds = result.selected.map(event => event.id);
+  const sourceSignature = JSON.stringify({
+    favorites: [...state.favorites].sort(),
+    moods: [...state.moods].sort(),
+    pace: state.pace,
+    eventIds
+  });
+  const changed = state.plan?.sourceSignature !== sourceSignature;
+  state.plan = {
+    eventIds,
+    conflicts: result.conflicts.length,
+    builtAt: changed ? new Date().toISOString() : state.plan.builtAt,
+    pace: state.pace,
+    moods: [...state.moods],
+    sourceSignature
+  };
   localStorage.setItem(STORAGE.plan, JSON.stringify(state.plan));
   renderPlan();
-  if (button) {
-    button.disabled = false;
-    button.removeAttribute("aria-busy");
-    button.innerHTML = original;
+  if (status) {
+    const sets = eventIds.length;
+    status.textContent = `${announce && changed ? "Schedule updated" : "Schedule in sync"} automatically · ${sets} ${sets === 1 ? "set" : "sets"}`;
   }
-  showToast("Your festival flow is ready");
 }
 
 function renderPlan() {
@@ -295,14 +282,17 @@ function renderPlan() {
   const result = document.getElementById("planResults");
   const selectedEvents = state.plan ? state.plan.eventIds.map(id => state.content.events.find(event => event.id === id)).filter(Boolean) : [];
   if (!selectedEvents.length) {
-    result.innerHTML = state.favorites.size
-      ? `<div class="plan-empty"><div class="empty-art">♡ ✦ ♫</div><h3>Your picks are ready</h3><p>You have ${state.favorites.size} saved artist${state.favorites.size === 1 ? "" : "s"}. Choose your pace above, then build a conflict-aware plan.</p><button class="text-button" id="emptyBuildPlan">Build my festival flow →</button></div>`
-      : `<div class="plan-empty"><div class="empty-art">♡ ✦ ♫</div><h3>Your weekend starts here</h3><p>Heart artists in the lineup, pick your pace, then build a conflict-aware plan that works without cell service.</p><button class="text-button" data-route="lineup">Choose artists →</button></div>`;
+    const hasPublishedSets = state.content.events.some(event => state.favorites.has(event.artistId));
+    result.innerHTML = !state.favorites.size
+      ? `<div class="plan-empty"><div class="empty-art">♡ ✦ ♫</div><h3>Your weekend starts here</h3><p>Heart artists in the lineup and their conflict-aware schedule will appear here automatically, ready without cell service.</p><button class="text-button" data-route="lineup">Choose artists →</button></div>`
+      : hasPublishedSets
+        ? `<div class="plan-empty"><div class="empty-art">♡ ✦ ♫</div><h3>No sets fit these choices</h3><p>Your favorites are safe. Show all your picks to restore the full personalized schedule.</p><button class="text-button" id="showAllPicks">Show all my picks →</button></div>`
+        : `<div class="plan-empty"><div class="empty-art">♡ ✦ ♫</div><h3>Set times coming soon</h3><p>Your favorites are saved. Their schedule will appear automatically when published times are available.</p><button class="text-button" data-route="lineup">Edit favorite artists →</button></div>`;
     return;
   }
   const now = new Date();
   const next = getNextEvent(selectedEvents, now);
-  let html = `<div class="plan-summary"><span>✦</span><div><h3>${selectedEvents.length} sets, zero double-bookings</h3><p>${state.plan.conflicts ? `${state.plan.conflicts} conflict${state.plan.conflicts === 1 ? "" : "s"} resolved around your priorities.` : "Your favorites fit together cleanly."}</p></div></div>`;
+  let html = `<div class="plan-summary"><span>✦</span><div><h3>${selectedEvents.length} ${selectedEvents.length === 1 ? "set" : "sets"}, zero double-bookings</h3><p>${state.plan.conflicts ? `${state.plan.conflicts} conflict${state.plan.conflicts === 1 ? "" : "s"} resolved around your priorities.` : "Your favorites fit together cleanly."}</p></div></div>`;
   if (next) html += `<div class="next-up-card"><p class="eyebrow ink">WHAT SHOULD I SEE NEXT?</p><h3>${escapeHTML(artistFor(next.artistId).name)}</h3><p>${escapeHTML(next.day)} at ${escapeHTML(next.start)} · ${escapeHTML(next.stage)}</p><small>${next.reason}</small></div>`;
   days.forEach(day => {
     const events = selectedEvents.filter(event => event.day === day);
@@ -311,7 +301,7 @@ function renderPlan() {
     html += events.map(event => `<article class="schedule-item"><div class="schedule-time">${escapeHTML(event.start)}</div><div class="timeline"></div><div class="schedule-info"><h4>${escapeHTML(artistFor(event.artistId).name)}</h4><p>${escapeHTML(event.stage)} · until ${escapeHTML(event.end)}</p><div class="schedule-tools"><button data-remind="${event.id}">Remind me</button><button data-calendar="${event.id}">Add to calendar</button></div></div></article>`).join("");
     html += `</div>`;
   });
-  html += `<div class="plan-actions"><button class="primary-button" id="shareLineup">Share my festival picks · ${state.favorites.size} <span>↗</span></button><button class="text-button" id="clearPlan">Rebuild plan</button></div>`;
+  html += `<div class="plan-actions"><button class="primary-button" id="shareLineup">Share my festival picks · ${state.favorites.size} <span>↗</span></button><button class="text-button" data-route="lineup">Edit favorite artists</button></div>`;
   result.innerHTML = html;
 }
 
@@ -528,6 +518,7 @@ function bindEvents() {
       if (mood === "favorites") state.moods = new Set(["favorites"]);
       else { state.moods.delete("favorites"); state.moods.has(mood) ? state.moods.delete(mood) : state.moods.add(mood); }
       renderMoodChips();
+      syncPlanToInputs({ announce: true });
     }
     const pace = event.target.closest("[data-pace]")?.dataset.pace;
     if (pace) {
@@ -537,12 +528,16 @@ function bindEvents() {
         button.classList.toggle("selected", selected);
         button.setAttribute("aria-pressed", selected);
       });
+      syncPlanToInputs({ announce: true });
     }
-    if (event.target.closest("#generatePlan") || event.target.closest("#emptyBuildPlan")) buildPlan();
+    if (event.target.closest("#showAllPicks")) {
+      state.moods = new Set(["favorites"]);
+      renderMoodChips();
+      syncPlanToInputs({ announce: true });
+    }
     if (event.target.closest("#shareLineup")) createShareImage();
     if (event.target.closest("#shareGeneratedImage")) shareGeneratedImage();
     if (event.target.closest("#closeShareDialog")) document.getElementById("shareDialog").close();
-    if (event.target.closest("#clearPlan")) { state.plan = null; localStorage.removeItem(STORAGE.plan); renderPlan(); }
     if (event.target.closest("#retryGuide")) init();
     const reminderId = event.target.closest("[data-remind]")?.dataset.remind;
     if (reminderId) setReminder(reminderId);
@@ -560,6 +555,17 @@ function bindEvents() {
   };
   window.addEventListener("online", updateNetwork); window.addEventListener("offline", updateNetwork); updateNetwork();
   window.addEventListener("hashchange", () => navigate(location.hash.slice(1) || "home"));
+  window.addEventListener("storage", event => {
+    if (event.key !== STORAGE.favorites) return;
+    try {
+      state.favorites = new Set(JSON.parse(event.newValue || "[]"));
+      invalidateSharePreview();
+      updateFavoriteUI();
+      renderHome();
+      renderLineup();
+      syncPlanToInputs({ announce: true });
+    } catch (_) { /* ignore invalid cross-tab state */ }
+  });
 }
 
 function renderMoodChips() {
@@ -613,12 +619,13 @@ async function init() {
   boot.innerHTML = `<span class="boot-mark" aria-hidden="true">✦</span><div><strong>Tuning the festival guide…</strong><p>Loading the official 2026 lineup and your saved picks.</p></div>`;
   try {
     await loadContent();
-    renderAnnouncement(); renderHome(); renderLineup(); renderInfo(); renderMoodChips(); updateFavoriteUI(); renderPlan();
+    renderAnnouncement(); renderHome(); renderLineup(); renderInfo(); renderMoodChips(); updateFavoriteUI();
     document.querySelectorAll("[data-pace]").forEach(button => {
       const selected = button.dataset.pace === state.pace;
       button.classList.toggle("selected", selected);
       button.setAttribute("aria-pressed", selected);
     });
+    syncPlanToInputs();
     document.body.classList.remove("app-loading");
     boot.hidden = true;
     setupPosterAssembly();
