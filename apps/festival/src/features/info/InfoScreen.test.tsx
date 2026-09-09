@@ -13,4 +13,14 @@ describe("Info", () => {
     fireEvent.click(screen.getByRole("radio", { name: "Dark" }));
     expect(useUiStore.getState().theme).toBe("dark");
   });
+
+  it("inline privacy/licenses toggles carry a 44px hit area and reveal their panels", async () => {
+    renderAt("/info");
+    const privacy = await screen.findByRole("button", { name: "Privacy" });
+    expect(privacy.className).toMatch(/before:-inset-y-\[13px\]/);
+    fireEvent.click(privacy);
+    expect(screen.getByText(/no accounts\. no analytics or ads/i)).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: "Licenses" }));
+    expect(screen.getByText("Michroma")).toBeInTheDocument();
+  });
 });

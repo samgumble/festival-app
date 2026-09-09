@@ -7,6 +7,9 @@ import { useAlertsStore } from "@/state/alerts";
 import { usePlanStore } from "@/state/plan";
 import { useUiStore } from "@/state/ui";
 
+// Inline text buttons in an 18 px line: extend the hit area invisibly to the 44 px floor (18 + 13 + 13).
+const INLINE_LINK = "relative inline-block underline before:absolute before:inset-x-0 before:-inset-y-[13px] before:content-['']";
+
 const FONTS = [
   ["Bungee", "SIL Open Font License 1.1"], ["Bungee Shade", "SIL Open Font License 1.1"],
   ["Michroma", "SIL Open Font License 1.1"], ["DM Sans", "SIL Open Font License 1.1"],
@@ -62,8 +65,8 @@ export function InfoScreen() {
       <Card className="mt-4 flex items-center gap-3">
         <img src="/art/sbg.png" alt="SBG Productions" className="h-11 w-11 rounded-[10px]" />
         <div className="flex-1 text-[13px] leading-[18px] text-fg-soft">Official app of the {festival.name}<br />© {festival.year} SBG Productions ·{" "}
-          <button type="button" className="underline" onClick={() => setPrivacy(!privacy)}>Privacy</button> ·{" "}
-          <button type="button" className="underline" onClick={() => setLicenses(!licenses)}>Licenses</button>
+          <button type="button" className={INLINE_LINK} onClick={() => setPrivacy(!privacy)}>Privacy</button> ·{" "}
+          <button type="button" className={INLINE_LINK} onClick={() => setLicenses(!licenses)}>Licenses</button>
         </div>
       </Card>
       {privacy && (
