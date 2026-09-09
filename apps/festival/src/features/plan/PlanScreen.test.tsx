@@ -38,4 +38,24 @@ describe("Plan", () => {
     expect(await screen.findByRole("radio", { name: /fri 1/i })).toBeInTheDocument();
     expect(screen.getByRole("radio", { name: /sat 1/i })).toBeChecked();
   });
+
+  it("renders every favorite in a three-way overlap, with a Swap for each loser", async () => {
+    // Saturday 2:00–3:00 Camp, 2:30–3:30 Blues, 2:30–3:30 Truck — all three overlap each other
+    usePlanStore.setState({ favorites: ["sat-david-jacobs-strain-camp-1400", "sat-kirk-fletcher-blues-1430", "sat-katie-skene-truck-1430"] });
+    renderAt("/plan");
+    expect(await screen.findByText("David Jacobs-Strain and Bob Beach")).toBeInTheDocument();
+    expect(screen.getByText("Kirk Fletcher")).toBeInTheDocument();
+    expect(screen.getByText("Katie Skene")).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: /swap/i }).length).toBe(2);
+  });
+
+  it("renders a chain where the middle set loses (orphan loser still gets a Swap)", async () => {
+    // Nigel Wearne Camp 12:30–1:30 × Derrick Dove Blues 1:00–2:00 × Judith Hill Main 1:30–2:30 (Nigel and Judith don't overlap)
+    usePlanStore.setState({ favorites: ["sat-nigel-wearne-camp-1230", "sat-derrick-dove-blues-1300", "sat-judith-hill-main-1330"] });
+    renderAt("/plan");
+    expect(await screen.findByText("Nigel Wearne & The Spectres")).toBeInTheDocument();
+    expect(screen.getByText("Derrick Dove & The Peacekeepers")).toBeInTheDocument();
+    expect(screen.getByText("Judith Hill")).toBeInTheDocument();
+    expect(screen.getAllByRole("button", { name: /swap/i }).length).toBe(2);
+  });
 });

@@ -35,7 +35,11 @@ export function PlanScreen() {
   const exportIcs = () => downloadText("blues-and-brews-plan.ics", "text/calendar", planToIcs(mine, idx.artistsById, idx.stagesById, content.festival));
   const share = async () => {
     const text = planToText(mine, idx.artistsById, idx.stagesById, content.festival);
-    if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
+    try {
+      if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
+    } catch {
+      /* user cancelled the share sheet */
+    }
   };
   return (
     <div>

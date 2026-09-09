@@ -2,7 +2,7 @@ import type { FestivalSet } from "@bb/shared";
 import { Link } from "react-router";
 import { Button, Chip, Toggle } from "@/design";
 import { useContentIndex } from "@/data/content";
-import { detectConflicts, keptSet, type Conflict } from "@/domain/conflicts";
+import { detectConflicts, lostSetIds, type Conflict } from "@/domain/conflicts";
 import { isEnded } from "@/domain/schedule";
 import { formatRange, formatTime, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
@@ -40,25 +40,41 @@ function SetCardRow({ set, lost, conflict, now, onSwap }: { set: FestivalSet; lo
 export function PlanTimeline({ sets, now }: { sets: FestivalSet[]; now: Date }) {
   const { resolutions, resolve, settings } = usePlanStore();
   const conflicts = detectConflicts(sets, settings.bufferMinutes);
-  const conflictFor = (id: string) => conflicts.find((c) => c.a.id === id || c.b.id === id);
-  const lostIds = new Set(conflicts.map((c) => (keptSet(c, resolutions).id === c.a.id ? c.b.id : c.a.id)));
+  const lostIds = lostSetIds(conflicts, resolutions);
+  const conflictsOf = (id: string) => conflicts.filter((c) => c.a.id === id || c.b.id === id);
+  const other = (c: Conflict, id: string) => (c.a.id === id ? c.b : c.a);
   const rendered = new Set<string>();
+  const rows: { lead: FestivalSet; leadConflict?: Conflict; lost: { set: FestivalSet; conflict: Conflict }[] }[] = [];
+  for (const s of sets) {
+    if (rendered.has(s.id)) continue;
+    rendered.add(s.id);
+    const mine = conflictsOf(s.id);
+    if (lostIds.has(s.id)) {
+      // orphan loser: every opponent is itself lost; show it dashed with Swap against the first conflict it lost
+      rows.push({ lead: s, leadConflict: mine[0], lost: [] });
+      continue;
+    }
+    const lost = mine
+      .map((c) => ({ set: other(c, s.id), conflict: c }))
+      .filter(({ set }) => lostIds.has(set.id) && !rendered.has(set.id));
+    for (const l of lost) rendered.add(l.set.id);
+    rows.push({ lead: s, leadConflict: mine[0], lost });
+  }
   return (
     <div className="mt-4">
-      {sets.map((s) => {
-        if (rendered.has(s.id) || lostIds.has(s.id)) return null;
-        rendered.add(s.id);
-        const c = conflictFor(s.id);
-        const partner = c ? (c.a.id === s.id ? c.b : c.a) : undefined;
-        if (partner) rendered.add(partner.id);
+      {rows.map(({ lead, leadConflict, lost }) => {
+        const leadLost = lostIds.has(lead.id);
         return (
-          <div key={s.id} className="relative grid grid-cols-[56px_1fr] gap-2.5">
-            <div className="pt-3 text-[13px] font-semibold leading-4 text-fg-soft tabular-nums">{formatTime(parseIso(s.start)).replace(" ", "\n")}</div>
-            <span aria-hidden="true" className={`absolute left-[46px] top-4 h-2.5 w-2.5 rounded-chip border-2 border-surface ${c ? "bg-ember" : "bg-sky"}`} />
+          <div key={lead.id} className="relative grid grid-cols-[56px_1fr] gap-2.5">
+            <div className="pt-3 text-[13px] font-semibold leading-4 text-fg-soft tabular-nums">{formatTime(parseIso(lead.start)).replace(" ", "\n")}</div>
+            <span aria-hidden="true" className={`absolute left-[46px] top-4 h-2.5 w-2.5 rounded-chip border-2 border-surface ${leadConflict ? "bg-ember" : "bg-sky"}`} />
             <span aria-hidden="true" className="absolute -bottom-3 left-[50px] top-6 w-0.5 bg-hair" />
             <div>
-              <SetCardRow set={s} lost={false} conflict={c} now={now} />
-              {partner && c && <SetCardRow set={partner} lost conflict={c} now={now} onSwap={() => resolve(c.key, partner.id)} />}
+              <SetCardRow set={lead} lost={leadLost} conflict={leadConflict} now={now}
+                onSwap={leadLost && leadConflict ? () => resolve(leadConflict.key, lead.id) : undefined} />
+              {lost.map(({ set, conflict }) => (
+                <SetCardRow key={set.id} set={set} lost conflict={conflict} now={now} onSwap={() => resolve(conflict.key, set.id)} />
+              ))}
             </div>
           </div>
         );
