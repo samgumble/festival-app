@@ -15,7 +15,10 @@ const state = {
   pace: "full",
   installPrompt: null,
   shareFile: null,
-  shareUrl: null
+  shareUrl: null,
+  lastFavoriteId: null,
+  bound: false,
+  posterMotionReady: false
 };
 
 if (state.plan) {
@@ -71,21 +74,30 @@ function navigate(route) {
   const next = document.querySelector(`[data-view="${route}"]`);
   if (!next) return;
   document.querySelectorAll(".view").forEach(view => view.classList.toggle("active", view === next));
-  document.querySelectorAll(".bottom-nav [data-route]").forEach(button => button.classList.toggle("active", button.dataset.route === route));
+  document.querySelectorAll(".app-nav [data-route]").forEach(button => {
+    const active = button.dataset.route === route;
+    button.classList.toggle("active", active);
+    if (active) button.setAttribute("aria-current", "page");
+    else button.removeAttribute("aria-current");
+  });
   history.replaceState(null, "", `#${route}`);
-  window.scrollTo({ top: 0, behavior: "smooth" });
-  next.focus({ preventScroll: true });
+  window.scrollTo({ top: 0, behavior: "auto" });
+  const heading = next.querySelector("h1");
+  heading?.setAttribute("tabindex", "-1");
+  heading?.focus({ preventScroll: true });
   if (route === "plan") renderPlan();
 }
 
 function favoriteButton(id, label) {
   const active = state.favorites.has(id);
-  return `<button class="favorite-button ${active ? "active" : ""}" data-favorite="${escapeHTML(id)}" aria-label="${active ? "Remove" : "Add"} ${escapeHTML(label)} ${active ? "from" : "to"} favorites" aria-pressed="${active}">${heartIcon}</button>`;
+  const recent = state.lastFavoriteId === id ? "favorite-pop" : "";
+  return `<button class="favorite-button ${active ? "active" : ""} ${recent}" data-favorite="${escapeHTML(id)}" aria-label="${active ? "Remove" : "Add"} ${escapeHTML(label)} ${active ? "from" : "to"} favorites" aria-pressed="${active}">${heartIcon}</button>`;
 }
 
 function toggleFavorite(id) {
   const artist = artistFor(id);
   if (!artist) return;
+  state.lastFavoriteId = id;
   if (state.favorites.has(id)) {
     state.favorites.delete(id);
     showToast(`${artist.name} removed`);
@@ -100,6 +112,10 @@ function toggleFavorite(id) {
   renderHome();
   renderLineup();
   renderPlan();
+  window.setTimeout(() => {
+    state.lastFavoriteId = null;
+    document.querySelectorAll(".favorite-pop").forEach(button => button.classList.remove("favorite-pop"));
+  }, 360);
 }
 
 function reconcilePlanWithFavorites() {
@@ -124,9 +140,14 @@ function reconcilePlanWithFavorites() {
 function updateFavoriteUI() {
   const count = state.favorites.size;
   document.getElementById("favoriteCount").textContent = `${count} ${count === 1 ? "pick" : "picks"}`;
-  const badge = document.getElementById("navFavoriteCount");
-  badge.textContent = count;
-  badge.hidden = count === 0;
+  document.querySelectorAll("[data-favorite-count]").forEach(badge => {
+    badge.textContent = count;
+    badge.hidden = count === 0;
+    badge.classList.remove("count-pop");
+    if (count) requestAnimationFrame(() => badge.classList.add("count-pop"));
+  });
+  const featureCount = document.getElementById("featureFavoriteCount");
+  if (featureCount) featureCount.textContent = count ? `${count} artist${count === 1 ? "" : "s"} saved` : "Start your weekend";
 }
 
 function renderAnnouncement() {
@@ -153,7 +174,7 @@ function renderHome() {
 
 function renderFilters() {
   document.getElementById("dayFilters").innerHTML = ["All", ...days].map(day =>
-    `<button class="chip ${state.day === day ? "selected" : ""}" data-day="${day}">${day}</button>`
+    `<button class="chip ${state.day === day ? "selected" : ""}" data-day="${day}" aria-pressed="${state.day === day}">${day}</button>`
   ).join("");
 }
 
@@ -190,6 +211,8 @@ function renderLineup() {
   });
   document.getElementById("artistList").innerHTML = html;
   document.getElementById("lineupEmpty").hidden = artists.length > 0;
+  document.getElementById("lineupResultCount").textContent = `${artists.length} artist${artists.length === 1 ? "" : "s"}${state.day === "All" ? "" : ` · ${state.day}`}`;
+  document.getElementById("clearFilters").hidden = !query && state.day === "All";
 }
 
 function renderInfo() {
@@ -202,7 +225,7 @@ function renderInfo() {
   survival.innerHTML = `<span class="info-icon">☀</span><h3>Offline survival mode</h3><p>${state.content.survival.map(tip => `• ${escapeHTML(tip)}`).join("<br><br>")}</p>`;
   container.append(survival);
   document.getElementById("faqList").innerHTML = (state.content.faq || []).map((item, index) => `
-    <details class="faq-item" ${index === 0 ? "open" : ""}><summary>${escapeHTML(item.question)}<span>+</span></summary><div><p>${escapeHTML(item.answer)}</p>${item.source ? `<a href="${escapeHTML(item.source)}" target="_blank" rel="noopener">Official details ↗</a>` : ""}</div></details>
+    <details class="faq-item" ${index === 0 ? "open" : ""}><summary>${escapeHTML(item.question)}<span aria-hidden="true">+</span></summary><div><p>${escapeHTML(item.answer)}</p>${item.source ? `<a href="${escapeHTML(item.source)}" target="_blank" rel="noopener">Official details ↗</a>` : ""}</div></details>
   `).join("");
 }
 
@@ -238,16 +261,31 @@ function resolveConflicts(events) {
   return { selected: selected.sort((a,b) => days.indexOf(a.day) - days.indexOf(b.day) || timeValue(a.start) - timeValue(b.start)), conflicts };
 }
 
-function buildPlan() {
+async function buildPlan() {
   if (!state.favorites.size) {
     showToast("Heart a few artists first");
     navigate("lineup");
     return;
   }
+  const button = document.getElementById("generatePlan");
+  const original = button?.innerHTML;
+  if (button) {
+    button.disabled = true;
+    button.setAttribute("aria-busy", "true");
+    button.innerHTML = "Building your flow… <span>✦</span>";
+  }
+  if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    await new Promise(resolve => window.setTimeout(resolve, 180));
+  }
   const result = resolveConflicts(getCandidateEvents());
   state.plan = { eventIds: result.selected.map(event => event.id), conflicts: result.conflicts.length, builtAt: new Date().toISOString(), pace: state.pace, moods: [...state.moods] };
   localStorage.setItem(STORAGE.plan, JSON.stringify(state.plan));
   renderPlan();
+  if (button) {
+    button.disabled = false;
+    button.removeAttribute("aria-busy");
+    button.innerHTML = original;
+  }
   showToast("Your festival flow is ready");
 }
 
@@ -334,25 +372,44 @@ async function addToCalendar(eventId, fallbackMessage) {
 
 async function createShareImage() {
   if (!state.favorites.size) return showToast("Choose artists before sharing");
-  await document.fonts.ready;
-  const canvas = document.createElement("canvas");
-  canvas.width = 1080; canvas.height = 1920;
-  const ctx = canvas.getContext("2d");
-  const poster = await loadImage("assets/poster-source-preview.png");
-  ctx.drawImage(poster, 0, 0, 1080, 1890, 0, 0, 1080, 1920);
-  restorePosterLineupArea(ctx, poster);
-  ctx.save();
-  ctx.fillStyle = "#24236f"; ctx.textAlign = "center"; ctx.font = "30px 'Michroma', sans-serif";
-  ctx.fillText("MY FESTIVAL PICKS", 540, 1420);
-  ctx.restore();
-  const selectedArtists = state.content.artists.filter(artist => state.favorites.has(artist.id));
-  drawLineupNames(ctx, selectedArtists, 1450, 1788);
-  const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
-  state.shareFile = new File([blob], "my-blues-and-brews-festival-picks.png", { type: "image/png" });
-  if (state.shareUrl) URL.revokeObjectURL(state.shareUrl);
-  state.shareUrl = URL.createObjectURL(blob);
-  document.getElementById("sharePreviewImage").src = state.shareUrl;
-  document.getElementById("shareDialog").showModal();
+  const button = document.getElementById("shareLineup");
+  const original = button?.innerHTML;
+  if (button) {
+    button.disabled = true;
+    button.setAttribute("aria-busy", "true");
+    button.innerHTML = "Building poster… <span>✦</span>";
+  }
+  try {
+    await document.fonts.ready;
+    const canvas = document.createElement("canvas");
+    canvas.width = 1080; canvas.height = 1920;
+    const ctx = canvas.getContext("2d");
+    const poster = await loadImage("assets/poster-source-preview.png");
+    ctx.drawImage(poster, 0, 0, 1080, 1890, 0, 0, 1080, 1920);
+    restorePosterLineupArea(ctx, poster);
+    ctx.save();
+    ctx.fillStyle = "#24236f"; ctx.textAlign = "center"; ctx.font = "30px 'Michroma', sans-serif";
+    ctx.fillText("MY FESTIVAL PICKS", 540, 1420);
+    ctx.restore();
+    const selectedArtists = state.content.artists.filter(artist => state.favorites.has(artist.id));
+    drawLineupNames(ctx, selectedArtists, 1450, 1788);
+    const blob = await new Promise(resolve => canvas.toBlob(resolve, "image/png"));
+    if (!blob) throw new Error("Poster encoding failed");
+    state.shareFile = new File([blob], "my-blues-and-brews-festival-picks.png", { type: "image/png" });
+    if (state.shareUrl) URL.revokeObjectURL(state.shareUrl);
+    state.shareUrl = URL.createObjectURL(blob);
+    document.getElementById("sharePreviewImage").src = state.shareUrl;
+    document.getElementById("shareDialog").showModal();
+  } catch (error) {
+    console.error(error);
+    showToast("Poster couldn’t be built. Try again.");
+  } finally {
+    if (button?.isConnected) {
+      button.disabled = false;
+      button.removeAttribute("aria-busy");
+      button.innerHTML = original;
+    }
+  }
 }
 
 async function shareGeneratedImage() {
@@ -450,6 +507,8 @@ function wrapCanvasText(ctx, text, maxWidth) {
 }
 
 function bindEvents() {
+  if (state.bound) return;
+  state.bound = true;
   document.addEventListener("click", event => {
     const route = event.target.closest("[data-route]")?.dataset.route;
     if (route) navigate(route);
@@ -457,6 +516,13 @@ function bindEvents() {
     if (favorite) toggleFavorite(favorite);
     const day = event.target.closest("[data-day]")?.dataset.day;
     if (day) { state.day = day; renderLineup(); }
+    if (event.target.closest("#clearFilters") || event.target.closest("#emptyClearFilters")) {
+      state.day = "All";
+      state.query = "";
+      document.getElementById("artistSearch").value = "";
+      renderLineup();
+      document.getElementById("artistSearch").focus();
+    }
     const mood = event.target.closest("[data-mood]")?.dataset.mood;
     if (mood) {
       if (mood === "favorites") state.moods = new Set(["favorites"]);
@@ -466,13 +532,18 @@ function bindEvents() {
     const pace = event.target.closest("[data-pace]")?.dataset.pace;
     if (pace) {
       state.pace = pace;
-      document.querySelectorAll("[data-pace]").forEach(button => button.classList.toggle("selected", button.dataset.pace === pace));
+      document.querySelectorAll("[data-pace]").forEach(button => {
+        const selected = button.dataset.pace === pace;
+        button.classList.toggle("selected", selected);
+        button.setAttribute("aria-pressed", selected);
+      });
     }
     if (event.target.closest("#generatePlan") || event.target.closest("#emptyBuildPlan")) buildPlan();
     if (event.target.closest("#shareLineup")) createShareImage();
     if (event.target.closest("#shareGeneratedImage")) shareGeneratedImage();
     if (event.target.closest("#closeShareDialog")) document.getElementById("shareDialog").close();
     if (event.target.closest("#clearPlan")) { state.plan = null; localStorage.removeItem(STORAGE.plan); renderPlan(); }
+    if (event.target.closest("#retryGuide")) init();
     const reminderId = event.target.closest("[data-remind]")?.dataset.remind;
     if (reminderId) setReminder(reminderId);
     const calendarId = event.target.closest("[data-calendar]")?.dataset.calendar;
@@ -481,27 +552,80 @@ function bindEvents() {
   document.getElementById("artistSearch").addEventListener("input", event => { state.query = event.target.value; renderLineup(); });
   window.addEventListener("beforeinstallprompt", event => { event.preventDefault(); state.installPrompt = event; document.getElementById("installButton").hidden = false; });
   document.getElementById("installButton").addEventListener("click", async () => { await state.installPrompt?.prompt(); state.installPrompt = null; document.getElementById("installButton").hidden = true; });
-  const updateNetwork = () => { const status = document.getElementById("networkStatus"); status.hidden = navigator.onLine; if (!navigator.onLine) showToast("Offline — your saved guide is ready"); };
+  const updateNetwork = () => {
+    const status = document.getElementById("networkStatus");
+    status.hidden = navigator.onLine;
+    status.textContent = "Offline · guide saved";
+    if (!navigator.onLine) showToast("Offline — your saved guide is ready");
+  };
   window.addEventListener("online", updateNetwork); window.addEventListener("offline", updateNetwork); updateNetwork();
+  window.addEventListener("hashchange", () => navigate(location.hash.slice(1) || "home"));
 }
 
 function renderMoodChips() {
   const moods = [
     ["favorites", "All my picks"], ["headliners", "Big-stage energy"], ["side-stages", "Explore side stages"], ["stay-central", "Stay in Town Park"]
   ];
-  document.getElementById("moodChips").innerHTML = moods.map(([id,label]) => `<button class="chip ${state.moods.has(id) ? "selected" : ""}" data-mood="${id}">${label}</button>`).join("");
+  document.getElementById("moodChips").innerHTML = moods.map(([id,label]) => `<button class="chip ${state.moods.has(id) ? "selected" : ""}" data-mood="${id}" aria-pressed="${state.moods.has(id)}">${label}</button>`).join("");
+}
+
+function setupPosterAssembly() {
+  if (state.posterMotionReady) return;
+  state.posterMotionReady = true;
+  const hero = document.querySelector(".hero-card");
+  const art = document.getElementById("heroArt");
+  if (!hero || !art) return;
+  const poster = new Image();
+  poster.onerror = () => {
+    art.hidden = true;
+    hero.style.setProperty("--assembly-offset", "0px");
+  };
+  poster.src = "assets/poster-source-preview.png";
+  const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+  const useStatic = () => reduced.matches || window.innerWidth < 360 || Boolean(navigator.connection?.saveData);
+  let queued = false;
+  const update = () => {
+    queued = false;
+    if (useStatic()) {
+      hero.style.setProperty("--assembly-offset", "0px");
+      return;
+    }
+    const range = Math.min(260, hero.offsetHeight * .48);
+    const progress = Math.min(1, Math.max(0, window.scrollY / range));
+    hero.style.setProperty("--assembly-offset", `${((1 - progress) * 24).toFixed(2)}px`);
+  };
+  const requestUpdate = () => {
+    if (queued) return;
+    queued = true;
+    requestAnimationFrame(update);
+  };
+  window.addEventListener("scroll", requestUpdate, { passive: true });
+  window.addEventListener("resize", requestUpdate);
+  reduced.addEventListener?.("change", requestUpdate);
+  update();
 }
 
 async function init() {
   bindEvents();
+  const boot = document.getElementById("bootStatus");
+  document.body.classList.add("app-loading");
+  boot.hidden = false;
+  boot.innerHTML = `<span class="boot-mark" aria-hidden="true">✦</span><div><strong>Tuning the festival guide…</strong><p>Loading the official 2026 lineup and your saved picks.</p></div>`;
   try {
     await loadContent();
     renderAnnouncement(); renderHome(); renderLineup(); renderInfo(); renderMoodChips(); updateFavoriteUI(); renderPlan();
-    document.querySelectorAll("[data-pace]").forEach(button => button.classList.toggle("selected", button.dataset.pace === state.pace));
+    document.querySelectorAll("[data-pace]").forEach(button => {
+      const selected = button.dataset.pace === state.pace;
+      button.classList.toggle("selected", selected);
+      button.setAttribute("aria-pressed", selected);
+    });
+    document.body.classList.remove("app-loading");
+    boot.hidden = true;
+    setupPosterAssembly();
     navigate(location.hash.slice(1) || "home");
     registerServiceWorker();
   } catch (error) {
-    document.getElementById("app").innerHTML = `<div class="empty-state"><span>↻</span><h3>Festival guide unavailable</h3><p>Reconnect once to save the guide for offline use.</p></div>`;
+    boot.innerHTML = `<div class="empty-state"><span>↻</span><h3>Festival guide unavailable</h3><p>Reconnect once to save the guide for offline use.</p><button class="primary-button inline-button" id="retryGuide">Try again</button></div>`;
     console.error(error);
   }
 }

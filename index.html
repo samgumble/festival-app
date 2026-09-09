@@ -8,25 +8,41 @@
     <link rel="manifest" href="manifest.webmanifest" />
     <link rel="apple-touch-icon" href="assets/sbg-logo.png" />
     <link rel="icon" href="assets/sbg-logo.png" />
-    <link rel="stylesheet" href="styles.css?v=12" />
+    <link rel="stylesheet" href="styles.css?v=17" />
     <title>Blues & Brews 2026</title>
   </head>
-  <body>
+  <body class="app-loading">
     <div class="app-shell">
       <header class="topbar">
         <button class="brand-button" data-route="home" aria-label="Go home">
           <img src="assets/festival-logo.png" alt="Telluride Blues & Brews Festival" />
         </button>
+        <nav class="app-nav desktop-nav" aria-label="Primary navigation">
+          <button class="active" data-route="home"><span>Home</span></button>
+          <button data-route="lineup"><span>Lineup</span></button>
+          <button data-route="plan"><span>My Plan</span><span class="nav-badge" data-favorite-count hidden>0</span></button>
+          <button data-route="info"><span>Guide</span></button>
+        </nav>
         <div class="top-actions"><span id="networkStatus" class="network-status" hidden>Offline ready</span><button class="round-button" id="installButton" hidden aria-label="Install app">
           <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 16v4h14v-4" /></svg>
         </button></div>
       </header>
 
       <main id="app" tabindex="-1">
+        <div class="boot-status" id="bootStatus" role="status" aria-live="polite">
+          <span class="boot-mark" aria-hidden="true">✦</span>
+          <div><strong>Tuning the festival guide…</strong><p>Loading the official 2026 lineup and your saved picks.</p></div>
+        </div>
         <section class="view active" id="homeView" data-view="home">
           <div id="announcementHero"></div>
           <section class="hero-card">
             <div class="hero-sun" aria-hidden="true"></div>
+            <div class="hero-art" id="heroArt" aria-hidden="true">
+              <div class="hero-art-layer hero-art-base"></div>
+              <div class="hero-art-layer hero-art-sun"></div>
+              <div class="hero-art-layer hero-art-mountains"></div>
+              <div class="hero-art-layer hero-art-foreground"></div>
+            </div>
             <div class="hero-content">
               <p class="eyebrow">YOUR WEEKEND IN TELLURIDE</p>
               <h1>Find your<br /><span>festival flow.</span></h1>
@@ -49,7 +65,7 @@
             <div class="feature-grid">
               <button class="feature-card cobalt" data-route="lineup">
                 <span class="feature-icon">♫</span>
-                <span><strong>Pick your artists</strong><small>Heart the acts you can't miss</small></span>
+                <span><strong>Pick your artists</strong><small><span id="featureFavoriteCount">Start your weekend</span></small></span>
                 <span class="arrow">↗</span>
               </button>
               <button class="feature-card plum" data-route="plan">
@@ -89,14 +105,16 @@
           </div>
           <div class="sticky-tools">
             <label class="search-box">
+              <span class="sr-only">Search artists</span>
               <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m16 16 4 4"/></svg>
               <input id="artistSearch" type="search" placeholder="Search artists" autocomplete="off" />
             </label>
             <div class="chip-row" id="dayFilters" aria-label="Filter by day"></div>
+            <div class="filter-meta"><span id="lineupResultCount" aria-live="polite">30 artists</span><button id="clearFilters" hidden>Clear filters</button></div>
           </div>
           <div class="artist-list" id="artistList"></div>
           <div class="empty-state" id="lineupEmpty" hidden>
-            <span>♫</span><h3>No artists found</h3><p>Try another name or day.</p>
+            <span>♫</span><h3>No artists match</h3><p>Try another name or reset your day filters.</p><button class="text-button" id="emptyClearFilters">Clear filters</button>
           </div>
         </section>
 
@@ -152,10 +170,10 @@
         </section>
       </main>
 
-      <nav class="bottom-nav" aria-label="Main navigation">
+      <nav class="app-nav bottom-nav" aria-label="Main navigation">
         <button class="active" data-route="home"><span class="nav-icon">⌂</span><span>Home</span></button>
         <button data-route="lineup"><span class="nav-icon">♫</span><span>Lineup</span></button>
-        <button data-route="plan"><span class="nav-icon">✦</span><span>My Plan</span><span class="nav-badge" id="navFavoriteCount" hidden>0</span></button>
+        <button data-route="plan"><span class="nav-icon">✦</span><span>My Plan</span><span class="nav-badge" data-favorite-count hidden>0</span></button>
         <button data-route="info"><span class="nav-icon">ⓘ</span><span>Guide</span></button>
       </nav>
     </div>
@@ -166,7 +184,7 @@
       <p>Generated privately on this device from your current favorites.</p>
     </dialog>
     <div class="update-notice" id="updateNotice" hidden><span>A fresh festival guide is ready.</span><button id="applyUpdate">Refresh now</button></div>
-    <div class="toast" id="toast" role="status" aria-live="polite"></div>
-    <script src="app.js?v=16" defer></script>
+    <div class="toast" id="toast" role="status" aria-live="polite" aria-atomic="true"></div>
+    <script src="app.js?v=17" defer></script>
   </body>
 </html>

@@ -19,6 +19,14 @@ No account, payment, ticket storage, precise location, analytics, or personal-da
 - `assets/poster-source-preview.png`: a 1080×1890 derivative of the licensed layered PSD, used intact and full-bleed as the on-device share-image template. The roughly 1.74 GB source PSD is untouched in `SBG Content/`.
 - `assets/fonts/`: locally bundled OFL fonts and exact license files. See `FONT_LICENSES.md`.
 
+### Flagship responsive UI system
+
+`UI-SPEC.md` is the standalone, implementation-level design contract for the current interface. It was checked across all six UI review dimensions before implementation. The app now expands into a true desktop festival dashboard at 1024px and above while retaining a focused, one-handed mobile experience with a raised navigation dock, 44px-or-larger controls, keyboard focus treatments, live status regions, and route-specific empty/error/loading feedback.
+
+Home, Lineup, My Plan, and Guide share the licensed poster palette and locally bundled type. Favorites update instantly across home cards, lineup rows, navigation counts, and the plan. Search and day filters expose their result state; plan and share-poster generation expose progress and recovery states; the organizer publisher uses the same visual language while remaining local-only and credential-free.
+
+The home hero's signature scroll moment uses several masked views of the existing `assets/poster-source-preview.png`: the sun, mountain, and foreground regions begin at a subtle maximum 24px offset and assemble as the page moves through its opening scroll. One requestAnimationFrame-updated CSS custom property drives transform-only movement. Reduced-motion, sub-360px, Save-Data, and poster-load-failure paths remain static. No new or reconstructed artwork is introduced, and the poster is already part of the offline app shell. WebKit mask/backdrop prefixes accompany the standards declarations.
+
 The referenced “SVG content folder” was not present when this handoff was written (`find . -iname '*.svg'` returned no files). If the layered SVG arrives later, preserve it and treat it as a source asset only. The current personalized edition keeps the official illustration, border, annual badge, and brewers banner intact. It cleans only the poster’s existing printed-lineup zone with a feathered paper field reconstructed from the light pixels and grain colors sampled from that exact zone, then typesets “MY FESTIVAL PICKS” and the user’s current favorites in the same compact uppercase composition. It adds no card, new panel, or full-frame color wash.
 
 The editable `SBG Content/16x28 commemorative poster.psd` is roughly 1.74 GB and is explicitly ignored by Git. `scripts/build.mjs` copies only `assets/` and never copies `SBG Content/`, so the PSD cannot enter `dist/` or either native public bundle. The accepted runtime derivative is approximately 5 MB at 1080×1890 to preserve its paper grain and small poster detail; the personalized export remains 1080×1920.
@@ -60,7 +68,7 @@ The build has no root-absolute asset URLs. Manifest start URL, app assets, priva
 
 The PWA caches the app shell, official content JSON, logo assets, privacy policy, and poster share template. The app also stores the last successfully downloaded content JSON in local storage. Native Capacitor builds bundle the same assets, so lineup, schedule, guide/FAQ, venue essentials, favorites, and the personal plan work without venue connectivity. Calendar files and share images are generated locally. Set reminders are scheduled locally.
 
-An offline status appears when connectivity is lost. Online content uses network-first refresh and falls back to the saved copy. Bump the `CACHE` name in `sw.js` and the `?v=` asset query in `index.html` for every production asset change.
+An offline status appears when connectivity is lost. Online content uses network-first refresh and falls back to the saved copy. The current UI shell is cache generation `blues-brews-2026-v17`, with matching `?v=17` CSS and JavaScript URLs. Bump the `CACHE` name in `sw.js` and the asset query in `index.html` for every production asset change.
 
 When a new service worker finishes installing, the app shows **A fresh festival guide is ready → Refresh now**. Applying it activates the new worker and reloads without deleting favorites or plans. This recovery path was added after an early prototype service worker retained a broken script revision; do not remove the asset-version bump or update prompt.
 
