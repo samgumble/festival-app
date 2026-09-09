@@ -85,5 +85,14 @@ describe("touch targets", () => {
     expect(screen.getByRole("button", { name: "Small" }).className).toMatch(/before:-inset-y-1\b/);
     expect(screen.getByRole("radio", { name: "A" }).className).toMatch(/before:-inset-y-0\.5\b/);
     expect(screen.getByRole("switch", { name: "Switch" }).className).toMatch(/before:-inset-y-2\b/);
+    // class presence is a proxy for geometry — jsdom has no layout
+    for (const el of [
+      screen.getByRole("button", { name: "Small" }),
+      screen.getByRole("radio", { name: "A" }),
+      screen.getByRole("switch", { name: "Switch" }),
+    ]) {
+      expect(el.className).toMatch(/\brelative\b/);
+      expect(el.className).toContain("before:content-['']");
+    }
   });
 });

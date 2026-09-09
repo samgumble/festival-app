@@ -59,6 +59,7 @@
   --color-hair: var(--hair);
   --color-structure: var(--structure);
   --color-structure-2: var(--structure-2);
+  --color-structure-fill: var(--structure-fill);
 }
 
 :root, [data-theme="light"] {
@@ -68,7 +69,8 @@
   --fg: var(--color-ink);
   --fg-soft: var(--color-ink-soft);
   --hair: rgba(30, 26, 26, 0.14);
-  --structure: var(--color-sky);
+  --structure: var(--color-night);
+  --structure-fill: var(--color-sky);
   --structure-2: var(--color-night);
   --grain-blend: multiply;
   --grain-opacity: 0.10;
@@ -84,6 +86,7 @@
   --fg-soft: #CDB99A;
   --hair: rgba(235, 213, 179, 0.16);
   --structure: var(--color-sky-light);
+  --structure-fill: var(--color-sky);
   --structure-2: var(--color-sky);
   --grain-blend: screen;
   --grain-opacity: 0.06;
