@@ -28,7 +28,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Old prototype (reference only) | github.com/samgumble/music-app — `main` and `expo-v2` |
 | Fan app repo | https://github.com/samgumble/festival-app (public, generic name for now) — this monorepo |
 | Admin console repo | https://github.com/samgumble/festival-admin (public; built Day 3, separate from the monorepo per D-018) |
-| Firebase project | `bb-festival-2026` (project number 221524343225), **Spark/free plan, no card** — owner sam.gumble@gmail.com. Auth: Email/Password enabled, admin user sam.gumble@gmail.com (uid `YQlsno0sgAbQZJKRuKB7m1XvCqL2`, allowlisted in `admins/`), authorized domain `samgumble.github.io`. Firestore `(default)` in `nam5`, production rules. Web app `festival-web`; config in `packages/shared/src/firebase.config.ts` |
+| Firebase project | `bb-festival-2026` (project number 221524343225), **Spark/free plan, no card** — owner sam.gumble@gmail.com. Auth: Email/Password enabled, self sign-up disabled (Sep 10; new admins are added in the console + an `admins/{uid}` doc), admin user sam.gumble@gmail.com (uid `YQlsno0sgAbQZJKRuKB7m1XvCqL2`, allowlisted in `admins/`), authorized domain `samgumble.github.io`. Firestore `(default)` in `nam5`, production rules. Web app `festival-web`; config in `packages/shared/src/firebase.config.ts` |
 | Store records | Apple + Google accounts pending approval as of Sep 9; record team IDs / app IDs here when created |
 | Official content sources | tellurideblues.com `/lineup`, `/schedule`, `/faqs`, the 2026 festival guide news post |
 | Claude Project | "Blues and Brews Fable 5.1" — mirrors these docs |
