@@ -45,7 +45,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Now / Lineup | ✅ design pass | all states via dev clock; screenshots in `docs/screens/design-pass/` |
 | Plan / Alerts / Info / PWA | 🟡 | Plan/Alerts/Info at rough fidelity (alerts from fixture); PWA/service worker not started |
 | Admin console + Functions | ⬜ | Day 3 |
-| Web beta live for SBG | ⬜ | Sat Sep 12 |
+| Web beta live for SBG | ✅ Sep 9 | https://samgumble.github.io/festival-app/ — auto-deploys from `main` via `.github/workflows/pages.yml` (design pass; no backend yet) |
 | Native (icons, push, notifications) | ⬜ | Day 4 |
 | TestFlight / Play closed test | ⬜ | Mon Sep 14 |
 | iOS submitted | ⬜ | Mon Sep 14 — follow `STORE-CHECKLIST.md` §8 |
