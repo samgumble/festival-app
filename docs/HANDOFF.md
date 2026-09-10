@@ -41,7 +41,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Repo scaffold | ✅ Sep 9 | npm workspaces: apps/festival, packages/shared, packages/content (`festival-app`) |
 | Firebase project + rules | 🟡 | `firebase/firestore.rules` written + 7 emulator tests green (`npm run rules:test`); **deploy pending `npx firebase-tools login`** then `npm run rules:deploy` |
 | Design tokens + fonts | ✅ | Palette locked D-016; Tailwind v4 theme; Bungee/Bungee Shade/Michroma/DM Sans bundled |
-| Content seed | 🟡 | bundled ✅; Firestore seed: `FIREBASE_ADMIN_EMAIL=… FIREBASE_ADMIN_PASSWORD=… npm run seed` (Sam runs it after rules deploy); re-verify vs official schedule before beta |
+| Content seed | 🟡 | bundled ✅; Firestore seed: `read -rs FIREBASE_ADMIN_PASSWORD && export FIREBASE_ADMIN_PASSWORD && FIREBASE_ADMIN_EMAIL=sam.gumble@gmail.com npm run seed` (password prompted, never on the command line; Sam runs it after rules deploy); re-verify vs official schedule before beta |
 | Now / Lineup | ✅ design pass | all states via dev clock; screenshots in `docs/screens/design-pass/` |
 | Plan / Alerts / Info / PWA | 🟡 | Plan/Alerts/Info at rough fidelity (alerts from fixture); PWA/service worker not started |
 | Admin console | ✅ Sep 9 | https://samgumble.github.io/festival-admin/ (repo `festival-admin`, Pages) — sign-in, lineup editor, alerts, publish/rollback; no Functions/push (D-021) |
