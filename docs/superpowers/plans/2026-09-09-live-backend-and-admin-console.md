@@ -1159,7 +1159,8 @@ const s = (id: string, stageId: string, start: string, end: string) => ({ id, ar
 describe("stageOverlaps", () => {
   it("flags overlapping sets on the same stage only", () => {
     const r = stageOverlaps([s("1", "main", "12:00", "13:00"), s("2", "main", "12:30", "13:30"), s("3", "blues", "12:30", "13:30"), s("4", "main", "13:00", "14:00")]);
-    expect(r.map((p) => `${p.a.id}-${p.b.id}`)).toEqual(["1-2"]);
+    // 1×2 overlap 12:30–13:00; 2×4 overlap 13:00–13:30; 1×4 touch at 13:00 (no overlap); 3 is another stage
+    expect(r.map((p) => `${p.a.id}-${p.b.id}`)).toEqual(["1-2", "2-4"]);
   });
 });
 ```
