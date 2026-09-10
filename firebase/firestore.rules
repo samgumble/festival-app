@@ -24,6 +24,8 @@ service cloud.firestore {
 
     match /content/published {
       allow read: if true;
+      // isContent() reads request.resource, which is absent on a delete — so deletes are always
+      // denied here, by design. content/published is append-and-replace only.
       allow write: if isAdmin() && isContent();
     }
     match /content/draft {
@@ -36,8 +38,10 @@ service cloud.firestore {
     }
     match /alerts/{id} {
       allow read: if true;
-      allow create, update: if isAdmin() && isAlert();
+      // Alerts are never edited after send (spec §4): correcting one means sending another.
+      allow create: if isAdmin() && isAlert();
       allow delete: if isAdmin();
+      allow update: if false;
     }
     match /admins/{uid} {
       allow read: if request.auth != null && request.auth.uid == uid;

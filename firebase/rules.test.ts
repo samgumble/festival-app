@@ -1,8 +1,8 @@
 import { readFileSync } from "node:fs";
 import { resolve } from "node:path";
-import { afterAll, beforeAll, beforeEach, describe, expect, it } from "vitest";
+import { afterAll, beforeAll, beforeEach, describe, it } from "vitest";
 import { assertFails, assertSucceeds, initializeTestEnvironment, type RulesTestEnvironment } from "@firebase/rules-unit-testing";
-import { doc, getDoc, setDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, deleteDoc, collection, getDocs } from "firebase/firestore";
 
 let env: RulesTestEnvironment;
 const ADMIN = "admin-uid";
@@ -47,13 +47,19 @@ describe("public reads", () => {
     await assertFails(getDoc(doc(stranger(), "content", "draft")));
     await assertSucceeds(getDoc(doc(admin(), "content", "draft")));
   });
+  it("nobody but the owning uid can read an admin doc, not even anonymously", async () => {
+    await assertFails(getDoc(doc(anon(), "admins", ADMIN)));
+  });
 });
 
 describe("writes", () => {
   it("anonymous and non-admin users cannot write anything", async () => {
     await assertFails(setDoc(doc(anon(), "content", "published"), content));
     await assertFails(setDoc(doc(stranger(), "content", "published"), content));
+    await assertFails(setDoc(doc(stranger(), "content", "draft"), content));
+    await assertFails(setDoc(doc(stranger(), "history", "x"), content));
     await assertFails(setDoc(doc(stranger(), "alerts", "a2"), alert));
+    await assertFails(deleteDoc(doc(stranger(), "alerts", "a1")));
     await assertFails(setDoc(doc(stranger(), "admins", STRANGER), { email: "x" }));
   });
   it("admins can publish, archive, and manage alerts", async () => {
@@ -72,6 +78,15 @@ describe("writes", () => {
     await assertFails(setDoc(doc(admin(), "content", "published"), { festival: {} }));
     await assertFails(setDoc(doc(admin(), "alerts", "bad"), { ...alert, severity: "loud" }));
     await assertFails(setDoc(doc(admin(), "alerts", "long"), { ...alert, title: "x".repeat(61) }));
+    await assertFails(setDoc(doc(admin(), "alerts", "long-body"), { ...alert, body: "x".repeat(241) }));
+    await assertFails(setDoc(doc(admin(), "alerts", "bad-push"), { ...alert, push: "yes" }));
+  });
+  it("admins cannot write outside the known collections (default deny)", async () => {
+    await assertFails(setDoc(doc(admin(), "junk", "x"), { anything: true }));
+  });
+  it("alerts are never edited once created, even by admins", async () => {
+    await assertFails(updateDoc(doc(admin(), "alerts", "a1"), { title: "Edited" }));
+    await assertFails(setDoc(doc(admin(), "alerts", "a1"), alert));
   });
   it("admins can read only their own admin doc", async () => {
     await assertSucceeds(getDoc(doc(admin(), "admins", ADMIN)));
