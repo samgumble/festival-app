@@ -52,6 +52,8 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Store accounts / ownership decided | ⬜ | STORE-CHECKLIST §0 — urgent: SBG vs Sam accounts, Play account type, authorization letter |
 | Poster layers exported | ⬜ | Sam, in parallel — see ASSET-BRIEF |
 | Generated supporting art | ⬜ | Sam via ChatGPT — see ASSET-BRIEF |
+| Art budget | ⚠️ open | `apps/festival/public/art` is 3.33 MB (hero crops 2.47 MB vs 2 MB spec budget); convert to WebP / swap true PSD layers in the PWA precache task |
+| Dev clock caveat | ℹ️ | Lineup/Plan day selector is chosen on first render; scrubbing the dev clock doesn't move it — pick the day tab manually when reviewing |
 
 ## 4. How we work
 
