@@ -67,13 +67,13 @@ export function PlanTimeline({ sets, now }: { sets: FestivalSet[]; now: Date }) 
 
   return (
     <div className="mt-4">
-      {rows.map(({ lead, leadConflict, lost }) => {
+      {rows.map(({ lead, leadConflict, lost }, i) => {
         const leadLost = lostIds.has(lead.id);
         return (
           <div key={lead.id} data-testid="plan-row" className="relative grid grid-cols-[56px_1fr] gap-2.5">
-            <div className="pt-3 text-[13px] font-semibold leading-4 text-fg-soft tabular-nums">{formatTime(parseIso(lead.start)).replace(" ", "\n")}</div>
+            <div className="whitespace-pre-line pt-3 text-[13px] font-semibold leading-4 text-fg-soft tabular-nums">{formatTime(parseIso(lead.start)).replace(" ", "\n")}</div>
             <span aria-hidden="true" className={`absolute left-[46px] top-4 h-2.5 w-2.5 rounded-chip border-2 border-surface ${leadConflict ? "bg-ember" : "bg-sky"}`} />
-            <span aria-hidden="true" className="absolute -bottom-3 left-[50px] top-6 w-0.5 bg-hair" />
+            {i < rows.length - 1 && <span aria-hidden="true" className="absolute -bottom-3 left-[50px] top-6 w-0.5 bg-hair" />}
             <div>
               <SetCardRow set={lead} lost={leadLost} conflict={leadConflict} now={now}
                 onSwap={leadLost && leadConflict ? () => resolve(leadConflict.key, lead.id) : undefined} />

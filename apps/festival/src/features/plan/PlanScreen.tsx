@@ -5,7 +5,7 @@ import { useFestivalClock } from "@/app/clock";
 import { useContent, useContentIndex } from "@/data/content";
 import { detectConflicts, leaveBy, nextUp } from "@/domain/conflicts";
 import { planToIcs, planToText } from "@/domain/ics";
-import { formatRange, formatTime, isoMs, minutesBetween, parseIso } from "@/domain/time";
+import { formatDuration, formatRange, formatTime, isoMs, minutesBetween, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
 import type { DayId } from "@bb/shared";
 import { downloadText } from "./download";
@@ -51,7 +51,7 @@ export function PlanScreen() {
       </div>
       {next && (
         <Card className="mt-3 border-plum bg-gradient-to-br from-surface to-violet/15">
-          <Eyebrow tone="plum">Next up · in {minutesBetween(now, parseIso(next.start))} min</Eyebrow>
+          <Eyebrow tone="plum">Next up · {formatDuration(minutesBetween(now, parseIso(next.start)))}</Eyebrow>
           <Link to={`/lineup/artist/${next.artistId}`} className="mt-1 block font-display text-[20px] leading-6">{idx.artistsById.get(next.artistId)?.name}</Link>
           <div className="text-[13px] text-fg-soft tabular-nums">{formatRange(parseIso(next.start), parseIso(next.end))} · {idx.stagesById.get(next.stageId)?.name}{settings.bufferMinutes > 0 ? ` · leave by ${formatTime(leaveBy(next, settings.bufferMinutes))}` : ""}</div>
         </Card>
