@@ -39,12 +39,13 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 |---|---|---|
 | Plan approved | ✅ Sep 9 | stack, backend, scope, timeline chosen with Sam |
 | Repo scaffold | ✅ Sep 9 | npm workspaces: apps/festival, packages/shared, packages/content (`festival-app`) |
-| Firebase project + rules | 🟡 | Project created Sep 9 on Spark (no Functions/push for now, D-021); rules deploy pending `firebase login` |
+| Firebase project + rules | 🟡 | `firebase/firestore.rules` written + 7 emulator tests green (`npm run rules:test`); **deploy pending `npx firebase-tools login`** then `npm run rules:deploy` |
 | Design tokens + fonts | ✅ | Palette locked D-016; Tailwind v4 theme; Bungee/Bungee Shade/Michroma/DM Sans bundled |
-| Content seed | ✅ (bundled) | `packages/content/content-2026.json` from Sep 8 verified data + poster comedy names; Firestore seed still Day 3; re-verify vs official schedule before beta |
+| Content seed | 🟡 | bundled ✅; Firestore seed: `FIREBASE_ADMIN_EMAIL=… FIREBASE_ADMIN_PASSWORD=… npm run seed` (Sam runs it after rules deploy); re-verify vs official schedule before beta |
 | Now / Lineup | ✅ design pass | all states via dev clock; screenshots in `docs/screens/design-pass/` |
 | Plan / Alerts / Info / PWA | 🟡 | Plan/Alerts/Info at rough fidelity (alerts from fixture); PWA/service worker not started |
-| Admin console + Functions | ⬜ | Day 3 |
+| Admin console | ✅ Sep 9 | https://samgumble.github.io/festival-admin/ (repo `festival-admin`, Pages) — sign-in, lineup editor, alerts, publish/rollback; no Functions/push (D-021) |
+| Live content in fan app | ✅ (code) | Firestore `content/published` + `alerts` behind the repository seams; bundled fallback; Info shows live/cache/bundled. Goes live once rules are deployed and the seed has run |
 | Web beta live for SBG | ✅ Sep 9 | https://samgumble.github.io/festival-app/ — auto-deploys from `main` via `.github/workflows/pages.yml` (design pass; no backend yet) |
 | Native (icons, push, notifications) | ⬜ | Day 4 |
 | TestFlight / Play closed test | ⬜ | Mon Sep 14 |
@@ -113,4 +114,5 @@ Apple Silicon. Node 22.x, npm 10.x. Xcode 26.x installed, license accepted; **iO
 | 2026-09-09 | Fable 5.1 / Cowork | Fresh-start plan approved: React+Vite+Capacitor, Firebase, new repo, store attempt by Sep 14; docs written |
 | 2026-09-09 | Fable 5.1 / Cowork | Store gap review → `STORE-CHECKLIST.md`; PLAN §8 corrected (age rating, iPhone-only, targetSdk 36, 5.2.1 authorization); D-015 |
 | 2026-09-09 | Fable 5.1 / Claude Code | Working tree cleared of the old prototype; design-system + five-screen mockups approved; palette locked (D-016); local design-pass spec written (D-017) |
+| 2026-09-09 | Claude Code | Live backend + admin console built per `docs/superpowers/plans/2026-09-09-live-backend-and-admin-console.md`: rules + emulator tests, seed script, Firestore sources in the fan app, admin console deployed to Pages |
 | 2026-09-09 | Claude Code | Design pass implemented per `docs/superpowers/plans/2026-09-09-festival-app-design-pass.md`: tokens, ornaments, primitives, shell, five screens, domain tests, screenshots |
