@@ -41,12 +41,12 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Repo scaffold | ✅ Sep 9 | npm workspaces: apps/festival, packages/shared, packages/content (`festival-app`) |
 | Firebase project + rules | ✅ | `firebase/firestore.rules` deployed to `bb-festival-2026` on 2026-09-10 (`npm run rules:deploy`); 10 emulator tests green (`npm run rules:test`); live probe: `content/published` readable, `content/draft` and `admins/*` denied unauthenticated |
 | Design tokens + fonts | ✅ | Palette locked D-016; Tailwind v4 theme; Bungee/Bungee Shade/Michroma/DM Sans bundled |
-| Content seed | 🟡 | bundled ✅; Firestore seed: `read -rs FIREBASE_ADMIN_PASSWORD && export FIREBASE_ADMIN_PASSWORD && FIREBASE_ADMIN_EMAIL=sam.gumble@gmail.com npm run seed` (password prompted, never on the command line; Sam runs it after rules deploy); re-verify vs official schedule before beta |
+| Content seed | ✅ Sep 10 | bundled ✅; Firestore `content/published` = v2026.09.09.1 (41 sets, seeded by Sam via `npm run seed`; password via env only, e.g. `FIREBASE_ADMIN_PASSWORD="$(pbpaste)" FIREBASE_ADMIN_EMAIL=… npm run seed; pbcopy </dev/null`); re-verify vs official schedule before beta |
 | Now / Lineup | ✅ design pass | all states via dev clock; screenshots in `docs/screens/design-pass/` |
 | Plan / Alerts / Info / PWA | 🟡 | Plan/Alerts/Info at rough fidelity (alerts from fixture); PWA/service worker not started |
 | Admin console | ✅ Sep 9 | https://samgumble.github.io/festival-admin/ (repo `festival-admin`, Pages) — sign-in, lineup editor, alerts, publish/rollback; no Functions/push (D-021) |
-| Live content in fan app | ✅ (code) | Firestore `content/published` + `alerts` behind the repository seams; bundled fallback; Info shows live/cache/bundled. Goes live once rules are deployed and the seed has run |
-| Web beta live for SBG | ✅ Sep 9 | https://samgumble.github.io/festival-app/ — auto-deploys from `main` via `.github/workflows/pages.yml` (design pass; no backend yet) |
+| Live content in fan app | ✅ Sep 10 | Firestore `content/published` + `alerts` behind the repository seams; bundled fallback. Verified live on Pages: Info shows `Content v2026.09.09.1 · live`; an alert sent from the admin console appeared in the fan inbox. Publish/restore round-trip still to be exercised by Sam |
+| Web beta live for SBG | ✅ Sep 9 | https://samgumble.github.io/festival-app/ — auto-deploys from `main` via `.github/workflows/pages.yml`; live Firestore content + alerts since Sep 10 |
 | Native (icons, push, notifications) | ⬜ | Day 4 |
 | TestFlight / Play closed test | ⬜ | Mon Sep 14 |
 | iOS submitted | ⬜ | Mon Sep 14 — follow `STORE-CHECKLIST.md` §8 |
