@@ -45,7 +45,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Now / Lineup | ✅ design pass | all states via dev clock; screenshots in `docs/screens/design-pass/` |
 | Plan / Alerts / Info / PWA | 🟡 | Plan/Alerts/Info at rough fidelity (alerts from fixture); PWA/service worker not started |
 | Admin console | ✅ Sep 9 | https://samgumble.github.io/festival-admin/ (repo `festival-admin`, Pages) — sign-in, lineup editor, alerts, publish/rollback; no Functions/push (D-021) |
-| Live content in fan app | ✅ Sep 10 | Firestore `content/published` + `alerts` behind the repository seams; bundled fallback. Verified live on Pages: Info shows `Content v2026.09.09.1 · live`; an alert sent from the admin console appeared in the fan inbox. Publish/restore round-trip still to be exercised by Sam |
+| Live content in fan app | ✅ Sep 10 | Firestore `content/published` + `alerts` behind the repository seams; bundled fallback. Verified live on Pages Sep 10: edit → publish (v2026.09.10.1) → restore (v2026.09.10.2, content identical to seed) reflected in Info within seconds; alert send + delete round-trip through the fan inbox; `history/` holds 2026.09.09.1 and 2026.09.10.1 |
 | Web beta live for SBG | ✅ Sep 9 | https://samgumble.github.io/festival-app/ — auto-deploys from `main` via `.github/workflows/pages.yml`; live Firestore content + alerts since Sep 10 |
 | Native (icons, push, notifications) | ⬜ | Day 4 |
 | TestFlight / Play closed test | ⬜ | Mon Sep 14 |
