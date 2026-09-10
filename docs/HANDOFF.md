@@ -28,7 +28,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Old prototype (reference only) | github.com/samgumble/music-app — `main` and `expo-v2` |
 | Fan app repo | https://github.com/samgumble/festival-app (public, generic name for now) — this monorepo |
 | Admin console repo | https://github.com/samgumble/festival-admin (public; built Day 3, separate from the monorepo per D-018) |
-| Firebase project | *(record project ID here once created; console owner: Sam → SBG)* |
+| Firebase project | `bb-festival-2026` (project number 221524343225), **Spark/free plan, no card** — owner sam.gumble@gmail.com. Auth: Email/Password enabled, admin user sam.gumble@gmail.com, authorized domain `samgumble.github.io`. Firestore `(default)` in `nam5`, production rules. Web app `festival-web`; config in `packages/shared/src/firebase.config.ts` |
 | Store records | Apple + Google accounts pending approval as of Sep 9; record team IDs / app IDs here when created |
 | Official content sources | tellurideblues.com `/lineup`, `/schedule`, `/faqs`, the 2026 festival guide news post |
 | Claude Project | "Blues and Brews Fable 5.1" — mirrors these docs |
@@ -39,7 +39,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 |---|---|---|
 | Plan approved | ✅ Sep 9 | stack, backend, scope, timeline chosen with Sam |
 | Repo scaffold | ✅ Sep 9 | npm workspaces: apps/festival, packages/shared, packages/content (`festival-app`) |
-| Firebase project + rules | ⬜ | Day 0; Blaze plan needed for Functions |
+| Firebase project + rules | 🟡 | Project created Sep 9 on Spark (no Functions/push for now, D-021); rules deploy pending `firebase login` |
 | Design tokens + fonts | ✅ | Palette locked D-016; Tailwind v4 theme; Bungee/Bungee Shade/Michroma/DM Sans bundled |
 | Content seed | ✅ (bundled) | `packages/content/content-2026.json` from Sep 8 verified data + poster comedy names; Firestore seed still Day 3; re-verify vs official schedule before beta |
 | Now / Lineup | ✅ design pass | all states via dev clock; screenshots in `docs/screens/design-pass/` |
