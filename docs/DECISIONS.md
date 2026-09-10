@@ -91,4 +91,4 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 
 **Why.** generateSW is the least code for precache + versioning + cleanup, the three places hand-rolled workers break offline; `sharp`/asset generators aren't on the approved dependency list, while `cwebp` and Playwright already exist on the machine; committing generated assets keeps CI free of native image tooling. The lockup stays lossless because logo lockups must ship unmodified.
 
-**Consequences.** Art 3.2 MB → ~0.95 MB; precache ≈ 2.3 MB (budget 3 MB). Icon files are a drop-in replacement later. Offline e2e runs locally (`npm run e2e:offline`), not in the Pages workflow.
+**Consequences.** Art 3.2 MB → ~0.95 MB and fonts 1.0 MB → 0.35 MB as WOFF2 (`npm run fonts:build`, Homebrew `woff2`); precache ≈ 2.55 MB (budget 3 MB). Icon files are a drop-in replacement later. Offline e2e runs locally (`npm run e2e:offline`), not in the Pages workflow.

@@ -19,7 +19,8 @@ A fan who opens https://samgumble.github.io/festival-app/ once can add it to the
 | P-2 | **WebP art is committed** next to the PNG sources and produced by `npm run art:build` (Homebrew `cwebp`; no `sharp`, which isn't on the approved list). Opaque hero layers lossy q82; every alpha file lossless. The official lockup stays lossless because the rules say logo lockups ship unmodified. Measured: 3.2 MB → 0.95 MB. |
 | P-3 | **Interim code-drawn icon**: one SVG sun (disc + 12 rays in `sun`/`sun-hot`) on the `sky → night` vertical gradient from ASSET-BRIEF §2, rasterized by a Playwright script (already a dev dependency) to 192, 512, 512-maskable, 180 apple-touch. Swapping in the PSD-derived icon later is a file replacement, no code change. |
 | P-4 | Install nudge lives on **Info** only (no interstitials): `beforeinstallprompt` where supported, a Share → Add to Home Screen sheet on iOS Safari, nothing when already standalone. |
-| P-5 | Service worker registration is **off in dev, tests, and Playwright screenshots** (they run on the dev server); a separate Playwright config runs the offline check against `vite preview` of a real build. |
+| P-5 | **Fonts ship as WOFF2** produced by `npm run fonts:build` (Homebrew `woff2_compress`, installed 2026-09-10); the OFL TTF sources and `OFL.txt` stay in the repo (OFL permits format conversion; the files are not renamed with the Reserved Font Names). Measured: 1,013 kB TTF → 350 kB WOFF2. |
+| P-6 | Service worker registration is **off in dev, tests, and Playwright screenshots** (they run on the dev server); a separate Playwright config runs the offline check against `vite preview` of a real build. |
 
 ## 3. Out of scope
 
@@ -32,7 +33,11 @@ Push/FCM, background sync, Capacitor, periodic content prefetch beyond Firestore
 - App references switch to `.webp`: `Hero.tsx` (sky, mountains-near, foreground, lockup), `InfoScreen.tsx` (lockup in the festival card, sbg), any other `art/*.png` reference found by grep. No `<picture>` fallback (WebP is universal on the supported browsers: iOS 14+, Chrome, Firefox, Edge).
 - Budget check in CI: the Vite build's precache manifest total must be ≤ 3,000,000 bytes; `vite-plugin-pwa`'s `maximumFileSizeToCacheInBytes` stays default (2 MiB per file), and a unit test on the build output isn't required — the `art:build` guard plus the plugin's per-file cap are the guards.
 
-Measured on 2026-09-10 (bytes): sky 187,706 · mountains-near 154,100 · foreground 133,168 · lockup 380,806 (lossless) · dates 82,308 · sbg 30,082 → 968,170 total. Add the JS bundle (~600 kB + Firebase chunk ~534 kB), CSS 34 kB, fonts (`public/fonts/*/*.woff2`), icons ≈ 60 kB → ≈ 2.3 MB precache.
+Measured on 2026-09-10 (bytes): sky 187,706 · mountains-near 154,100 · foreground 133,168 · lockup 380,806 (lossless) · dates 82,308 · sbg 30,082 → 968,170 total.
+
+**Fonts.** `apps/festival/scripts/fonts-build.ts` runs `woff2_compress` on every `public/fonts/*/*.ttf`, writing the `.woff2` beside it (Bungee 40,528 · Bungee Shade 81,612 · Michroma 26,384 · DM Sans 89,116 · DM Sans Italic 112,616 → 350,256). `fonts.css` switches each `src` to `url(".../X.woff2") format("woff2")`. TTFs are kept as sources but excluded from the precache glob. npm script `fonts:build`; outputs committed.
+
+Precache estimate: JS ~1.13 MB (main ~600 kB + Firebase chunk ~534 kB, stored uncompressed) + art 0.97 MB + fonts 0.35 MB + CSS 34 kB + icons ≈ 60 kB + HTML/manifest ≈ **2.55 MB** (budget 3 MB).
 
 ## 5. Manifest and icons
 
@@ -57,10 +62,10 @@ VitePWA({
   registerType: "prompt",
   injectRegister: false,                 // we call registerSW ourselves (src/app/sw.ts)
   manifest: { …§5 },
-  includeAssets: ["favicon.svg", "icons/*.png", "fonts/**/*.woff2", "art/*.webp"],
+  includeAssets: ["favicon.svg", "icons/*.png", "fonts/**/*.woff2", "art/*.webp"],   // public/ files to precache
   workbox: {
     globPatterns: ["**/*.{js,css,html,svg,webp,woff2,png}"],
-    globIgnores: ["art/*.png"],
+    globIgnores: ["art/*.png", "fonts/**/*.ttf", "fonts/**/OFL.txt"],
     navigateFallback: `${base}index.html`,
     navigateFallbackDenylist: [/^\/design/],   // dev-only gallery route never precached
     cleanupOutdatedCaches: true,
@@ -88,7 +93,7 @@ Bundled content is already inside the JS bundle (`bundled.json` import), so a fi
 
 ## 9. Testing
 
-- Unit (Vitest): `sw.test.ts` mocks `virtual:pwa-register` (vitest `alias`) and asserts `setupServiceWorker` registers once in production mode, never in DEV/test, and that `onNeedRefresh` flips the store; `updates.test.ts` for the store; `install.test.ts` for `isStandalone`/`isIosSafari`/`useInstall` modes with stubbed `matchMedia`, UA, and a synthetic `beforeinstallprompt`; `UpdateBanner.test.tsx` (hidden by default, visible on `needRefresh`, Refresh calls `apply`, ✕ dismisses); `InfoScreen` test for the "Get the app" card in each mode and the footer suffix; `art-build` size guard tested by running the script's `checkBudget(sizes)` function in isolation.
+- Unit (Vitest): `sw.test.ts` mocks `virtual:pwa-register` (vitest `alias`) and asserts `setupServiceWorker` registers once in production mode, never in DEV/test, and that `onNeedRefresh` flips the store; `updates.test.ts` for the store; `install.test.ts` for `isStandalone`/`isIosSafari`/`useInstall` modes with stubbed `matchMedia`, UA, and a synthetic `beforeinstallprompt`; `UpdateBanner.test.tsx` (hidden by default, visible on `needRefresh`, Refresh calls `apply`, ✕ dismisses); `InfoScreen` test for the "Get the app" card in each mode and the footer suffix; `art-build` size guard tested by running the script's `checkBudget(sizes)` function in isolation; `fonts.css` asserted (string test) to reference only `.woff2`.
 - Playwright: `playwright.offline.config.ts` + `e2e/offline.spec.ts`: `npm run build` (base `/`), `vite preview --port 4173`, load `/`, wait for `navigator.serviceWorker.ready` and precache completion (poll `caches.keys()` until the workbox precache exists and a second load is controlled), `context.setOffline(true)`, `goto('/lineup')`, expect a known set from the bundled fixture to be visible and the Info footer to say "offline-ready ✓". npm script `e2e:offline`. Existing `screenshots.spec.ts` gains two shots: the update banner (forced via `window.__bbForceUpdateBanner()` exposed only when `import.meta.env.DEV`) and the Info "Get the app" card with the iOS sheet open (forced via a `?install=ios` query the Info screen honors only in DEV).
 - CI (`pages.yml`): add `npm run e2e:offline` after `npm test`? **No** — Chromium install on the runner costs ~40 s and Pages deploys already gate on unit tests; offline e2e runs locally before merge (documented in HANDOFF §Commands). Revisit when the native pipeline adds a browser step anyway.
 
@@ -96,7 +101,8 @@ Bundled content is already inside the JS bundle (`bundled.json` import), so a fi
 
 ```
 apps/festival/
-  scripts/art-build.ts, scripts/icons.ts
+  scripts/art-build.ts, scripts/fonts-build.ts, scripts/icons.ts
+  public/fonts/*/*.woff2  (committed, generated)
   public/icons/{icon.svg,icon-192.png,icon-512.png,icon-512-maskable.png,apple-touch-icon-180.png}, public/favicon.svg
   public/art/*.webp  (committed, generated)
   src/app/{sw.ts,UpdateBanner.tsx}, src/state/updates.ts, src/platform/install.ts, src/features/info/InstallSheet.tsx
@@ -105,7 +111,7 @@ apps/festival/
 
 ## 11. Definition of done
 
-1. `npm run art:build` regenerates the WebP set under 1 MB; no `.png` art is referenced by the app.
+1. `npm run art:build` regenerates the WebP set under 1 MB and `npm run fonts:build` the WOFF2 set; no `.png` art or `.ttf` font is referenced by the app.
 2. Production build emits `sw.js`, `workbox-*.js`, `manifest.webmanifest`, icons; the precache manifest totals ≤ 3 MB.
 3. `npm run e2e:offline` passes: airplane-mode reload of `/lineup` renders the lineup and Info says "offline-ready ✓".
 4. On the Pages deploy: Chrome desktop offers Install; iOS Safari's Info card shows the Add to Home Screen sheet; after a second deploy the update banner appears and Refresh loads the new build.
