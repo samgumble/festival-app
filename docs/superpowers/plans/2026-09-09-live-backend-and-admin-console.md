@@ -539,8 +539,10 @@ const liveRepo = useFirestore ? createFirestoreContentSource(getDb(), bundledRep
 
 export const contentRepository: ContentRepository = liveRepo ?? bundledRepo;
 
+// useSyncExternalStore needs a referentially stable snapshot — never build a fresh object per call.
+const bundledStatus: ContentStatus = { source: "bundled", contentVersion: bundledRepo.getContent().meta.contentVersion, updatedAt: null };
 export function useContentStatus(): ContentStatus {
-  const get = () => liveRepo?.getStatus() ?? { source: "bundled" as const, contentVersion: bundledRepo.getContent().meta.contentVersion, updatedAt: null };
+  const get = () => liveRepo?.getStatus() ?? bundledStatus;
   return useSyncExternalStore(contentRepository.subscribe, get, get);
 }
 ```
