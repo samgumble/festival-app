@@ -31,7 +31,7 @@ Push (FCM/APNs), Cloud Functions, App Check, PWA/service worker, Capacitor, MFA,
 ```
 content/published              Content (schema in @bb/shared)          world-readable · admin write
 content/draft                  Content (may be invalid mid-edit)       admin read/write
-content/history/{version}      Content + { archivedAt }                world-readable · admin write
+history/{version}      Content + { archivedAt }                world-readable · admin write
 alerts/{id}                    Alert                                   world-readable · admin write/delete
 admins/{uid}                   { email, createdAt }                    read: that uid only · write: console/Admin SDK only
 ```
@@ -45,7 +45,7 @@ admins/{uid}                   { email, createdAt }                    read: tha
 
 ```
 function isAdmin() { return request.auth != null && exists(/databases/$(database)/documents/admins/$(request.auth.uid)); }
-content/published, content/history/**, alerts/**   → read: true;  write: isAdmin()
+content/published, history/**, alerts/**   → read: true;  write: isAdmin()
 content/draft                                       → read, write: isAdmin()
 admins/{uid}                                        → read: request.auth.uid == uid; write: false
 everything else                                     → false

@@ -4,7 +4,7 @@
 
 **Goal:** The fan app reads live content and alerts from Firestore (project `bb-festival-2026`, Spark plan), and SBG gets a password-protected admin console on GitHub Pages (`samgumble/festival-admin`) to edit the lineup, publish, roll back, and send alerts.
 
-**Architecture:** Firestore holds `content/published`, `content/draft`, `content/history/{version}`, `alerts/{id}`, `admins/{uid}`; rules make published/history/alerts world-readable and admin-only writable. The fan app gets two new sources behind its existing `ContentRepository`/`AlertsRepository` seams (Zod-validated; bundled snapshot stays the fallback). The admin console is a separate Vite + React app that carries a git-subtree copy of `packages/shared`, signs in with Firebase Auth, autosaves a draft, and publishes with an atomic batch (archive old → write new). No Cloud Functions.
+**Architecture:** Firestore holds `content/published`, `content/draft`, `history/{version}`, `alerts/{id}`, `admins/{uid}`; rules make published/history/alerts world-readable and admin-only writable. The fan app gets two new sources behind its existing `ContentRepository`/`AlertsRepository` seams (Zod-validated; bundled snapshot stays the fallback). The admin console is a separate Vite + React app that carries a git-subtree copy of `packages/shared`, signs in with Firebase Auth, autosaves a draft, and publishes with an atomic batch (archive old → write new). No Cloud Functions.
 
 **Tech Stack:** firebase 12.19.0 (app, auth, firestore), @firebase/rules-unit-testing 5.0.2, firebase-tools 15.30.0 (via `npx`, emulator needs Java 21 at `/opt/homebrew/opt/openjdk@21/bin`), plus the fan app's existing pins (Vite 8.2.2, React 19.3.0, react-router 7.18.3, zustand 5.0.15, zod 4.6.0, Tailwind 4.3.3, TS 5.9.3, Vitest 4.1.11).
 
@@ -16,9 +16,9 @@
 - Never commit secrets: no service-account JSON, no passwords, no `.env*`. The Firebase **web** config in `packages/shared/src/firebase.config.ts` is public by design. The seed script reads the admin password from the environment at run time only.
 - Never invent festival content. Firestore is seeded from `packages/content/content-2026.json`; the admin console edits what SBG enters.
 - All time math via `time.ts` (`isoMs`, `parseIso`, `fromDenver`, `toDenverParts`) — the admin repo gets an identical copy under `src/domain/time.ts` (Task 8) rather than reaching into the fan app.
-- Firestore rules: `content/published`, `content/history/**`, `alerts/**` → `read: true`, `write: isAdmin()`; `content/draft` → `read, write: isAdmin()`; `admins/{uid}` → `read: request.auth.uid == uid`, `write: false`; everything else `false`. `isAdmin()` = signed in AND `admins/{uid}` exists.
+- Firestore rules: `content/published`, `history/**`, `alerts/**` → `read: true`, `write: isAdmin()`; `content/draft` → `read, write: isAdmin()`; `admins/{uid}` → `read: request.auth.uid == uid`, `write: false`; everything else `false`. `isAdmin()` = signed in AND `admins/{uid}` exists.
 - Remote content must pass `Content.safeParse` (and each alert `Alert.safeParse`) before it can replace what's shown; an invalid snapshot never wins.
-- `contentVersion` format `YYYY.MM.DD.n` (Denver date); `publishedBy` is the admin's email; publishing archives the previous published doc to `history/{oldVersion}` and writes the new `published` in one batch.
+- `contentVersion` format `YYYY.MM.DD.n` (Denver date); `publishedBy` is the admin's email; publishing archives the previous published doc to `history/{oldVersion}` (top-level collection) and writes the new `published` in one batch.
 - Admin console: no analytics; `browserSessionPersistence`; 60-minute idle sign-out; sun (`#F0C41C`) used only for **Publish** and **Send alert**; tap targets ≥ 44 px; never `<button>` inside `<a>`.
 - Fan app: no screen changes beyond the Info provenance line; `VITE_DATA_SOURCE=bundled` in tests and screenshots, `firestore` in production builds.
 - Conventional commits; small commits; push `festival-app` only when a task says so (Pages redeploys on push); `festival-admin` pushes are part of its deploy task.
@@ -131,7 +131,7 @@ service cloud.firestore {
     match /content/draft {
       allow read, write: if isAdmin();
     }
-    match /content/history/{version} {
+    match /history/{version} {
       allow read: if true;
       allow create: if isAdmin() && isContent();
       allow update, delete: if false;
@@ -207,7 +207,7 @@ describe("public reads", () => {
   it("anyone can read published, history and alerts", async () => {
     await assertSucceeds(getDoc(doc(anon(), "content", "published")));
     await assertSucceeds(getDocs(collection(anon(), "alerts")));
-    await assertSucceeds(getDocs(collection(anon(), "content", "history")));
+    await assertSucceeds(getDocs(collection(anon(), "history")));
   });
   it("nobody but admins can read the draft", async () => {
     await assertFails(getDoc(doc(anon(), "content", "draft")));
@@ -225,14 +225,14 @@ describe("writes", () => {
   });
   it("admins can publish, archive, and manage alerts", async () => {
     await assertSucceeds(setDoc(doc(admin(), "content", "published"), { ...content, meta: { ...content.meta, contentVersion: "2026.09.09.2" } }));
-    await assertSucceeds(setDoc(doc(admin(), "content", "history", "2026.09.09.1"), { ...content, archivedAt: "2026-09-09T13:00:00-06:00" }));
+    await assertSucceeds(setDoc(doc(admin(), "history", "2026.09.09.1"), { ...content, archivedAt: "2026-09-09T13:00:00-06:00" }));
     await assertSucceeds(setDoc(doc(admin(), "alerts", "a2"), alert));
     await assertSucceeds(deleteDoc(doc(admin(), "alerts", "a1")));
   });
   it("history is append-only and admins cannot grant admin", async () => {
-    await env.withSecurityRulesDisabled(async (ctx) => { await setDoc(doc(ctx.firestore(), "content", "history", "v0"), content); });
-    await assertFails(setDoc(doc(admin(), "content", "history", "v0"), { ...content, meta: { ...content.meta, contentVersion: "x" } }));
-    await assertFails(deleteDoc(doc(admin(), "content", "history", "v0")));
+    await env.withSecurityRulesDisabled(async (ctx) => { await setDoc(doc(ctx.firestore(), "history", "v0"), content); });
+    await assertFails(setDoc(doc(admin(), "history", "v0"), { ...content, meta: { ...content.meta, contentVersion: "x" } }));
+    await assertFails(deleteDoc(doc(admin(), "history", "v0")));
     await assertFails(setDoc(doc(admin(), "admins", "new-uid"), { email: "new@example.com" }));
   });
   it("shape guards reject malformed content and alerts", async () => {
@@ -261,7 +261,7 @@ Then `npm install`.
 - [ ] **Step 4: Run the rules tests**
 
 Run: `npm run rules:test`
-Expected: the emulator downloads on first use, then `6 passed`. If `java` is not found, confirm `/opt/homebrew/opt/openjdk@21/bin/java -version` prints 21 (it was installed by Homebrew) — do not change the PATH prefix in the scripts.
+Expected: the emulator downloads on first use, then `7 passed`. If `java` is not found, confirm `/opt/homebrew/opt/openjdk@21/bin/java -version` prints 21 (it was installed by Homebrew) — do not change the PATH prefix in the scripts.
 
 - [ ] **Step 5: Deploy the rules**
 
@@ -335,7 +335,7 @@ const batch = writeBatch(db);
 const now = new Date().toISOString();
 if (published.exists()) {
   const old = published.data() as { meta: { contentVersion: string } };
-  batch.set(doc(db, "content", "history", old.meta.contentVersion), { ...published.data(), archivedAt: now });
+  batch.set(doc(db, "history", old.meta.contentVersion), { ...published.data(), archivedAt: now });
 }
 batch.set(doc(db, "content", "published"), { ...content, meta: { ...content.meta, publishedBy: email } });
 batch.set(doc(db, "content", "draft"), { ...content, meta: { ...content.meta, publishedBy: email } });
@@ -1288,14 +1288,14 @@ export async function publish(draft: Content, published: Content | null, by: str
   const next: Content = { ...draft, meta: { ...draft.meta, contentVersion: version, publishedAt: toDenverIso(now), publishedBy: by } };
   Content.parse(next);
   const batch = writeBatch(db());
-  if (published) batch.set(doc(db(), "content", "history", published.meta.contentVersion), { ...published, archivedAt: toDenverIso(now) });
+  if (published) batch.set(doc(db(), "history", published.meta.contentVersion), { ...published, archivedAt: toDenverIso(now) });
   batch.set(doc(db(), "content", "published"), next);
   batch.set(doc(db(), "content", "draft"), next);
   await batch.commit();
   return version;
 }
 export async function listHistory(): Promise<{ version: string; archivedAt: string; content: Content }[]> {
-  const snap = await getDocs(query(collection(db(), "content", "history"), orderBy("archivedAt", "desc")));
+  const snap = await getDocs(query(collection(db(), "history"), orderBy("archivedAt", "desc")));
   const out: { version: string; archivedAt: string; content: Content }[] = [];
   for (const d of snap.docs) { const { archivedAt, ...rest } = d.data() as { archivedAt: string } & Record<string, unknown>; const p = Content.safeParse(rest); if (p.success) out.push({ version: d.id, archivedAt, content: p.data }); }
   return out;
