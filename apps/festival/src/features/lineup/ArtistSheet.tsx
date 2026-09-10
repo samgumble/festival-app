@@ -25,14 +25,10 @@ export function ArtistSheet() {
   const share = async () => {
     const lines = sets.map((s) => `${dayLabel(s.dayId)} ${formatRange(parseIso(s.start), parseIso(s.end))} · ${idx.stagesById.get(s.stageId)?.name}`);
     const text = `${artist.name} — ${content.festival.name}\n${lines.join("\n")}\n${content.festival.links.lineup}`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ text });
-      } catch {
-        /* user cancelled the share sheet */
-      }
-    } else {
-      await navigator.clipboard?.writeText(text);
+    try {
+      if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
+    } catch {
+      /* user cancelled the share sheet, or clipboard unavailable */
     }
   };
   return (
@@ -59,7 +55,7 @@ export function ArtistSheet() {
         <div className="mt-3 flex items-center gap-2">
           <Button variant={inPlan ? "ghost" : "sun"} className="flex-1" onClick={() => toggleFavorite(single.id)}>{inPlan ? "✓ In your plan" : "Add to plan"}</Button>
           {inPlan && (
-            <label className="flex items-center gap-2 text-[14px]"><span>Remind me {settings.leadMinutes} min before</span><Toggle on={reminders.includes(single.id)} onChange={() => toggleReminder(single.id)} label="Remind me" /></label>
+            <span className="flex items-center gap-2 text-[14px]"><span>Remind me {settings.leadMinutes} min before</span><Toggle on={reminders.includes(single.id)} onChange={() => toggleReminder(single.id)} label="Remind me" /></span>
           )}
         </div>
       )}

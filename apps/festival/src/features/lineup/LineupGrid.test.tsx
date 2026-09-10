@@ -49,6 +49,7 @@ describe("LineupGrid", () => {
     renderAt("/lineup");
     const short = await screen.findByRole("button", { name: /Derrick Dove & The Peacekeepers, 5:40 PM/ });
     expect(short.className).toMatch(/before:-inset-x-1\.5\b/);
+    expect(short.className).not.toMatch(/\boverflow-hidden\b/);
     const long = screen.getByRole("button", { name: /Charlie Musselwhite & GA-20/ });
     expect(long.className).not.toMatch(/before:-inset-x/);
   });

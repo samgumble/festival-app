@@ -19,7 +19,7 @@ export function SetRow({ set, artist, stage, now, showStage = false, dayLabel }:
   return (
     <div className={`-mx-4 flex items-center gap-3 border-b border-hair px-4 py-2.5 ${live || isHeadliner ? "bg-gradient-to-r from-sun/20 to-transparent" : ""} ${ended ? "opacity-60" : ""}`}>
       <button type="button" onClick={() => navigate(`/lineup/artist/${artist.id}`)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
-        <span className={`w-16 shrink-0 text-[14px] font-semibold leading-[18px] tabular-nums ${live ? "text-ink" : "text-fg-soft"}`}>{dayLabel ? `${dayLabel} ` : ""}{live ? "● " : ""}{formatTime(start)}</span>
+        <span className={`w-20 shrink-0 text-[14px] font-semibold leading-[18px] tabular-nums ${live ? "text-fg" : "text-fg-soft"}`}>{dayLabel ? `${dayLabel} ` : ""}{live ? "● " : ""}{formatTime(start)}</span>
         <span className="min-w-0 flex-1">
           <span className={`block truncate ${isHeadliner ? "font-display text-[17px] leading-5" : "text-[16px] font-semibold leading-5"}`}>{artist.name}</span>
           {sub && <span className="block text-[13px] text-fg-soft">{sub}</span>}

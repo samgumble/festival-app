@@ -38,4 +38,10 @@ describe("Lineup list", () => {
     renderAt("/lineup");
     expect(await screen.findByText("Baron Vaughn")).toBeInTheDocument();
   });
+
+  it("search also matches a comedy act with no sets", async () => {
+    renderAt("/lineup");
+    fireEvent.change(await screen.findByRole("searchbox"), { target: { value: "baron" } });
+    expect(screen.getByText("Baron Vaughn")).toBeInTheDocument();
+  });
 });
