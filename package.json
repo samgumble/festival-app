@@ -10,7 +10,7 @@
     "build": "npm run content:build && npm run build -w @bb/festival",
     "content:build": "node packages/content/scripts/build.ts",
     "test": "npm run content:build && npm run test --workspaces --if-present",
-    "typecheck": "npm run typecheck --workspaces --if-present",
+    "typecheck": "npm run typecheck --workspaces --if-present && tsc -p tsconfig.firebase.json",
     "screenshots": "npm run screenshots -w @bb/festival",
     "emulators": "PATH=/opt/homebrew/opt/openjdk@21/bin:$PATH npx --yes firebase-tools@15.30.0 emulators:start --only firestore,auth --config firebase/firebase.json --project bb-festival-2026",
     "rules:test": "PATH=/opt/homebrew/opt/openjdk@21/bin:$PATH npx --yes firebase-tools@15.30.0 emulators:exec --only firestore --config firebase/firebase.json --project bb-festival-2026 \"vitest run --config vitest.rules.config.ts\"",
