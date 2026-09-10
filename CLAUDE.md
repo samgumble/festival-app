@@ -11,10 +11,9 @@ React 19 + Vite 8 + TypeScript (strict) · Tailwind v4 tokens · `motion` · Rea
 - No analytics/ads/tracking SDKs. Firebase Analytics stays off.
 - All schedule time math goes through `apps/festival/src/domain/time.ts` in `America/Denver`.
 - Remote content must pass the Zod schema in `packages/shared/src/schema.ts` before replacing cached content.
-- Firestore writes only via rules-protected paths and the `publishContent` callable. Do not loosen `firebase/firestore.rules`.
+- Firestore writes only from the admin console under `firebase/firestore.rules` (admins allowlisted in `admins/{uid}`); there are no Cloud Functions on the Spark plan (D-021). Never widen rules to make a demo work. History is a top-level `history/{version}` collection.
 - Every animation has a `prefers-reduced-motion` fallback; every screen renders from `bundled.json` offline.
 - Official logo lockups are used as images, unmodified. Fonts are bundled OFL files only (Bungee, Bungee Shade, Michroma, DM Sans).
-- Firestore writes only from the admin console under `firebase/firestore.rules` (admins allowlisted in `admins/{uid}`); never widen rules to make a demo work. History is a top-level `history/{version}` collection.
 - Add dependencies only from the approved list in `docs/HANDOFF.md §6`; otherwise ask.
 
 ## Conventions
