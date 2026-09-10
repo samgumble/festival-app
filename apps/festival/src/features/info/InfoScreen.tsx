@@ -26,7 +26,7 @@ function Row({ label, children, href }: { label: string; children?: ReactNode; h
 }
 
 export function InfoScreen() {
-  const { festival } = useContent();
+  const { festival, meta } = useContent();
   const status = useContentStatus();
   const theme = useUiStore((s) => s.theme);
   const setTheme = useUiStore((s) => s.setTheme);
@@ -78,8 +78,8 @@ export function InfoScreen() {
         <Card className="mt-2 text-[14px] leading-5 text-fg-soft">{FONTS.map(([f, l]) => <div key={f}><b className="text-fg">{f}</b> — {l}</div>)}<div className="mt-1">Poster artwork © SBG Productions, used with permission.</div></Card>
       )}
       <p className="mt-4 text-center eyebrow text-fg-soft">
-        Content v{status.contentVersion} · {status.source === "live" ? "live" : status.source === "cache" ? "offline · cached" : "bundled"}
-        {status.updatedAt ? ` · updated ${formatTime(parseIso(status.updatedAt))}` : ""} · app {__APP_VERSION__}
+        Content v{status.contentVersion} · {status.source === "live" ? "live" : status.source === "cache" ? "cached" : "bundled"}
+        {" · updated "}{formatTime(parseIso(status.updatedAt ?? meta.publishedAt))} · app {__APP_VERSION__}
       </p>
     </div>
   );
