@@ -1,7 +1,6 @@
-import { doc, onSnapshot, type Firestore } from "firebase/firestore";
+import { doc, onSnapshot, type Firestore, type Unsubscribe } from "firebase/firestore";
 import { Alert, Content } from "@bb/shared";
 import { isoMs } from "@/domain/time";
-import type { ContentRepository } from "./content";
 
 export interface ContentStatus {
   source: "bundled" | "live" | "cache";
@@ -9,6 +8,8 @@ export interface ContentStatus {
   updatedAt: string | null;
 }
 export interface ContentState { current: Content; status: ContentStatus }
+
+export interface ListenerHandle { stop(): void }
 
 /** Pure: fold one Firestore snapshot into the current state. Invalid or missing docs never replace good content. */
 export function applyContentSnapshot(state: ContentState, snap: { exists: boolean; data: unknown; fromCache: boolean }): ContentState {
@@ -18,6 +19,13 @@ export function applyContentSnapshot(state: ContentState, snap: { exists: boolea
     console.warn("content/published failed validation; keeping last good content", parsed.error.issues.slice(0, 3));
     return state;
   }
+  const sameVersion = parsed.data.meta.contentVersion === state.status.contentVersion;
+  const sameCacheState = snap.fromCache === (state.status.source === "cache");
+  // Metadata-only re-emits (e.g. a server ack after a local write) carry the same version and the
+  // same cache/live state we already have — skip reallocating Content so subscribers don't re-render.
+  // The very first snapshot after the bundled fallback always applies, even when the version already
+  // matches, so status can move off "bundled" to "live"/"cache".
+  if (state.status.source !== "bundled" && sameVersion && sameCacheState) return state;
   return {
     current: parsed.data,
     status: { source: snap.fromCache ? "cache" : "live", contentVersion: parsed.data.meta.contentVersion, updatedAt: parsed.data.meta.publishedAt },
@@ -35,21 +43,30 @@ export function applyAlertsSnapshot(docs: { id: string; data: unknown }[]): Aler
   return out.sort((a, b) => isoMs(b.publishedAt) - isoMs(a.publishedAt));
 }
 
-export function createFirestoreContentSource(db: Firestore, fallback: Content): ContentRepository & { getStatus(): ContentStatus } {
-  let state: ContentState = { current: fallback, status: { source: "bundled", contentVersion: fallback.meta.contentVersion, updatedAt: null } };
-  const listeners = new Set<() => void>();
-  let started = false;
-  const start = () => {
-    if (started) return;
-    started = true;
-    onSnapshot(doc(db, "content", "published"), { includeMetadataChanges: true }, (snap) => {
+/**
+ * Attach a live `content/published` listener. `initial` seeds the fold (typically the caller's
+ * bundled snapshot); `onChange` fires with the new state whenever it actually changes. On a
+ * listener error, `onError` runs so the caller can reset its "started" flag and let a later
+ * `subscribe` retry.
+ */
+export function startContentListener(
+  db: Firestore,
+  initial: ContentState,
+  onChange: (state: ContentState) => void,
+  onError?: () => void,
+): ListenerHandle {
+  let state = initial;
+  const unsubscribe: Unsubscribe = onSnapshot(
+    doc(db, "content", "published"),
+    { includeMetadataChanges: true },
+    (snap) => {
       const next = applyContentSnapshot(state, { exists: snap.exists(), data: snap.data(), fromCache: snap.metadata.fromCache });
-      if (next !== state) { state = next; listeners.forEach((l) => l()); }
-    }, (err) => console.warn("content/published listener error", err));
-  };
-  return {
-    getContent: () => state.current,
-    getStatus: () => state.status,
-    subscribe: (cb) => { listeners.add(cb); start(); return () => listeners.delete(cb); },
-  };
+      if (next !== state) { state = next; onChange(state); }
+    },
+    (err) => {
+      console.warn("content/published listener error", err);
+      onError?.();
+    },
+  );
+  return { stop: () => unsubscribe() };
 }

@@ -3,8 +3,7 @@ import { Alert } from "@bb/shared";
 import { z } from "zod";
 import { isoMs } from "@/domain/time";
 import fixture from "./alerts.fixture.json";
-import { getDb } from "./firebase";
-import { createFirestoreAlertsSource } from "./firestore-alerts";
+import { useFirestore } from "./source";
 
 export interface AlertsRepository {
   getAlerts(): Alert[];
@@ -15,9 +14,35 @@ const alerts = z.array(Alert).parse(fixture).sort((a, b) => isoMs(b.publishedAt)
 
 const fixtureRepository: AlertsRepository = { getAlerts: () => alerts, subscribe: () => () => {} };
 
-const useFirestore = import.meta.env.VITE_DATA_SOURCE === "firestore" || (import.meta.env.PROD && import.meta.env.VITE_DATA_SOURCE !== "bundled");
+/**
+ * An `AlertsRepository` that starts empty and only pulls in the Firestore SDK (via dynamic import)
+ * the first time something actually subscribes — keeping `firebase/firestore` out of the initial
+ * JS chunk for everyone who never touches live alerts (tests, first paint).
+ */
+function createLazyLiveAlertsSource(): AlertsRepository {
+  let current: Alert[] = [];
+  const listeners = new Set<() => void>();
+  let started = false;
+  const subscribe = (cb: () => void) => {
+    listeners.add(cb);
+    if (!started) {
+      started = true;
+      void import("./firebase").then(({ getDb }) =>
+        import("./firestore-alerts").then(({ startAlertsListener }) =>
+          startAlertsListener(
+            getDb(),
+            (next) => { current = next; listeners.forEach((l) => l()); },
+            () => { started = false; },
+          ),
+        ),
+      );
+    }
+    return () => listeners.delete(cb);
+  };
+  return { getAlerts: () => current, subscribe };
+}
 
-export const alertsRepository: AlertsRepository = useFirestore ? createFirestoreAlertsSource(getDb()) : fixtureRepository;
+export const alertsRepository: AlertsRepository = useFirestore ? createLazyLiveAlertsSource() : fixtureRepository;
 
 export function useAlerts(): Alert[] {
   return useSyncExternalStore(alertsRepository.subscribe, alertsRepository.getAlerts, alertsRepository.getAlerts);

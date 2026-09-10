@@ -2,8 +2,8 @@ import { useMemo, useSyncExternalStore } from "react";
 import { Content, type Artist, type DayId, type FestivalSet, type Stage } from "@bb/shared";
 import { isoMs } from "@/domain/time";
 import bundled from "./bundled.json";
-import { getDb } from "./firebase";
-import { createFirestoreContentSource, type ContentStatus } from "./firestore-content";
+import { useFirestore } from "./source";
+import type { ContentState, ContentStatus } from "./firestore-content";
 
 export interface ContentRepository {
   getContent(): Content;
@@ -16,9 +16,37 @@ export function createBundledRepository(raw: unknown): ContentRepository {
   return { getContent: () => content, subscribe: () => () => {} };
 }
 
-const useFirestore = import.meta.env.VITE_DATA_SOURCE === "firestore" || (import.meta.env.PROD && import.meta.env.VITE_DATA_SOURCE !== "bundled");
+/**
+ * A `ContentRepository` that serves `fallback` synchronously and only pulls in the Firestore SDK
+ * (via dynamic import) the first time something actually subscribes — keeping `firebase/firestore`
+ * out of the initial JS chunk for everyone who never touches live data (tests, first paint).
+ */
+function createLazyLiveContentSource(fallback: Content): ContentRepository & { getStatus(): ContentStatus } {
+  let state: ContentState = { current: fallback, status: { source: "bundled", contentVersion: fallback.meta.contentVersion, updatedAt: null } };
+  const listeners = new Set<() => void>();
+  let started = false;
+  const subscribe = (cb: () => void) => {
+    listeners.add(cb);
+    if (!started) {
+      started = true;
+      void import("./firebase").then(({ getDb }) =>
+        import("./firestore-content").then(({ startContentListener }) =>
+          startContentListener(
+            getDb(),
+            state,
+            (next) => { state = next; listeners.forEach((l) => l()); },
+            () => { started = false; },
+          ),
+        ),
+      );
+    }
+    return () => listeners.delete(cb);
+  };
+  return { getContent: () => state.current, getStatus: () => state.status, subscribe };
+}
+
 const bundledRepo = createBundledRepository(bundled);
-const liveRepo = useFirestore ? createFirestoreContentSource(getDb(), bundledRepo.getContent()) : null;
+const liveRepo = useFirestore ? createLazyLiveContentSource(bundledRepo.getContent()) : null;
 
 export const contentRepository: ContentRepository = liveRepo ?? bundledRepo;
 

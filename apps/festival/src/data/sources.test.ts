@@ -25,6 +25,12 @@ describe("applyContentSnapshot", () => {
     const r = applyContentSnapshot({ current: base, status: { source: "bundled", contentVersion: base.meta.contentVersion, updatedAt: null } }, { exists: false, data: undefined, fromCache: false });
     expect(r.current).toBe(base);
   });
+  it("returns the same state for a metadata-only event with unchanged version and cache status", () => {
+    const live = applyContentSnapshot({ current: base, status: { source: "bundled", contentVersion: base.meta.contentVersion, updatedAt: null } }, { exists: true, data: base, fromCache: false });
+    expect(live.status.source).toBe("live");
+    const again = applyContentSnapshot(live, { exists: true, data: base, fromCache: false });
+    expect(again).toBe(live);
+  });
 });
 
 describe("applyAlertsSnapshot", () => {
