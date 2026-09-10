@@ -19,13 +19,12 @@ describe("ArtistSheet", () => {
     expect(usePlanStore.getState().favorites).toEqual(["sat-nigel-wearne-camp-1230"]);
   });
 
-  it("offers a single-set add button and a reminder once added", async () => {
+  it("offers a single-set add button and no reminder control yet", async () => {
     renderAt("/lineup/artist/nether-hour");
     const dialog = await screen.findByRole("dialog");
     fireEvent.click(within(dialog).getByRole("button", { name: /add to plan/i }));
     expect(usePlanStore.getState().favorites).toEqual(["sat-nether-hour-main-1500"]);
-    fireEvent.click(within(dialog).getByRole("switch", { name: /remind me/i }));
-    expect(usePlanStore.getState().reminders).toEqual(["sat-nether-hour-main-1500"]);
+    expect(within(dialog).queryByRole("switch")).toBeNull();
   });
 
   it("shows comedy acts without sets", async () => {

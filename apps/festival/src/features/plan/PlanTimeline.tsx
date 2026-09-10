@@ -1,6 +1,6 @@
 import type { FestivalSet } from "@bb/shared";
 import { Link } from "react-router";
-import { Button, Chip, Toggle } from "@/design";
+import { Button, Chip } from "@/design";
 import { useContentIndex } from "@/data/content";
 import { detectConflicts, lostSetIds, type Conflict } from "@/domain/conflicts";
 import { isEnded } from "@/domain/schedule";
@@ -9,7 +9,7 @@ import { usePlanStore } from "@/state/plan";
 
 function SetCardRow({ set, lost, conflict, now, onSwap }: { set: FestivalSet; lost: boolean; conflict?: Conflict; now: Date; onSwap?: () => void }) {
   const idx = useContentIndex();
-  const { reminders, toggleReminder, settings } = usePlanStore();
+  const { settings } = usePlanStore();
   const artist = idx.artistsById.get(set.artistId)!, stage = idx.stagesById.get(set.stageId)!;
   const ended = isEnded(set, now);
   const other = conflict ? (conflict.a.id === set.id ? conflict.b : conflict.a) : undefined;
@@ -21,11 +21,8 @@ function SetCardRow({ set, lost, conflict, now, onSwap }: { set: FestivalSet; lo
           <span className={`block truncate ${artist.tier === "headliner" ? "font-display text-[17px] leading-5" : "text-[16px] font-semibold leading-5"}`}>{artist.name}</span>
           <span className="block text-[13px] text-fg-soft tabular-nums">{stage.name} · {formatRange(parseIso(set.start), parseIso(set.end))}{ended ? " · ended" : ""}</span>
         </Link>
-        {lost ? (
-          <Button size="sm" onClick={onSwap}>Swap</Button>
-        ) : (
-          !ended && <Toggle on={reminders.includes(set.id)} onChange={() => toggleReminder(set.id)} label={`Remind me for ${artist.name}`} />
-        )}
+        {/* reminders arrive with the native build (Day 4); until then the row is favorite-only */}
+        {lost && <Button size="sm" onClick={onSwap}>Swap</Button>}
       </div>
       {conflict && !lost && (
         <div className="mt-2 flex flex-wrap items-center gap-2">

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
-import { Button, buttonClasses, Chip, Eyebrow, Heart, Sheet, Toggle } from "@/design";
+import { Button, buttonClasses, Chip, Eyebrow, Heart, Sheet } from "@/design";
 import { useFestivalClock } from "@/app/clock";
 import { useContent, useContentIndex } from "@/data/content";
 import { formatRange, formatTime, parseIso } from "@/domain/time";
@@ -15,7 +15,7 @@ export function ArtistSheet() {
   const { now } = useFestivalClock();
   const content = useContent();
   const idx = useContentIndex();
-  const { favorites, reminders, toggleFavorite, toggleReminder, settings } = usePlanStore();
+  const { favorites, toggleFavorite } = usePlanStore();
   const artist = idx.artistsById.get(id);
   if (!artist) return <Sheet onClose={onClose} title="Artist"><p className="py-6 text-center text-fg-soft">Artist not found.</p></Sheet>;
   const sets = idx.setsByArtist.get(artist.id) ?? [];
@@ -54,9 +54,6 @@ export function ArtistSheet() {
       {single && (
         <div className="mt-3 flex items-center gap-2">
           <Button variant={inPlan ? "ghost" : "sun"} className="flex-1" onClick={() => toggleFavorite(single.id)}>{inPlan ? "✓ In your plan" : "Add to plan"}</Button>
-          {inPlan && (
-            <span className="flex items-center gap-2 text-[14px]"><span>Remind me {settings.leadMinutes} min before</span><Toggle on={reminders.includes(single.id)} onChange={() => toggleReminder(single.id)} label="Remind me" /></span>
-          )}
         </div>
       )}
       <div className="mt-3 flex gap-2">
