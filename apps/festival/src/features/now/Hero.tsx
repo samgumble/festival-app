@@ -4,9 +4,9 @@ import type { ReactNode } from "react";
 import { Chip, RainbowArch, useMotionOk } from "@/design";
 
 const LAYERS = [
-  { src: asset("/art/sky.png"), rate: 0.15, top: "0%" },
-  { src: asset("/art/mountains-near.png"), rate: 0.35, top: "38%" },
-  { src: asset("/art/foreground.png"), rate: 0.6, top: "62%" },
+  { src: asset("/art/sky.webp"), rate: 0.15, top: "0%" },
+  { src: asset("/art/mountains-near.webp"), rate: 0.35, top: "38%" },
+  { src: asset("/art/foreground.webp"), rate: 0.6, top: "62%" },
 ] as const;
 
 /** Poster-crop parallax hero framed by the rainbow arch; official lockup on top. */
@@ -25,7 +25,7 @@ export function Hero({ compact = false, children }: { compact?: boolean; childre
           className="absolute left-1/2 w-[150%] max-w-none -translate-x-1/2 select-none" draggable={false} />
       ))}
       <RainbowArch />
-      <img src={asset("/art/lockup.png")} alt="Telluride Blues & Brews Festival, September 18–20, 2026, Telluride, Colorado"
+      <img src={asset("/art/lockup.webp")} alt="Telluride Blues & Brews Festival, September 18–20, 2026, Telluride, Colorado"
         className="absolute left-1/2 top-4 w-[74%] -translate-x-1/2 drop-shadow-[0_6px_14px_rgba(0,0,0,.35)]" />
       <div className="absolute inset-x-0 bottom-0 h-[58%] bg-gradient-to-b from-transparent to-bg to-[82%]" />
       <div className="absolute right-3 top-3"><Chip tone="sun">32nd annual</Chip></div>
