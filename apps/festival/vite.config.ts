@@ -8,6 +8,7 @@ export default defineConfig({
   base: process.env.BASE_PATH ?? "/",
   plugins: [react(), tailwindcss()],
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
+  define: { __APP_VERSION__: JSON.stringify(process.env.npm_package_version ?? "0.0.0") },
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],

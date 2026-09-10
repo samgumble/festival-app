@@ -75,7 +75,7 @@ export function InfoScreen() {
       {licenses && (
         <Card className="mt-2 text-[14px] leading-5 text-fg-soft">{FONTS.map(([f, l]) => <div key={f}><b className="text-fg">{f}</b> — {l}</div>)}<div className="mt-1">Poster artwork © SBG Productions, used with permission.</div></Card>
       )}
-      <p className="mt-4 text-center eyebrow text-fg-soft">Content v{meta.contentVersion} · bundled {formatTime(parseIso(meta.publishedAt))} · offline-ready ✓ · app 0.1.0</p>
+      <p className="mt-4 text-center eyebrow text-fg-soft">Content v{meta.contentVersion} · bundled {formatTime(parseIso(meta.publishedAt))} · offline-ready ✓ · app {__APP_VERSION__}</p>
     </div>
   );
 }
