@@ -39,7 +39,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 |---|---|---|
 | Plan approved | ✅ Sep 9 | stack, backend, scope, timeline chosen with Sam |
 | Repo scaffold | ✅ Sep 9 | npm workspaces: apps/festival, packages/shared, packages/content (`festival-app`) |
-| Firebase project + rules | 🟡 | `firebase/firestore.rules` written + 7 emulator tests green (`npm run rules:test`); **deploy pending `npx firebase-tools login`** then `npm run rules:deploy` |
+| Firebase project + rules | ✅ | `firebase/firestore.rules` deployed to `bb-festival-2026` on 2026-09-10 (`npm run rules:deploy`); 10 emulator tests green (`npm run rules:test`); live probe: `content/published` readable, `content/draft` and `admins/*` denied unauthenticated |
 | Design tokens + fonts | ✅ | Palette locked D-016; Tailwind v4 theme; Bungee/Bungee Shade/Michroma/DM Sans bundled |
 | Content seed | 🟡 | bundled ✅; Firestore seed: `read -rs FIREBASE_ADMIN_PASSWORD && export FIREBASE_ADMIN_PASSWORD && FIREBASE_ADMIN_EMAIL=sam.gumble@gmail.com npm run seed` (password prompted, never on the command line; Sam runs it after rules deploy); re-verify vs official schedule before beta |
 | Now / Lineup | ✅ design pass | all states via dev clock; screenshots in `docs/screens/design-pass/` |
