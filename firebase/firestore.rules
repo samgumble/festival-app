@@ -1,0 +1,50 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAdmin() {
+      return request.auth != null
+        && exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+    function isContent() {
+      return request.resource.data.meta is map
+        && request.resource.data.meta.contentVersion is string
+        && request.resource.data.festival is map
+        && request.resource.data.stages is list
+        && request.resource.data.artists is list
+        && request.resource.data.sets is list;
+    }
+    function isAlert() {
+      return request.resource.data.title is string && request.resource.data.title.size() <= 60
+        && request.resource.data.body is string && request.resource.data.body.size() <= 240
+        && request.resource.data.severity in ['info', 'important', 'urgent']
+        && request.resource.data.publishedAt is string
+        && request.resource.data.publishedBy is string
+        && request.resource.data.push is bool;
+    }
+
+    match /content/published {
+      allow read: if true;
+      allow write: if isAdmin() && isContent();
+    }
+    match /content/draft {
+      allow read, write: if isAdmin();
+    }
+    match /history/{version} {
+      allow read: if true;
+      allow create: if isAdmin() && isContent();
+      allow update, delete: if false;
+    }
+    match /alerts/{id} {
+      allow read: if true;
+      allow create, update: if isAdmin() && isAlert();
+      allow delete: if isAdmin();
+    }
+    match /admins/{uid} {
+      allow read: if request.auth != null && request.auth.uid == uid;
+      allow write: if false;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

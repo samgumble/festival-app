@@ -11,6 +11,15 @@
     "content:build": "node packages/content/scripts/build.ts",
     "test": "npm run content:build && npm run test --workspaces --if-present",
     "typecheck": "npm run typecheck --workspaces --if-present",
-    "screenshots": "npm run screenshots -w @bb/festival"
+    "screenshots": "npm run screenshots -w @bb/festival",
+    "emulators": "PATH=/opt/homebrew/opt/openjdk@21/bin:$PATH npx --yes firebase-tools@15.30.0 emulators:start --only firestore,auth --config firebase/firebase.json --project bb-festival-2026",
+    "rules:test": "PATH=/opt/homebrew/opt/openjdk@21/bin:$PATH npx --yes firebase-tools@15.30.0 emulators:exec --only firestore --config firebase/firebase.json --project bb-festival-2026 \"vitest run --config vitest.rules.config.ts\"",
+    "rules:deploy": "npx --yes firebase-tools@15.30.0 deploy --only firestore --config firebase/firebase.json --project bb-festival-2026",
+    "seed": "node packages/content/scripts/seed.ts"
+  },
+  "devDependencies": {
+    "@firebase/rules-unit-testing": "5.0.2",
+    "firebase": "12.19.0",
+    "vitest": "4.1.11"
   }
 }
