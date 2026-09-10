@@ -21,6 +21,7 @@ for (const theme of THEMES) for (const [clockName, devNow] of Object.entries(CLO
     await page.goto(path);
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(400);
+    await page.addStyleTag({ content: "[data-devclock]{display:none!important}" });
     await page.screenshot({ path: `${OUT}/${clockName}-${theme}-${name}.png` });
   });
 }
@@ -33,5 +34,6 @@ test("live light lineup-grid", async ({ page }) => {
   await page.evaluate(() => document.fonts.ready);
   await page.getByRole("button", { name: /jump to now/i }).click();
   await page.waitForTimeout(600);
+  await page.addStyleTag({ content: "[data-devclock]{display:none!important}" });
   await page.screenshot({ path: `${OUT}/live-light-lineup-grid.png` });
 });
