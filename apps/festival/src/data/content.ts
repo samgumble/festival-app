@@ -2,6 +2,8 @@ import { useMemo, useSyncExternalStore } from "react";
 import { Content, type Artist, type DayId, type FestivalSet, type Stage } from "@bb/shared";
 import { isoMs } from "@/domain/time";
 import bundled from "./bundled.json";
+import { getDb } from "./firebase";
+import { createFirestoreContentSource, type ContentStatus } from "./firestore-content";
 
 export interface ContentRepository {
   getContent(): Content;
@@ -14,10 +16,22 @@ export function createBundledRepository(raw: unknown): ContentRepository {
   return { getContent: () => content, subscribe: () => () => {} };
 }
 
-export const contentRepository: ContentRepository = createBundledRepository(bundled);
+const useFirestore = import.meta.env.VITE_DATA_SOURCE === "firestore" || (import.meta.env.PROD && import.meta.env.VITE_DATA_SOURCE !== "bundled");
+const bundledRepo = createBundledRepository(bundled);
+const liveRepo = useFirestore ? createFirestoreContentSource(getDb(), bundledRepo.getContent()) : null;
+
+export const contentRepository: ContentRepository = liveRepo ?? bundledRepo;
 
 export function useContent(): Content {
   return useSyncExternalStore(contentRepository.subscribe, contentRepository.getContent, contentRepository.getContent);
+}
+
+// Stable reference so useSyncExternalStore doesn't see a "new" snapshot on every call when there's no live repo.
+const bundledStatus: ContentStatus = { source: "bundled", contentVersion: bundledRepo.getContent().meta.contentVersion, updatedAt: null };
+const getContentStatus = () => liveRepo?.getStatus() ?? bundledStatus;
+
+export function useContentStatus(): ContentStatus {
+  return useSyncExternalStore(contentRepository.subscribe, getContentStatus, getContentStatus);
 }
 
 export interface ContentIndex {

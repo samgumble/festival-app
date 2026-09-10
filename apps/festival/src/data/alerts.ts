@@ -3,6 +3,8 @@ import { Alert } from "@bb/shared";
 import { z } from "zod";
 import { isoMs } from "@/domain/time";
 import fixture from "./alerts.fixture.json";
+import { getDb } from "./firebase";
+import { createFirestoreAlertsSource } from "./firestore-alerts";
 
 export interface AlertsRepository {
   getAlerts(): Alert[];
@@ -11,7 +13,11 @@ export interface AlertsRepository {
 
 const alerts = z.array(Alert).parse(fixture).sort((a, b) => isoMs(b.publishedAt) - isoMs(a.publishedAt));
 
-export const alertsRepository: AlertsRepository = { getAlerts: () => alerts, subscribe: () => () => {} };
+const fixtureRepository: AlertsRepository = { getAlerts: () => alerts, subscribe: () => () => {} };
+
+const useFirestore = import.meta.env.VITE_DATA_SOURCE === "firestore" || (import.meta.env.PROD && import.meta.env.VITE_DATA_SOURCE !== "bundled");
+
+export const alertsRepository: AlertsRepository = useFirestore ? createFirestoreAlertsSource(getDb()) : fixtureRepository;
 
 export function useAlerts(): Alert[] {
   return useSyncExternalStore(alertsRepository.subscribe, alertsRepository.getAlerts, alertsRepository.getAlerts);

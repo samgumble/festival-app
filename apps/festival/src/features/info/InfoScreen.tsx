@@ -2,7 +2,7 @@ import { useState } from "react";
 import { asset } from "@/app/assets";
 import type { ReactNode } from "react";
 import { Card, Eyebrow, SegmentedControl, Toggle } from "@/design";
-import { useContent } from "@/data/content";
+import { useContent, useContentStatus } from "@/data/content";
 import { formatTime, fromDenver, parseIso } from "@/domain/time";
 import { useAlertsStore } from "@/state/alerts";
 import { usePlanStore } from "@/state/plan";
@@ -26,7 +26,8 @@ function Row({ label, children, href }: { label: string; children?: ReactNode; h
 }
 
 export function InfoScreen() {
-  const { festival, meta } = useContent();
+  const { festival } = useContent();
+  const status = useContentStatus();
   const theme = useUiStore((s) => s.theme);
   const setTheme = useUiStore((s) => s.setTheme);
   const { settings, setSettings } = usePlanStore();
@@ -76,7 +77,10 @@ export function InfoScreen() {
       {licenses && (
         <Card className="mt-2 text-[14px] leading-5 text-fg-soft">{FONTS.map(([f, l]) => <div key={f}><b className="text-fg">{f}</b> — {l}</div>)}<div className="mt-1">Poster artwork © SBG Productions, used with permission.</div></Card>
       )}
-      <p className="mt-4 text-center eyebrow text-fg-soft">Content v{meta.contentVersion} · bundled {formatTime(parseIso(meta.publishedAt))} · offline-ready ✓ · app {__APP_VERSION__}</p>
+      <p className="mt-4 text-center eyebrow text-fg-soft">
+        Content v{status.contentVersion} · {status.source === "live" ? "live" : status.source === "cache" ? "offline · cached" : "bundled"}
+        {status.updatedAt ? ` · updated ${formatTime(parseIso(status.updatedAt))}` : ""} · app {__APP_VERSION__}
+      </p>
     </div>
   );
 }

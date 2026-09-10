@@ -9,7 +9,7 @@ describe("Info", () => {
     expect(await screen.findByText(/11:30 AM daily/)).toBeInTheDocument();
     expect(screen.getByText(/8,750 ft/)).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /tellurideblues.com/i })).toHaveAttribute("href", "https://www.tellurideblues.com");
-    expect(screen.getByText(/Content v2026\.09\.09\.1/)).toBeInTheDocument();
+    expect(screen.getByText(/Content v2026\.09\.09\.1 · bundled/)).toBeInTheDocument();
     fireEvent.click(screen.getByRole("radio", { name: "Dark" }));
     expect(useUiStore.getState().theme).toBe("dark");
   });
