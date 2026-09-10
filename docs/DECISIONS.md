@@ -76,3 +76,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 *Consequences:* the admin console must consume `@bb/shared` (schema, tokens) from another repo — decide on Day 3 between publishing `@bb/shared` to GitHub Packages or vendoring via git subtree. Licensed artwork derivatives (poster preview, lockups) are publicly visible; the PSD remains git-ignored and local. `docs/HANDOFF.md §2` records both URLs.
 
 **D-019 · 2026-09-09 · Accepted** — **Contrast adjustments after the design-pass review.** Section eyebrows use `night` (6.3:1 on paper) instead of `sky` (2.6:1) for text in light mode; `sky` remains the structure *fill* color (`--structure-fill`). Sky chips carry `ink` text (4.6:1) instead of white (3.8:1). Ember chips keep white text at 4.48:1 — a known 0.02 shortfall against AA 4.5, accepted for v1 because darkening the locked ember hex would drift from the poster; revisit with SBG. *Consequences:* PLAN §5.2 "sun never carries white text" now extends to sky; the mockups' sky eyebrows are superseded.
+
+**D-020 · 2026-09-09 · Accepted** — **`@bb/shared` reaches the admin repo via git subtree** (`festival-app/packages/shared` → `festival-admin/shared`), synced with `git subtree pull`.
+*Alternatives:* GitHub Packages (needs a token on every install, even for public packages); npm public registry (publishing overhead for a two-consumer package).
+*Consequences:* schema/token changes land in `festival-app` first, then one subtree pull in the admin repo; the admin repo never edits `shared/` directly.
+
+**D-021 · 2026-09-09 · Accepted** — **Firebase on the Spark (free) plan; no Cloud Functions, so no push notifications in this phase; publishing runs in the admin console's browser under Firestore rules.** Project `bb-festival-2026`, owner sam.gumble@gmail.com, Firestore `(default)` in `nam5`. Supersedes the Blaze assumption in D-004 and the `publishContent` callable in D-007 for 2026; both return unchanged if Blaze is enabled later.
+*Context:* Sam wants zero cost and no card for now; the Alerts inbox is live via Firestore, which D-008 already made the primary channel.
+*Consequences:* the admin console validates with the shared Zod schema and writes `published` + `history` in one atomic batch; rate limits on alerts are UI-side only; iOS/Android push is deferred to the native phase and needs Blaze.
