@@ -1,6 +1,6 @@
 import { Link } from "react-router";
 import { Card, Eyebrow } from "@/design";
-import { useAlerts } from "@/data/alerts";
+import { activeUrgent, useAlerts } from "@/data/alerts";
 import { useContent } from "@/data/content";
 import { useFestivalClock } from "@/app/clock";
 import { formatTime, isoMs, parseIso } from "@/domain/time";
@@ -11,7 +11,8 @@ import { NowPre } from "./NowPre";
 export function NowScreen() {
   const { now, state, dayId } = useFestivalClock();
   const { festival } = useContent();
-  const alerts = useAlerts().filter((a) => isoMs(a.publishedAt) <= now.getTime()).slice(0, 2);
+  const banner = activeUrgent(useAlerts(), now);
+  const alerts = useAlerts().filter((a) => isoMs(a.publishedAt) <= now.getTime()).filter((a) => a.id !== banner?.id).slice(0, 2);
   return (
     <div className="pt-3">
       <h1 className="sr-only">Now</h1>

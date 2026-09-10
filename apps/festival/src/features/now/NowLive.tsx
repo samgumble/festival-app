@@ -4,7 +4,7 @@ import { activeUrgent, useAlerts } from "@/data/alerts";
 import { useContent, useContentIndex } from "@/data/content";
 import { nextUp } from "@/domain/conflicts";
 import { nowPlaying, upNext } from "@/domain/schedule";
-import { formatRange, formatTime, minutesBetween, parseIso } from "@/domain/time";
+import { formatDuration, formatRange, formatTime, minutesBetween, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
 import type { DayId } from "@bb/shared";
 import { Hero } from "./Hero";
@@ -28,7 +28,7 @@ export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
     <>
       <Hero compact>
         <div className="absolute inset-x-3.5 bottom-2.5 flex items-end justify-between">
-          <div><Eyebrow className="text-fg">{day.label} · Town Park</Eyebrow><div className="font-display text-[24px] leading-7">Day {dayIndex} of {content.festival.days.length}</div></div>
+          <div><Eyebrow className="whitespace-nowrap text-fg">{day.label.slice(0, 3)} · Town Park</Eyebrow><div className="font-display text-[24px] leading-7">Day {dayIndex} of {content.festival.days.length}</div></div>
           <Chip tone="paper">Offline-ready ✓</Chip>
         </div>
       </Hero>
@@ -55,7 +55,7 @@ export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
           <Card className="flex items-center gap-3 border-plum">
             <Link to={`/lineup/artist/${p.artist.id}`} className="min-w-0 flex-1">
               <div className="text-[16px] font-semibold leading-5">{p.artist.name}</div>
-              <div className="text-[13px] text-fg-soft tabular-nums">in {minutesBetween(now, parseIso(myNext.start))} min · {formatRange(parseIso(myNext.start), parseIso(myNext.end))} · {p.stage.name}</div>
+              <div className="text-[13px] text-fg-soft tabular-nums">{formatDuration(minutesBetween(now, parseIso(myNext.start)))} · {formatRange(parseIso(myNext.start), parseIso(myNext.end))} · {p.stage.name}</div>
             </Link>
             <Link to="/plan" className={buttonClasses({ size: "sm" })}>Plan</Link>
           </Card>

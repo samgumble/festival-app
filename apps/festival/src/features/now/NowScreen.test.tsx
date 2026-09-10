@@ -23,7 +23,7 @@ describe("Now screen states", () => {
     expect(screen.getByText("Nether Hour")).toBeInTheDocument();
     expect(screen.getByText(/your next set/i)).toBeInTheDocument();
     expect(screen.getAllByText("Charlie Musselwhite & GA-20").length).toBeGreaterThan(0);
-    expect(screen.getAllByText(/Lightning hold/).length).toBeGreaterThan(0); // banner + latest alerts
+    expect(screen.getAllByText(/Lightning hold/).length).toBe(1); // banner only, not duplicated in latest alerts
   });
 
   it("post-festival thanks the user", async () => {
