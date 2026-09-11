@@ -12,6 +12,7 @@
     "art:build": "node scripts/art-build.ts",
     "fonts:build": "node scripts/fonts-build.ts",
     "icons:build": "node scripts/icons.ts",
+    "splash:build": "node scripts/splash.ts",
     "screenshots": "playwright test",
     "e2e:offline": "VITE_DATA_SOURCE=bundled npm run build && playwright test --config playwright.offline.config.ts",
     "cap:sync": "BASE_PATH=/ VITE_DATA_SOURCE=firestore npm run build && cap sync",
