@@ -1,16 +1,29 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const adapter = vi.hoisted(() => ({ supported: true, request: vi.fn(async () => "granted" as "granted" | "denied"), ensureExact: vi.fn(async () => true) }));
+const adapter = vi.hoisted(() => ({
+  supported: true,
+  request: vi.fn(async () => "granted" as "granted" | "denied"),
+  exactAllowed: vi.fn(async () => true),
+  requestExact: vi.fn(async () => true),
+  permission: vi.fn(async () => "prompt" as "granted" | "denied" | "prompt"),
+}));
 vi.mock("@/platform/notifications", () => ({
-  notifications: { isSupported: () => adapter.supported, request: adapter.request, ensureExact: adapter.ensureExact, permission: async () => "prompt", pending: async () => [], schedule: async () => {}, cancel: async () => {}, onTap: () => () => {} },
+  notifications: { isSupported: () => adapter.supported, request: adapter.request, exactAllowed: adapter.exactAllowed, requestExact: adapter.requestExact, permission: adapter.permission, pending: async () => [], schedule: async () => {}, cancel: async () => {}, onTap: () => () => {} },
 }));
 
 import { PlanSettings } from "./PlanSettings";
 import { usePlanStore } from "@/state/plan";
 
 describe("PlanSettings reminders switch", () => {
-  beforeEach(() => { usePlanStore.setState({ remindersOn: false }); adapter.supported = true; adapter.request.mockResolvedValue("granted"); });
+  beforeEach(() => {
+    usePlanStore.setState({ remindersOn: false });
+    adapter.supported = true;
+    adapter.request.mockResolvedValue("granted");
+    adapter.exactAllowed.mockResolvedValue(true);
+    adapter.requestExact.mockResolvedValue(true);
+    adapter.permission.mockResolvedValue("prompt");
+  });
   afterEach(() => vi.clearAllMocks());
 
   it("is hidden where notifications are unsupported", () => {
@@ -24,7 +37,15 @@ describe("PlanSettings reminders switch", () => {
     fireEvent.click(screen.getByRole("switch", { name: "Remind me before my sets" }));
     await waitFor(() => expect(usePlanStore.getState().remindersOn).toBe(true));
     expect(adapter.request).toHaveBeenCalledTimes(1);
-    expect(adapter.ensureExact).toHaveBeenCalledTimes(1);
+    expect(adapter.exactAllowed).toHaveBeenCalledTimes(1);
+  });
+
+  it("shows the arrive-late hint when exact alarms aren't allowed, while reminders stay on", async () => {
+    adapter.exactAllowed.mockResolvedValue(false);
+    render(<PlanSettings onClose={() => {}} />);
+    fireEvent.click(screen.getByRole("switch", { name: "Remind me before my sets" }));
+    expect(await screen.findByText(/arrive a few minutes late/)).toBeInTheDocument();
+    expect(usePlanStore.getState().remindersOn).toBe(true);
   });
 
   it("snaps back and explains when denied", async () => {

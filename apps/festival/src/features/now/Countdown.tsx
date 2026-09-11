@@ -6,7 +6,7 @@ export function Countdown({ msUntil, gatesLine }: { msUntil: number; gatesLine: 
   return (
     <div className="text-center">
       <Eyebrow tone="structure">Gates open in</Eyebrow>
-      <div className="font-shade text-[56px] leading-none text-structure-2 tabular-nums" aria-label={`${days} days ${hours} hours`}>
+      <div className="font-shade text-[56px] leading-none text-structure tabular-nums" aria-label={`${days} days ${hours} hours`}>
         {days}<span className="font-shade text-[24px] align-top mx-1">days</span>{String(hours).padStart(2, "0")}<span className="font-shade text-[24px] align-top ml-1">hrs</span>
       </div>
       <Eyebrow className="mt-1">{gatesLine}</Eyebrow>

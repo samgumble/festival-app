@@ -9,6 +9,7 @@ const adapter = vi.hoisted(() => ({
   schedule: vi.fn(async (_i: unknown) => {}),
   cancel: vi.fn(async (_ids: number[]) => {}),
   onTap: vi.fn((_h: () => void) => () => {}),
+  permission: vi.fn(async () => "granted" as "granted" | "denied" | "prompt"),
 }));
 vi.mock("@/platform/notifications", () => ({
   notifications: {
@@ -17,9 +18,20 @@ vi.mock("@/platform/notifications", () => ({
     schedule: adapter.schedule,
     cancel: adapter.cancel,
     onTap: adapter.onTap,
-    permission: async () => "granted",
+    permission: adapter.permission,
     request: async () => "granted",
-    ensureExact: async () => true,
+    exactAllowed: async () => true,
+    requestExact: async () => true,
+  },
+}));
+
+const lifecycle = vi.hoisted(() => ({ resumeHandler: null as (() => void) | null }));
+vi.mock("@/platform/appLifecycle", () => ({
+  appLifecycle: {
+    onResume: (h: () => void) => {
+      lifecycle.resumeHandler = h;
+      return () => { lifecycle.resumeHandler = null; };
+    },
   },
 }));
 
@@ -37,6 +49,9 @@ describe("useReminderSync", () => {
     adapter.pendingList = [];
     adapter.schedule.mockClear();
     adapter.cancel.mockClear();
+    adapter.permission.mockClear();
+    adapter.permission.mockResolvedValue("granted");
+    lifecycle.resumeHandler = null;
     vi.useFakeTimers({ now: Date.parse("2026-09-19T10:00:00-06:00") });
   });
   afterEach(() => vi.useRealTimers());
@@ -80,6 +95,27 @@ describe("useReminderSync", () => {
     expect(adapter.cancel).toHaveBeenLastCalledWith([hashId(FAV)]);
     const last = adapter.schedule.mock.calls.at(-1)![0] as Array<{ at: number }>;
     expect(last[0]!.at).toBe(Date.parse("2026-09-19T16:00:00-06:00"));
+  });
+
+  it("flips remindersOn off when the OS permission was revoked, and never schedules", async () => {
+    adapter.permission.mockResolvedValue("denied");
+    usePlanStore.setState({ favorites: [FAV], remindersOn: true });
+    renderHook(() => useReminderSync(), { wrapper: wrap });
+    await flush();
+    expect(usePlanStore.getState().remindersOn).toBe(false);
+    expect(adapter.schedule).not.toHaveBeenCalled();
+  });
+
+  it("re-checks the OS permission when the app resumes", async () => {
+    usePlanStore.setState({ favorites: [FAV], remindersOn: true });
+    renderHook(() => useReminderSync(), { wrapper: wrap });
+    await flush();
+    expect(usePlanStore.getState().remindersOn).toBe(true);
+
+    adapter.permission.mockResolvedValue("denied");
+    lifecycle.resumeHandler?.();
+    await flush();
+    expect(usePlanStore.getState().remindersOn).toBe(false);
   });
 
   it("is inert where notifications are unsupported", async () => {

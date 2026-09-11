@@ -3,6 +3,7 @@ import { useNavigate } from "react-router";
 import { useContent, useContentIndex } from "@/data/content";
 import { diffReminders, planReminders } from "@/domain/reminders";
 import { festivalNow } from "@/domain/time";
+import { appLifecycle } from "@/platform/appLifecycle";
 import { notifications } from "@/platform/notifications";
 import { usePlanStore } from "@/state/plan";
 import { useUiStore } from "@/state/ui";
@@ -28,12 +29,29 @@ export function useReminderSync(): void {
   // Tap on a reminder → Plan tab.
   useEffect(() => notifications.onTap(() => navigate("/plan")), [navigate]);
 
+  // Re-validate the switch against the OS permission: a fan can revoke notifications in Settings
+  // without ever touching the app, which would otherwise leave the switch silently lying. Checked
+  // on mount and whenever the app returns to the foreground.
+  useEffect(() => {
+    if (!notifications.isSupported()) return;
+    const check = async () => {
+      if (usePlanStore.getState().remindersOn && (await notifications.permission()) !== "granted") {
+        usePlanStore.getState().setRemindersOn(false);
+      }
+    };
+    void check();
+    const off = appLifecycle.onResume(() => void check());
+    return () => off();
+  }, []);
+
   useEffect(() => {
     if (!notifications.isSupported()) return;
     const run = () => {
       chain.current = chain.current.then(async () => {
         const pending = await notifications.pending();
-        if (!remindersOn) {
+        // Re-read the store (not the closed-over `remindersOn`) so a permission re-check that
+        // flips the switch off while this chain link is in flight can't race past it and schedule.
+        if (!usePlanStore.getState().remindersOn) {
           const ids = [...new Set([...owned.current, ...pending.map((p) => p.id)])];
           if (ids.length) await notifications.cancel(ids);
           owned.current.clear();

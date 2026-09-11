@@ -4,7 +4,8 @@ import { haptics } from "./haptics";
 import { statusBar } from "./statusBar";
 import { splash } from "./splash";
 import { share } from "./share";
-import { notifications } from "./notifications";
+import { notifications, pendingAt } from "./notifications";
+import { appLifecycle } from "./appLifecycle";
 
 describe("platform adapters on the web", () => {
   afterEach(() => vi.restoreAllMocks());
@@ -79,12 +80,26 @@ describe("platform adapters on the web", () => {
     expect(notifications.isSupported()).toBe(false);
     await expect(notifications.permission()).resolves.toBe("denied");
     await expect(notifications.request()).resolves.toBe("denied");
-    await expect(notifications.ensureExact()).resolves.toBe(true);
+    await expect(notifications.exactAllowed()).resolves.toBe(true);
+    await expect(notifications.requestExact()).resolves.toBe(true);
     await expect(notifications.pending()).resolves.toEqual([]);
     await expect(notifications.schedule([{ id: 1, setId: "a", title: "t", body: "b", at: 1 }])).resolves.toBeUndefined();
     await expect(notifications.cancel([1])).resolves.toBeUndefined();
     const off = notifications.onTap(() => {});
     expect(typeof off).toBe("function");
     off();
+  });
+
+  it("appLifecycle.onResume is a no-op that returns an unsubscribe on the web", () => {
+    const off = appLifecycle.onResume(() => {});
+    expect(typeof off).toBe("function");
+    off();
+  });
+
+  it("pendingAt prefers extra.at, falls back to schedule.at, then undefined", () => {
+    expect(pendingAt({ extra: { at: 123 } })).toBe(123);
+    expect(pendingAt({ schedule: { at: "2026-09-19T22:15:00Z" } })).toBe(Date.parse("2026-09-19T22:15:00Z"));
+    expect(pendingAt({ schedule: { at: "not a date" } })).toBeUndefined();
+    expect(pendingAt({})).toBeUndefined();
   });
 });

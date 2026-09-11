@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Eyebrow, SegmentedControl, Sheet, Toggle } from "@/design";
 import { notifications } from "@/platform/notifications";
 import { usePlanStore } from "@/state/plan";
@@ -6,9 +6,16 @@ import { usePlanStore } from "@/state/plan";
 export function PlanSettings({ onClose }: { onClose: () => void }) {
   const { settings, setSettings, remindersOn, setRemindersOn } = usePlanStore();
   const [denied, setDenied] = useState(false);
+  const [inexact, setInexact] = useState(false);
   const [pendingCount, setPendingCount] = useState<number | null>(null);
   const supported = notifications.isSupported();
   const busy = useRef(false);
+
+  // The fan may have revoked notifications in Settings since this sheet was last open.
+  useEffect(() => {
+    if (!supported) return;
+    void notifications.permission().then((p) => { if (p === "denied") setDenied(true); });
+  }, [supported]);
 
   const onToggle = async (v: boolean) => {
     if (busy.current) return;
@@ -17,9 +24,13 @@ export function PlanSettings({ onClose }: { onClose: () => void }) {
     try {
       const perm = await notifications.request();
       if (perm !== "granted") { setDenied(true); setRemindersOn(false); return; }
-      await notifications.ensureExact();
       setDenied(false);
       setRemindersOn(true);
+      const exact = await notifications.exactAllowed();
+      setInexact(!exact);
+    } catch {
+      setDenied(true);
+      setRemindersOn(false);
     } finally {
       busy.current = false;
     }
@@ -40,8 +51,13 @@ export function PlanSettings({ onClose }: { onClose: () => void }) {
               <Toggle on={remindersOn} onChange={(v) => void onToggle(v)} label="Remind me before my sets" />
             </div>
             {denied && <p className="mt-1.5 text-[13px] text-ember">Notifications are off for this app in Settings.</p>}
+            {inexact && (
+              <p className="mt-1.5 text-[13px] text-fg-soft">
+                Reminders may arrive a few minutes late. <button type="button" className="underline" onClick={() => void notifications.requestExact().then((ok) => setInexact(!ok))}>Allow exact timing in Settings</button>
+              </p>
+            )}
             {import.meta.env.DEV && (
-              <button type="button" className="mt-1.5 text-[12px] underline text-fg-soft" onClick={() => void notifications.pending().then((p) => setPendingCount(p.length))}>
+              <button type="button" className="mt-1.5 text-[12px] underline text-fg-soft" onClick={() => void notifications.pending().then((p) => setPendingCount(p.length)).catch(() => {})}>
                 pending: {pendingCount ?? "?"}
               </button>
             )}
