@@ -7,7 +7,7 @@ import { usePlanStore } from "@/state/plan";
 describe("ArtistSheet", () => {
   beforeEach(() => {
     useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00" });
-    usePlanStore.setState({ favorites: [], reminders: [] });
+    usePlanStore.setState({ favorites: [], remindersOn: false });
   });
 
   it("lists every set for the artist and toggles plan membership", async () => {

@@ -11,7 +11,7 @@ const TAJ = "sat-taj-mahal-keb-mo-main-2000";
 describe("Plan", () => {
   beforeEach(() => {
     useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00" });
-    usePlanStore.setState({ favorites: [], resolutions: {}, reminders: [], settings: { leadMinutes: 15, bufferMinutes: 10 } });
+    usePlanStore.setState({ favorites: [], resolutions: {}, settings: { leadMinutes: 15, bufferMinutes: 10 }, remindersOn: false });
   });
 
   it("empty state invites the user with headliner quick-adds", async () => {
