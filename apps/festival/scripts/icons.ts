@@ -32,7 +32,7 @@ const NATIVE: Variant[] = [
   ...[["mdpi", 108], ["hdpi", 162], ["xhdpi", 216], ["xxhdpi", 324], ["xxxhdpi", 432]].map(([d, px]) => ({ file: `../../android/app/src/main/res/mipmap-${d}/ic_launcher_monochrome.png`, size: px as number, inset: 0.18, alpha: true, mono: true })),
   ...[["mdpi", 48], ["hdpi", 72], ["xhdpi", 96], ["xxhdpi", 144], ["xxxhdpi", 192]].flatMap(([d, px]) => [
     { file: `../../android/app/src/main/res/mipmap-${d}/ic_launcher.png`, size: px as number, inset: 0, alpha: false },
-    { file: `../../android/app/src/main/res/mipmap-${d}/ic_launcher_round.png`, size: px as number, inset: 0, alpha: false, round: true },
+    { file: `../../android/app/src/main/res/mipmap-${d}/ic_launcher_round.png`, size: px as number, inset: 0, alpha: true, round: true },
   ]),
   ...[["mdpi", 24], ["hdpi", 36], ["xhdpi", 48], ["xxhdpi", 72], ["xxxhdpi", 96]].map(([d, px]) => ({ file: `../../android/app/src/main/res/drawable-${d}/ic_stat_sun.png`, size: px as number, inset: 0.05, alpha: true, mono: true })),
 ];
@@ -44,17 +44,16 @@ for (const { file, size, inset, alpha = false, mono = false, round = false } of 
   if (mono) markup = markup.replaceAll('fill="url(#sun)"', 'fill="#FFFFFF"').replaceAll('stroke="#1E1A1A"', 'stroke="none"');
 
   const pad = Math.round(size * inset);
-  // The gradient (and the round mask) live on `body`, not `html`. When `html` has no background, Chromium
-  // propagates `body`'s background to paint the viewport canvas directly, ignoring `body`'s own border-radius
-  // and overflow — the round mask would be a visual no-op. Giving `html` an explicit white background stops
-  // that propagation so `body`'s circular clip actually shows, with opaque white corners (alpha stays false).
+  // The gradient (and the round mask) live on `body`, not `html`. When rendering with alpha, `html` stays
+  // transparent and `body` carries the gradient with `border-radius: 50%` and `overflow: hidden` to create a
+  // circular clip. The screenshot uses `omitBackground: true` to preserve transparency outside the circle.
   const bodyRules = ["margin:0", `width:${size}px`, `height:${size}px`, "overflow:hidden", alpha ? "" : "background:linear-gradient(#1890A8,#1A4A80)", round ? "border-radius:50%" : ""]
     .filter(Boolean)
     .join(";");
 
   await page.setViewportSize({ width: size, height: size });
   await page.setContent(
-    `<style>html{margin:0${round ? ";background:#FFFFFF" : ""}}body{${bodyRules}}svg{position:absolute;left:${pad}px;top:${pad}px;width:${size - 2 * pad}px;height:${size - 2 * pad}px}</style>${markup}`,
+    `<style>html{margin:0}body{${bodyRules}}svg{position:absolute;left:${pad}px;top:${pad}px;width:${size - 2 * pad}px;height:${size - 2 * pad}px}</style>${markup}`,
   );
   const dest = resolve(out, file);
   mkdirSync(dirname(dest), { recursive: true });
