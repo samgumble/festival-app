@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { Eyebrow, SegmentedControl, Sheet, Toggle } from "@/design";
 import { notifications } from "@/platform/notifications";
 import { usePlanStore } from "@/state/plan";
@@ -8,14 +8,21 @@ export function PlanSettings({ onClose }: { onClose: () => void }) {
   const [denied, setDenied] = useState(false);
   const [pendingCount, setPendingCount] = useState<number | null>(null);
   const supported = notifications.isSupported();
+  const busy = useRef(false);
 
   const onToggle = async (v: boolean) => {
+    if (busy.current) return;
     if (!v) { setRemindersOn(false); setDenied(false); return; }
-    const perm = await notifications.request();
-    if (perm !== "granted") { setDenied(true); setRemindersOn(false); return; }
-    await notifications.ensureExact();
-    setDenied(false);
-    setRemindersOn(true);
+    busy.current = true;
+    try {
+      const perm = await notifications.request();
+      if (perm !== "granted") { setDenied(true); setRemindersOn(false); return; }
+      await notifications.ensureExact();
+      setDenied(false);
+      setRemindersOn(true);
+    } finally {
+      busy.current = false;
+    }
   };
 
   return (

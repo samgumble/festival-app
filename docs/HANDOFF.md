@@ -105,7 +105,7 @@ Native builds are not in CI; `cap sync` output (`ios/App/App/public`, `android/a
 
 ## 8. Environment on Sam's Mac (from the Sep 8 prototype; re-verify)
 
-Apple Silicon. Node 22.x, npm 10.x. Xcode 26.x installed, license accepted; **iOS platform/Simulator runtime may still need installing** (Xcode → Settings → Components). CocoaPods present (Capacitor 8 iOS uses SPM). Android Studio: an Intel build was installed by mistake earlier — **install the Apple Silicon (ARM64) build**, then SDK + JDK 21 via its wizard. Photoshop available for PSD layer export.
+Apple Silicon. Node 22.x, npm 10.x. Xcode 26.x installed, license accepted; **iOS platform/Simulator runtime may still need installing** (Xcode → Settings → Components). CocoaPods 1.17 installed but unused — the Capacitor 8 iOS project is Swift Package Manager only (open `apps/festival/ios/App/App.xcodeproj`). Android Studio: an Intel build was installed by mistake earlier — **install the Apple Silicon (ARM64) build**, then SDK + JDK 21 via its wizard. Photoshop available for PSD layer export.
 
 ## 9. Next actions (in order)
 

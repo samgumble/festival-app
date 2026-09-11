@@ -24,8 +24,9 @@ const VARIANTS: Variant[] = [
 
 // Native icon set (Task 5, D-023): iOS universal AppIcon must be opaque (App Store rejects an alpha
 // channel); Android adaptive foreground/monochrome layers are transparent with an 18 % safe-zone inset;
-// legacy + round launcher PNGs are full-bleed opaque, with the round variant pre-masked to a circle; the
-// status-bar notification icon is white-on-transparent.
+// legacy launcher PNG is full-bleed opaque; the round variant renders with transparent corners
+// (`alpha: true`) so the OS can apply its own circular mask; the status-bar notification icon is
+// white-on-transparent.
 const NATIVE: Variant[] = [
   { file: "../../ios/App/App/Assets.xcassets/AppIcon.appiconset/AppIcon-512@2x.png", size: 1024, inset: 0, alpha: false },
   ...[["mdpi", 108], ["hdpi", 162], ["xhdpi", 216], ["xxhdpi", 324], ["xxxhdpi", 432]].map(([d, px]) => ({ file: `../../android/app/src/main/res/mipmap-${d}/ic_launcher_foreground.png`, size: px as number, inset: 0.18, alpha: true })),

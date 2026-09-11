@@ -1,6 +1,10 @@
-// Renders the launch screen: paper background with the official lockup at 60 % width, centred.
+// Renders the launch screen: paper background with the official lockup at 34 % width, centred.
 // iOS uses one 2732×2732 image (Capacitor template's Splash.imageset); Android 12+ uses the
 // system icon-only splash on a paper window background (styles.xml), so no bitmap is needed there.
+// The LaunchScreen storyboard shows this image with aspect-fill, so on a real phone's tall,
+// narrow viewport only the central band of the square is ever visible (~46 % of the width on a
+// 402×874-pt iPhone 17 Pro) — 34 % keeps the lockup inside that visible band with margin on the
+// tallest phones, instead of the 60 % that gets cropped at the edges.
 import { chromium } from "@playwright/test";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { dirname, resolve } from "node:path";
@@ -14,7 +18,7 @@ const SIZE = 2732;
 const browser = await chromium.launch();
 const page = await browser.newPage({ deviceScaleFactor: 1 });
 await page.setViewportSize({ width: SIZE, height: SIZE });
-await page.setContent(`<style>html,body{margin:0;width:${SIZE}px;height:${SIZE}px;background:#EBD5B3;display:grid;place-items:center}img{width:60%}</style><img src="data:image/webp;base64,${lockup}">`);
+await page.setContent(`<style>html,body{margin:0;width:${SIZE}px;height:${SIZE}px;background:#EBD5B3;display:grid;place-items:center}img{width:34%}</style><img src="data:image/webp;base64,${lockup}">`);
 await page.waitForLoadState("networkidle");
 const png = await page.screenshot({ type: "png", clip: { x: 0, y: 0, width: SIZE, height: SIZE } });
 mkdirSync(out, { recursive: true });

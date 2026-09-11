@@ -34,7 +34,7 @@ export function useReminderSync(): void {
       chain.current = chain.current.then(async () => {
         const pending = await notifications.pending();
         if (!remindersOn) {
-          const ids = [...new Set([...owned.current, ...pending.map((p) => p.id)])].filter((id) => owned.current.has(id) || pending.some((p) => p.id === id));
+          const ids = [...new Set([...owned.current, ...pending.map((p) => p.id)])];
           if (ids.length) await notifications.cancel(ids);
           owned.current.clear();
           return;

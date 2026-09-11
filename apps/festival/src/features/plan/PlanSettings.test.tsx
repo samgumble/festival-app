@@ -42,4 +42,16 @@ describe("PlanSettings reminders switch", () => {
     await waitFor(() => expect(usePlanStore.getState().remindersOn).toBe(false));
     expect(adapter.request).not.toHaveBeenCalled();
   });
+
+  it("guards against a second tap while the permission request is in flight", async () => {
+    let resolveRequest!: (v: "granted" | "denied") => void;
+    adapter.request.mockReturnValue(new Promise((resolve) => { resolveRequest = resolve; }));
+    render(<PlanSettings onClose={() => {}} />);
+    const toggle = screen.getByRole("switch", { name: "Remind me before my sets" });
+    fireEvent.click(toggle);
+    fireEvent.click(toggle);
+    resolveRequest("granted");
+    await waitFor(() => expect(usePlanStore.getState().remindersOn).toBe(true));
+    expect(adapter.request).toHaveBeenCalledTimes(1);
+  });
 });
