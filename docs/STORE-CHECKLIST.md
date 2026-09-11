@@ -77,17 +77,19 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 | ☐ | App preview video | optional; skip for v1 |
 | ☐ | Splash / launch | iOS launch storyboard uses `paper` + centered lockup; Android 12+ splash uses the adaptive icon |
 
-Generate screenshots from the real app with `npm run screenshots` (Playwright at device sizes with `VITE_FESTIVAL_NOW` set to a live Saturday afternoon), then add captions in Michroma on a `paper` band. Screenshots must show the actual app; no mock UI.
+Generate screenshots from the real app with `npm run screenshots` (Playwright at device sizes with `VITE_FESTIVAL_NOW` set to a live Saturday afternoon), then add captions in Michroma on a `paper` band. Screenshots must show the actual app; no mock UI. Full plan (exact sizes re-verified against Apple's current spec, frame treatment, and the six captions) is in `docs/store/screenshots.md`; generating the final captioned/sized assets from the existing `docs/screens/design-pass/*.png` states is a follow-up script, not yet written.
 
-## 4. Metadata and listing copy (draft in `docs/store/listing.md`)
+## 4. Metadata and listing copy
+
+Drafts are written: listing copy in `docs/store/listing.md`, App Privacy / Data safety answers in `docs/store/privacy-answers.md`, App Review / Play review notes in `docs/store/review-notes.md`. Nothing below is ticked yet — these are drafts to paste into the consoles, not confirmation the consoles have been filled in.
 
 ### App Store Connect → App Information / Version
-- ☐ Name (≤ 30) · ☐ Subtitle (≤ 30, e.g. "Official 2026 festival guide") · ☐ Primary category **Music**, secondary **Entertainment**
+- ☐ Name (≤ 30) · ☐ Subtitle (≤ 30, e.g. "Official 2026 festival guide") · ☐ Primary category **Music**, secondary **Entertainment** ⚠ `docs/store/listing.md` drafted this the other way round (primary Entertainment, secondary Music) per its task instructions — pick one order and reconcile both docs before submitting, don't leave them contradicting each other.
 - ☐ Primary language English (U.S.) · ☐ Bundle ID selected · ☐ SKU (e.g. `bb-2026`) · ☐ Content rights: "Yes, contains third-party content; I have the rights" (SBG artwork, artist names)
-- ☐ Promotional text (≤ 170, editable without a new build — use for "Gates open 11:30 AM Friday") · ☐ Description (≤ 4000) · ☐ Keywords (≤ 100 chars, comma-separated: telluride,blues,brews,festival,lineup,schedule,colorado,beer,music) · ☐ Support URL · ☐ Marketing URL · ☐ Copyright
-- ☐ Version 1.0.0; What's New (first version: "Welcome to the official 2026 companion…")
-- ☐ **Age rating questionnaire** ⚠ Apple's tiers are now 4+, 9+, 13+, 16+, 18+. Answer "Alcohol, Tobacco, or Drug Use or References: Infrequent/Mild" truthfully (breweries, tastings, beer imagery) plus the newer mandatory questions (no in-app controls, no medical content, no violence, no user-generated content, no messaging, no unrestricted web access — the app opens official links in the system browser only). Accept whatever tier the questionnaire computes (expect 9+ or 13+); do not answer "None" to get 4+.
-- ☐ App Privacy (nutrition label): with no analytics, no accounts, and push via topic, the expected answer is **Data Not Collected**. Before answering, read Apple's current definitions for "Device ID" and push tokens and confirm the final binary matches (no Firebase Analytics, no Crashlytics, no IDFA). If in doubt, declare "Identifiers → Device ID → App Functionality, not linked, not used for tracking."
+- ☐ Promotional text (≤ 170, editable without a new build) · ☐ Description (≤ 4000) · ☐ Keywords (≤ 100 chars) · ☐ Support URL · ☐ Marketing URL · ☐ Copyright — all drafted, ready to paste, in `docs/store/listing.md`
+- ☐ Version 1.0.0; What's New — drafted in `docs/store/listing.md`
+- ☐ **Age rating questionnaire** ⚠ Apple's tiers are now 4+, 9+, 13+, 16+, 18+. Answer "Alcohol, Tobacco, or Drug Use or References: Infrequent/Mild" truthfully (breweries, tastings, beer imagery) plus the newer mandatory questions (no in-app controls, no medical content, no violence, no user-generated content, no messaging, no unrestricted web access — the app opens official links in the system browser only). Accept whatever tier the questionnaire computes (expect 9+ or 13+); do not answer "None" to get 4+. Full per-question grid in `docs/store/listing.md`.
+- ☐ App Privacy (nutrition label): with no analytics, no accounts, and no push in v1 (D-021), the expected answer is **Data Not Collected**. Before answering, read Apple's current definitions for "Device ID" and confirm the final binary matches (no Firebase Analytics, no Crashlytics, no IDFA). Full per-category answers and reasoning drafted in `docs/store/privacy-answers.md` — re-verify against Apple's current definitions before submitting.
 - ☐ App Review Information: contact first/last name, phone, email; **no sign-in required** (leave demo credentials blank, tick "Sign-in not required"); **Notes** — paste the review notes from `docs/store/review-notes.md` (offline data, on-device planning, native notifications, organizer-published content; mention the SBG authorization letter if the account is Sam's; give a suggested test path: favorite three artists → Plan → Remind me → airplane mode relaunch → Alerts).
 - ☐ Attachment: SBG authorization letter PDF (if applicable).
 - ☐ Export compliance: answered by the Info.plist key; confirm "No" to non-exempt encryption in the wizard if asked.
@@ -97,18 +99,22 @@ Generate screenshots from the real app with `npm run screenshots` (Playwright at
 
 ### Play Console → Dashboard "Set up your app" tasks
 - ☐ App name · ☐ Default language en-US · ☐ App or game: App · ☐ Free
-- ☐ Store listing: short description (≤ 80), full description (≤ 4000), icon 512, feature graphic, phone screenshots, category **Music & Audio** (or Events), contact email (required), website, privacy policy URL
-- ☐ **App access**: "All functionality is available without special access" (no login)
+- ☐ Store listing: short description (≤ 80), full description (≤ 4000) — drafted in `docs/store/listing.md` · icon 512, feature graphic, phone screenshots — see `docs/store/screenshots.md` · category **Music & Audio** (or **Events**, recommended in `docs/store/listing.md` with reasoning — not yet decided) · contact email (required), website, privacy policy URL
+- ☐ **App access**: "All functionality is available without special access" (no login) — review text drafted in `docs/store/review-notes.md`
 - ☐ **Ads**: No ads
-- ☐ **Content rating** (IARC questionnaire): answer alcohol references truthfully → expect Teen / PEGI 12–16 range; complete honestly
+- ☐ **Content rating** (IARC questionnaire): answer alcohol references truthfully → expect Teen / PEGI 12–16 range; complete honestly — full answer grid in `docs/store/listing.md`
 - ☐ **Target audience & content**: 18+ or 13+ audience (do **not** select under-13 — avoids Families policy); "not designed for children"
-- ☐ **News app**: No · ☐ **COVID-19**: No · ☐ **Data safety**: no data collected, no data shared; note that push uses Firebase Cloud Messaging without collecting user data; encryption in transit: yes; deletion request: N/A (no accounts) — ⚠ read the current Data safety guidance for FCM tokens
+- ☐ **News app**: No · ☐ **COVID-19**: No · ☐ **Data safety**: no data collected, no data shared (no push in v1, D-021); encryption in transit: yes; deletion request: N/A (no accounts) — full per-question answers, the `SCHEDULE_EXACT_ALARM` use-case declaration text, and the sensitive-permissions list are drafted in `docs/store/privacy-answers.md`
 - ☐ **Government app**: No · ☐ **Financial features**: None · ☐ **Health apps**: None
-- ☐ Advertising ID declaration: app does not use it (targeting 33+ requires the declaration; make sure the manifest has no `AD_ID` permission — Firebase Messaging alone doesn't add it, but verify the merged manifest)
+- ☐ Advertising ID declaration: **No** — app does not use it; make sure the manifest has no `AD_ID` permission — Firebase Messaging alone doesn't add it, but verify the merged manifest (`docs/store/privacy-answers.md`)
 - ☐ Countries/regions: U.S. (+ Canada) or worldwide
 
 ## 5. In-app legal and content-rights items
-- ☐ Privacy policy page live (plain language: no data collected; notifications optional; links to Firebase's policy for push delivery; contact email). Linked from Info screen and both listings.
+- ☐ Privacy policy draft written: `docs/store/privacy-policy.md` (plain language, under 600 words, placeholders for SBG's address, support email, and effective date). **Hosting location not yet decided** — two options, pick one:
+  - **The fan app's own `/privacy` route** (React Router, served by the existing GitHub Pages deploy) — recommended: no dependency on tellurideblues.com's CMS/access, ships with the same deploy pipeline that already builds the app, and keeps the policy versioned in this repo alongside the code it describes.
+  - **tellurideblues.com/privacy** (SBG's own site) — alternative if SBG wants the policy under their primary domain regardless of app changes, or if they want one privacy policy covering the whole festival brand (site + app) rather than an app-specific one.
+  This is a recommendation, not a decision — tick this row once Sam/SBG confirms, then update the URL placeholders in `docs/store/listing.md`, `docs/store/privacy-answers.md`, and `docs/store/review-notes.md`.
+- ☐ Privacy policy page live (plain language: no data collected; notifications optional; contact email). Linked from Info screen and both listings.
 - ☐ Font licenses (OFL) shipped in `docs/FONT_LICENSES.md` and listed under Info → Licenses.
 - ☐ Artwork/trademark: SBG's permission on file; official lockups unmodified; no artist photos.
 - ☐ No "Sign in with Apple" needed (no third-party login) and no account-deletion flow needed (no accounts) — keep it that way or both become mandatory.
