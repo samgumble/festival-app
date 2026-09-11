@@ -92,3 +92,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** generateSW is the least code for precache + versioning + cleanup, the three places hand-rolled workers break offline; `sharp`/asset generators aren't on the approved dependency list, while `cwebp` and Playwright already exist on the machine; committing generated assets keeps CI free of native image tooling. The lockup stays lossless because logo lockups must ship unmodified.
 
 **Consequences.** Art 3.2 MB → ~0.95 MB and fonts 1.0 MB → 0.35 MB as WOFF2 (`npm run fonts:build`, Homebrew `woff2`); precache ≈ 2.55 MB (budget 3 MB). Icon files are a drop-in replacement later. Offline e2e runs locally (`npm run e2e:offline`), not in the Pages workflow.
+
+## D-023 — Capacitor 8 native shell; reminders as one switch over all favorites via local notifications (2026-09-10)
+
+**Decision.** The fan app is wrapped with Capacitor 8.5.1 (`apps/festival/ios`, `apps/festival/android`, committed without signing material), bundle ID `com.sbgproductions.bluesandbrews`, iPhone-only portrait v1, Android target SDK 36. Set reminders are a single "Remind me before my sets" switch (native only) that schedules a local notification `leadMinutes` before every favorited upcoming set and reconciles by diff when favorites, lead time or published times change; no per-set toggles. Platform APIs sit behind `src/platform/*` adapters with web no-op fallbacks; the service worker, install nudge and update banner stay web-only. Interim icon/splash reuse the code-drawn sun and the official lockup. Spec: `docs/superpowers/specs/2026-09-10-native-shell-and-reminders-design.md`.
+
+**Why.** One codebase, three targets, as PLAN §3 chose; Sam rejected per-set toggles on web, and a single switch keeps the Plan screen clean while still delivering the "phone in pocket" reminder. Apple enrollment is pending, so the phase targets simulator + side-load and leaves TestFlight as a checklist item. Push remains Blaze-gated (D-021).
+
+**Consequences.** `reminders: string[]`/`toggleReminder` are removed from the plan store (persist migration). No `@capacitor/preferences` or `Filesystem`: localStorage persistence and text-only sharing of the `.ics` in v1. Native builds are not part of CI.
