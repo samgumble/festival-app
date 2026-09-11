@@ -32,7 +32,10 @@ export function PlanScreen() {
     </div>
   );
   if (mine.length === 0) return <div>{title}<PlanEmpty />{settingsOpen && <PlanSettings onClose={() => setSettingsOpen(false)} />}</div>;
-  const exportIcs = () => void share.shareFile("blues-and-brews-plan.ics", "text/calendar", planToIcs(mine, idx.artistsById, idx.stagesById, content.festival));
+  const exportIcs = async () => {
+    try { await share.shareFile("blues-and-brews-plan.ics", "text/calendar", planToIcs(mine, idx.artistsById, idx.stagesById, content.festival)); }
+    catch { /* user cancelled the share sheet */ }
+  };
   const shareText = async () => {
     try { await share.shareText("My Blues & Brews plan", planToText(mine, idx.artistsById, idx.stagesById, content.festival)); }
     catch { /* user cancelled the share sheet */ }

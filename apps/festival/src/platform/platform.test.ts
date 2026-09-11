@@ -20,6 +20,33 @@ describe("platform adapters on the web", () => {
     await expect(splash.hide()).resolves.toBeUndefined();
   });
 
+  it("native adapter failures resolve instead of rejecting (haptics)", async () => {
+    try {
+      (globalThis as { Capacitor?: unknown }).Capacitor = { isNativePlatform: () => true, getPlatform: () => "ios" };
+      await expect(haptics.tap()).resolves.toBeUndefined();
+    } finally {
+      delete (globalThis as { Capacitor?: unknown }).Capacitor;
+    }
+  });
+
+  it("native adapter failures resolve instead of rejecting (statusBar)", async () => {
+    try {
+      (globalThis as { Capacitor?: unknown }).Capacitor = { isNativePlatform: () => true, getPlatform: () => "ios" };
+      await expect(statusBar.apply("light")).resolves.toBeUndefined();
+    } finally {
+      delete (globalThis as { Capacitor?: unknown }).Capacitor;
+    }
+  });
+
+  it("native adapter failures resolve instead of rejecting (splash)", async () => {
+    try {
+      (globalThis as { Capacitor?: unknown }).Capacitor = { isNativePlatform: () => true, getPlatform: () => "ios" };
+      await expect(splash.hide()).resolves.toBeUndefined();
+    } finally {
+      delete (globalThis as { Capacitor?: unknown }).Capacitor;
+    }
+  });
+
   it("shareText prefers navigator.share and falls back to the clipboard", async () => {
     const nshare = vi.fn(async () => {});
     Object.defineProperty(navigator, "share", { value: nshare, configurable: true });

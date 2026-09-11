@@ -4,7 +4,11 @@ import { runtime } from "./runtime";
 export const haptics = {
   async tap(): Promise<void> {
     if (!runtime.isNative()) return;
-    const { Haptics, ImpactStyle } = await import("@capacitor/haptics");
-    await Haptics.impact({ style: ImpactStyle.Light });
+    try {
+      const { Haptics, ImpactStyle } = await import("@capacitor/haptics");
+      await Haptics.impact({ style: ImpactStyle.Light });
+    } catch {
+      /* haptics unavailable */
+    }
   },
 };

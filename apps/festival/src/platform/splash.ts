@@ -4,7 +4,11 @@ import { runtime } from "./runtime";
 export const splash = {
   async hide(): Promise<void> {
     if (!runtime.isNative()) return;
-    const { SplashScreen } = await import("@capacitor/splash-screen");
-    await SplashScreen.hide({ fadeOutDuration: 200 });
+    try {
+      const { SplashScreen } = await import("@capacitor/splash-screen");
+      await SplashScreen.hide({ fadeOutDuration: 200 });
+    } catch {
+      /* splash screen unavailable */
+    }
   },
 };
