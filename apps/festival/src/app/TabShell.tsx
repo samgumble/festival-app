@@ -6,9 +6,11 @@ import { TabBar } from "./TabBar";
 import { DevClock } from "./DevClock";
 import { UpdateBanner } from "./UpdateBanner";
 import { useUpdateStore } from "@/state/updates";
+import { useReminderSync } from "@/features/plan/useReminderSync";
 
 export function TabShell() {
   useApplyTheme();
+  useReminderSync();
   const needRefresh = useUpdateStore((s) => s.needRefresh);
   const dismissed = useUpdateStore((s) => s.dismissed);
   const bannerVisible = needRefresh && !dismissed;
