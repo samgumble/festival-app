@@ -1,12 +1,15 @@
 import { useState } from "react";
 import { asset } from "@/app/assets";
 import type { ReactNode } from "react";
-import { Card, Eyebrow, SegmentedControl, Toggle } from "@/design";
+import { Button, Card, Eyebrow, SegmentedControl, Toggle } from "@/design";
 import { useContent, useContentStatus } from "@/data/content";
 import { formatTime, fromDenver, parseIso } from "@/domain/time";
 import { useAlertsStore } from "@/state/alerts";
 import { usePlanStore } from "@/state/plan";
 import { useUiStore } from "@/state/ui";
+import { InstallSheet } from "./InstallSheet";
+import { useInstall } from "@/platform/install";
+import { useUpdateStore } from "@/state/updates";
 
 // Inline text buttons in an 18 px line: extend the hit area invisibly to the 44 px floor (18 + 13 + 13).
 const INLINE_LINK = "relative inline-block underline before:absolute before:inset-x-0 before:-inset-y-[13px] before:content-['']";
@@ -34,6 +37,12 @@ export function InfoScreen() {
   const { pushOptIn, setPushOptIn } = useAlertsStore();
   const [licenses, setLicenses] = useState(false);
   const [privacy, setPrivacy] = useState(false);
+  const install = useInstall();
+  const offlineReady = useUpdateStore((s) => s.offlineReady);
+  // DEV-only: `?install=ios` forces the iOS path with the sheet open, for screenshots.
+  const forcedIos = import.meta.env.DEV && new URLSearchParams(window.location.search).get("install") === "ios";
+  const [installSheet, setInstallSheet] = useState(forcedIos);
+  const installMode = forcedIos ? "ios" : install.mode;
   const first = festival.days[0]!, last = festival.days[festival.days.length - 1]!;
   return (
     <div className="pt-3">
@@ -46,6 +55,17 @@ export function InfoScreen() {
           <Row label="Altitude">{festival.altitudeFt.toLocaleString()} ft — hydrate</Row>
         </div>
       </Card>
+
+      {(installMode === "prompt" || installMode === "ios") && (
+        <>
+          <Eyebrow tone="structure" className="mt-4 block px-0.5">Get the app</Eyebrow>
+          <Card className="mt-1.5 flex items-center gap-3">
+            <div className="flex-1 text-[14px] leading-5 text-fg-soft">Works offline at the venue once it's on your home screen.</div>
+            <Button variant="ink" size="sm" className="shrink-0" onClick={() => (installMode === "prompt" ? void install.prompt() : setInstallSheet(true))}>Add to Home Screen</Button>
+          </Card>
+        </>
+      )}
+      {installSheet && <InstallSheet onClose={() => setInstallSheet(false)} />}
 
       <Eyebrow tone="structure" className="mt-4 block px-0.5">Official links</Eyebrow>
       <Card padded={false} className="mt-1.5 px-4 py-1">
@@ -79,7 +99,7 @@ export function InfoScreen() {
       )}
       <p className="mt-4 text-center eyebrow text-fg-soft">
         Content v{status.contentVersion} · {status.source === "live" ? "live" : status.source === "cache" ? "cached" : "bundled"}
-        {" · updated "}{formatTime(parseIso(status.updatedAt ?? meta.publishedAt))} · app {__APP_VERSION__}
+        {" · updated "}{formatTime(parseIso(status.updatedAt ?? meta.publishedAt))} · app {__APP_VERSION__}{offlineReady && " · offline-ready ✓"}
       </p>
     </div>
   );
