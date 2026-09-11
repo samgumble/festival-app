@@ -64,9 +64,7 @@ festival,lineup,schedule,music,concert,colorado,mountaintown,liveevent,artists,s
 
 ## Category
 
-**Apple**: primary **Entertainment**, secondary **Music**.
-
-⚠ Note the inversion: `docs/STORE-CHECKLIST.md` §4 and `docs/PLAN.md` §8 both currently say primary **Music**, secondary **Entertainment** — the opposite order. This listing follows the explicit instruction given for this task. Before submission, Sam/SBG should pick one order and reconcile all three documents; I have not edited STORE-CHECKLIST's or PLAN's existing category text, only flagged the conflict here.
+**Apple**: primary **Music**, secondary **Entertainment** — as chosen in `docs/PLAN.md` §8 and `docs/STORE-CHECKLIST.md` §4 (the earlier draft had these inverted; reconciled 2026-09-11).
 
 **Play**: recommend **Events** over **Music & Audio**.
 Reason: the app has no music playback, streaming, or audio content — it is a schedule/plan/alert companion for one real-world event. Play's "Music & Audio" category skews toward listening apps and could mismatch user expectations and Play's own store algorithms; "Events" matches the app's actual function (and pairs with the Apple "Entertainment" primary choice above). This is a recommendation, not a decision — tick the STORE-CHECKLIST row once Sam/SBG confirms.
