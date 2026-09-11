@@ -47,7 +47,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Admin console | ✅ Sep 9 | https://samgumble.github.io/festival-admin/ (repo `festival-admin`, Pages) — sign-in, lineup editor, alerts, publish/rollback; no Functions/push (D-021) |
 | Live content in fan app | ✅ Sep 10 | Firestore `content/published` + `alerts` behind the repository seams; bundled fallback. Verified live on Pages Sep 10: edit → publish (v2026.09.10.1) → restore (v2026.09.10.2, content identical to seed) reflected in Info within seconds; alert send + delete round-trip through the fan inbox; `history/` holds 2026.09.09.1 and 2026.09.10.1 |
 | Web beta live for SBG | ✅ Sep 9 | https://samgumble.github.io/festival-app/ — auto-deploys from `main` via `.github/workflows/pages.yml`; live Firestore content + alerts since Sep 10 |
-| Native (icons, push, notifications) | ⬜ | Day 4 |
+| Native shell | ✅ Sep 10 | Capacitor 8 iOS/Android in `apps/festival/{ios,android}` (D-023); reminders = one switch over favorites via local notifications; haptics, status bar, splash, icons; simulator-verified. iOS template is SPM-only (no CocoaPods, no `.xcworkspace`; open `ios/App/App.xcodeproj`). Pending: Apple/Play accounts → TestFlight/closed track (STORE-CHECKLIST §1/§7); push needs Blaze (D-021) |
 | TestFlight / Play closed test | ⬜ | Mon Sep 14 |
 | iOS submitted | ⬜ | Mon Sep 14 — follow `STORE-CHECKLIST.md` §8 |
 | Store accounts / ownership decided | ⬜ | STORE-CHECKLIST §0 — urgent: SBG vs Sam accounts, Play account type, authorization letter |
@@ -90,12 +90,18 @@ npm run test                         # vitest across workspaces
 npm run test:rules                   # firestore rules against emulator
 npm run build                        # festival app → apps/festival/dist (+ bundled.json refreshed)
 npm run build:admin
-npm run cap:sync                     # build + npx cap sync
-npm run cap:ios / cap:android        # open Xcode / Android Studio
 npm run screenshots                  # playwright device-size screenshots into docs/screens
 npm run art:build · fonts:build · icons:build   # regenerate committed assets from assets-src/ (cwebp, woff2_compress, Playwright)
 npm run e2e:offline                      # build + airplane-mode Playwright check (local only)
+npm run cap:sync                     # build (BASE_PATH=/, firestore data source) + npx cap sync
+npm run cap:ios                      # open the iOS project in Xcode (apps/festival/ios/App/App.xcodeproj — SPM-only, no CocoaPods)
+npm run cap:android                  # open the Android project in Android Studio
+npm run cap:build:ios                # headless Debug build for iOS Simulator (no code signing)
+npm run cap:build:android            # headless Debug .apk build via Gradle
+npm run splash:build                 # regenerate the native splash screen assets from assets-src/
 ```
+
+Native builds are not in CI; `cap sync` output (`ios/App/App/public`, `android/app/src/main/assets/public`) is git-ignored and regenerated.
 
 ## 8. Environment on Sam's Mac (from the Sep 8 prototype; re-verify)
 

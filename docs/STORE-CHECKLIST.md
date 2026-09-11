@@ -14,13 +14,13 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 | ☐ | Apple Developer Program account type | *Individual / Organization (needs SBG's D-U-N-S number and a person with legal authority to bind SBG)* |
 | ☐ | Google Play developer account type | *Personal / Organization (D-U-N-S)* — personal accounts created after Nov 13 2023 must run a 14-day closed test with 12 opted-in testers before production |
 | ☐ | Third-party authorization | If the accounts are Sam's, obtain a signed letter from SBG Productions authorizing Sam to publish the app, use the "Telluride Blues & Brews" name, and the 2026 artwork (Apple guideline 5.2.1 "Intellectual Property"). Keep a PDF in 1Password and be ready to attach it in review notes. |
-| ☐ | App display name | *"Telluride Blues & Brews"* (App Store name ≤ 30 chars; Play title ≤ 30) |
-| ☐ | Bundle ID / application ID | *`com.sbgproductions.bluesandbrews`* — identical on both platforms; cannot change after first upload |
+| ☑ | App display name | *"Telluride Blues & Brews"* (App Store name ≤ 30 chars; Play title ≤ 30) — locked in `capacitor.config.ts` `appName` |
+| ☑ | Bundle ID / application ID | *`com.sbgproductions.bluesandbrews`* — identical on both platforms; cannot change after first upload — locked in `capacitor.config.ts` `appId`, iOS `Info.plist`, and Android `build.gradle` `applicationId` |
 | ☐ | Support email + support URL | *e.g. app-support@… / tellurideblues.com/app* (required on both stores) |
 | ☐ | Privacy policy URL | *https://…/privacy* — must be live and reachable at submission |
 | ☐ | Marketing URL | *https://www.tellurideblues.com* |
 | ☐ | Copyright line | *© 2026 SBG Productions* |
-| ☐ | iPhone-only for v1 | Set `TARGETED_DEVICE_FAMILY = 1` (iPhone) in Xcode so iPad screenshots are not required; iPad users still install in compatibility mode. Revisit in v1.1. |
+| ☑ | iPhone-only for v1 | Set `TARGETED_DEVICE_FAMILY = 1` (iPhone) in Xcode so iPad screenshots are not required; iPad users still install in compatibility mode. Revisit in v1.1. |
 | ☐ | Release control | Choose **manual release** on both stores so go-live is a deliberate moment |
 
 ## 1. Accounts and enrollment
@@ -49,17 +49,17 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 - ☐ Register the App ID (explicit bundle ID) in Certificates, Identifiers & Profiles with capabilities: **Push Notifications** (and nothing else for v1).
 - ☐ Xcode: Signing & Capabilities → Team set, "Automatically manage signing" on; add **Push Notifications** and **Background Modes → Remote notifications**.
 - ☐ Distribution certificate + App Store provisioning profile (Xcode creates them automatically when archiving).
-- ☐ `Info.plist`: `CFBundleDisplayName`, `ITSAppUsesNonExemptEncryption = NO` (HTTPS-only is exempt), `UIRequiresFullScreen` not needed, supported orientations portrait only for iPhone.
-- ☐ `PrivacyInfo.xcprivacy` in the app target listing required-reason APIs actually used (Capacitor/WebKit typically: `NSPrivacyAccessedAPICategoryUserDefaults` reason `CA92.1`; check the Capacitor 8 docs for the current list) and `NSPrivacyTracking = false`, no tracking domains.
+- ☑ `Info.plist`: `CFBundleDisplayName`, `ITSAppUsesNonExemptEncryption = NO` (HTTPS-only is exempt), `UIRequiresFullScreen` not needed, supported orientations portrait only for iPhone.
+- ☑ `PrivacyInfo.xcprivacy` in the app target listing required-reason APIs actually used (Capacitor/WebKit typically: `NSPrivacyAccessedAPICategoryUserDefaults` reason `CA92.1`; check the Capacitor 8 docs for the current list) and `NSPrivacyTracking = false`, no tracking domains.
 - ☐ Third-party SDK privacy manifests present (Firebase SDKs ship theirs; verify the build has no missing-manifest warnings on upload).
 - ☐ Build with the current Xcode (26.x) and iOS SDK — Apple rejects uploads built with old SDKs after each spring deadline. ⚠
 
 ### Google
-- ☐ `applicationId` set in `android/app/build.gradle`; `versionCode` integer increments every upload; `versionName` "1.0.0".
-- ☐ `targetSdkVersion` / `compileSdkVersion` = **36** (Android 16) — required for new apps since Aug 31 2026. ⚠ Confirm Capacitor 8 template defaults; bump if lower.
+- ☑ `applicationId` set in `android/app/build.gradle`; `versionCode` integer increments every upload; `versionName` "1.0.0".
+- ☑ `targetSdkVersion` / `compileSdkVersion` = **36** (Android 16) — required for new apps since Aug 31 2026. ⚠ Confirm Capacitor 8 template defaults; bump if lower.
 - ☐ Create the **upload keystore** (`keytool -genkeypair -v -keystore bb-upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000`) stored **outside the repo** and in the vault with its passwords. Losing it is recoverable via Play App Signing key reset, but avoid it.
 - ☐ Build an **Android App Bundle (.aab)**, not an APK: Android Studio → Build → Generate Signed Bundle.
-- ☐ Adaptive icon (foreground/background/monochrome), themed-icon check on Android 13+, notification small icon is white-on-transparent (see `ASSET-BRIEF.md §2`).
+- ☑ Adaptive icon (foreground/background/monochrome), themed-icon check on Android 13+, notification small icon is white-on-transparent (see `ASSET-BRIEF.md §2`).
 - ☐ Edge-to-edge and predictive-back behave on Android 15/16 (required behaviors when targeting 35+).
 
 ## 3. Assets
