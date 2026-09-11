@@ -35,8 +35,13 @@ export function useReminderSync(): void {
   useEffect(() => {
     if (!notifications.isSupported()) return;
     const check = async () => {
-      if (usePlanStore.getState().remindersOn && (await notifications.permission()) !== "granted") {
+      if (!usePlanStore.getState().remindersOn) return;
+      if ((await notifications.permission()) !== "granted") {
+        // Android reports the ambiguous "prompt" (not "denied") right after an external
+        // revoke, so `remindersRevoked` — not the raw permission string — is what the
+        // settings sheet trusts to explain the switch turning itself off.
         usePlanStore.getState().setRemindersOn(false);
+        usePlanStore.getState().setRemindersRevoked(true);
       }
     };
     void check();

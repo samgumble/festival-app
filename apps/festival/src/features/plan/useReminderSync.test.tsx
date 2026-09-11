@@ -45,7 +45,7 @@ const flush = () => act(async () => { await Promise.resolve(); await Promise.res
 
 describe("useReminderSync", () => {
   beforeEach(() => {
-    usePlanStore.setState({ favorites: [], remindersOn: false, settings: { leadMinutes: 15, bufferMinutes: 10 } });
+    usePlanStore.setState({ favorites: [], remindersOn: false, remindersRevoked: false, settings: { leadMinutes: 15, bufferMinutes: 10 } });
     adapter.pendingList = [];
     adapter.schedule.mockClear();
     adapter.cancel.mockClear();
@@ -104,6 +104,28 @@ describe("useReminderSync", () => {
     await flush();
     expect(usePlanStore.getState().remindersOn).toBe(false);
     expect(adapter.schedule).not.toHaveBeenCalled();
+  });
+
+  it("marks remindersRevoked when Android reports \"prompt\" (not \"denied\") after an external revoke", async () => {
+    // Real Android behavior: checkPermissions() reports the ambiguous "prompt" right after the
+    // fan revokes notifications in system Settings, because shouldShowRequestPermissionRationale
+    // resets. remindersRevoked is the reliable signal the settings sheet needs since the raw
+    // permission string can't be trusted to say "denied" here.
+    adapter.permission.mockResolvedValue("prompt");
+    usePlanStore.setState({ favorites: [FAV], remindersOn: true, remindersRevoked: false });
+    renderHook(() => useReminderSync(), { wrapper: wrap });
+    await flush();
+    expect(usePlanStore.getState().remindersOn).toBe(false);
+    expect(usePlanStore.getState().remindersRevoked).toBe(true);
+    expect(adapter.schedule).not.toHaveBeenCalled();
+  });
+
+  it("never calls the native permission check when reminders were never turned on", async () => {
+    usePlanStore.setState({ favorites: [FAV], remindersOn: false, remindersRevoked: false });
+    renderHook(() => useReminderSync(), { wrapper: wrap });
+    await flush();
+    expect(adapter.permission).not.toHaveBeenCalled();
+    expect(usePlanStore.getState().remindersRevoked).toBe(false);
   });
 
   it("re-checks the OS permission when the app resumes", async () => {
