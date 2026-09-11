@@ -43,7 +43,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Design tokens + fonts | ✅ | Palette locked D-016; Tailwind v4 theme; Bungee/Bungee Shade/Michroma/DM Sans bundled |
 | Content seed | ✅ Sep 10 | bundled ✅; Firestore `content/published` = v2026.09.09.1 (41 sets, seeded by Sam via `npm run seed`; password via env only, e.g. `FIREBASE_ADMIN_PASSWORD="$(pbpaste)" FIREBASE_ADMIN_EMAIL=… npm run seed; pbcopy </dev/null`); re-verify vs official schedule before beta |
 | Now / Lineup | ✅ design pass | all states via dev clock; screenshots in `docs/screens/design-pass/` |
-| Plan / Alerts / Info / PWA | 🟡 | Plan/Alerts/Info at rough fidelity (alerts from fixture); PWA/service worker not started |
+| Plan / Alerts / Info / PWA | ✅ Sep 10 | Plan/Alerts/Info at rough fidelity; PWA: Workbox precache (2587 KiB), prompt-mode update banner, Info "Get the app" nudge (Chromium prompt / iOS sheet), offline e2e `npm run e2e:offline` |
 | Admin console | ✅ Sep 9 | https://samgumble.github.io/festival-admin/ (repo `festival-admin`, Pages) — sign-in, lineup editor, alerts, publish/rollback; no Functions/push (D-021) |
 | Live content in fan app | ✅ Sep 10 | Firestore `content/published` + `alerts` behind the repository seams; bundled fallback. Verified live on Pages Sep 10: edit → publish (v2026.09.10.1) → restore (v2026.09.10.2, content identical to seed) reflected in Info within seconds; alert send + delete round-trip through the fan inbox; `history/` holds 2026.09.09.1 and 2026.09.10.1 |
 | Web beta live for SBG | ✅ Sep 9 | https://samgumble.github.io/festival-app/ — auto-deploys from `main` via `.github/workflows/pages.yml`; live Firestore content + alerts since Sep 10 |
@@ -53,7 +53,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Store accounts / ownership decided | ⬜ | STORE-CHECKLIST §0 — urgent: SBG vs Sam accounts, Play account type, authorization letter |
 | Poster layers exported | ⬜ | Sam, in parallel — see ASSET-BRIEF |
 | Generated supporting art | ⬜ | Sam via ChatGPT — see ASSET-BRIEF |
-| Art budget | ⚠️ open | `apps/festival/public/art` is 3.33 MB (hero crops 2.47 MB vs 2 MB spec budget); convert to WebP / swap true PSD layers in the PWA precache task |
+| Art budget | ✅ Sep 10 | `public/art` WebP 0.97 MB (lockup lossless), fonts WOFF2 0.35 MB; regenerate with `npm run art:build` / `fonts:build` / `icons:build`; PSD-derived icon still to replace the code-drawn sun |
 | Dev clock caveat | ℹ️ | Lineup/Plan day selector is chosen on first render; scrubbing the dev clock doesn't move it — pick the day tab manually when reviewing |
 
 ## 4. How we work
@@ -93,6 +93,8 @@ npm run build:admin
 npm run cap:sync                     # build + npx cap sync
 npm run cap:ios / cap:android        # open Xcode / Android Studio
 npm run screenshots                  # playwright device-size screenshots into docs/screens
+npm run art:build · fonts:build · icons:build   # regenerate committed assets (cwebp, woff2_compress, Playwright)
+npm run e2e:offline                      # build + airplane-mode Playwright check (local only)
 ```
 
 ## 8. Environment on Sam's Mac (from the Sep 8 prototype; re-verify)

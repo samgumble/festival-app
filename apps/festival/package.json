@@ -12,7 +12,8 @@
     "art:build": "node scripts/art-build.ts",
     "fonts:build": "node scripts/fonts-build.ts",
     "icons:build": "node scripts/icons.ts",
-    "screenshots": "playwright test"
+    "screenshots": "playwright test",
+    "e2e:offline": "VITE_DATA_SOURCE=bundled npm run build && playwright test --config playwright.offline.config.ts"
   },
   "dependencies": {
     "@bb/shared": "*",
