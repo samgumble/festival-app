@@ -61,6 +61,7 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 - ☐ Build an **Android App Bundle (.aab)**, not an APK: Android Studio → Build → Generate Signed Bundle.
 - ☑ Adaptive icon (foreground/background/monochrome), themed-icon check on Android 13+, notification small icon is white-on-transparent (see `ASSET-BRIEF.md §2`).
 - ☐ Edge-to-edge and predictive-back behave on Android 15/16 (required behaviors when targeting 35+).
+- ☐ Play Console → App content → declare the SCHEDULE_EXACT_ALARM use case (set reminders at a user-chosen time); the local-notifications plugin merges the permission unconditionally.
 
 ## 3. Assets
 

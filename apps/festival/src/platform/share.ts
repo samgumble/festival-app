@@ -1,5 +1,5 @@
 import { runtime } from "./runtime";
-import { downloadText } from "@/features/plan/download";
+import { downloadText } from "./download";
 
 /** Native share sheet; web uses the Web Share API, then the clipboard, and a download for files. */
 export const share = {

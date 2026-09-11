@@ -9,7 +9,7 @@ const config: CapacitorConfig = {
   ios: { contentInset: "automatic" },
   android: { allowMixedContent: false },
   plugins: {
-    SplashScreen: { launchAutoHide: false, backgroundColor: "#EBD5B3", showSpinner: false, androidScaleType: "CENTER_CROP" },
+    SplashScreen: { launchAutoHide: false, backgroundColor: "#EBD5B3", showSpinner: false },
     LocalNotifications: { smallIcon: "ic_stat_sun", iconColor: "#F0C41C" },
     StatusBar: { overlaysWebView: true, style: "DEFAULT" },
   },

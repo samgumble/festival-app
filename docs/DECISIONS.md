@@ -102,3 +102,5 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Consequences.** `reminders: string[]`/`toggleReminder` are removed from the plan store (persist migration). No `@capacitor/preferences` or `Filesystem`: localStorage persistence and text-only sharing of the `.ics` in v1. Native builds are not part of CI.
 
 **Consequences (addendum, 2026-09-10).** iOS project uses Swift Package Manager (Capacitor 8 template default); legacy Android round icon rendered with transparent corners (review fix).
+
+**Consequences (addendum, 2026-09-10).** Native origins stay at the Capacitor defaults (`capacitor://localhost` iOS, `https://localhost` Android): fans' favorites/plan live in WebView localStorage at that origin, so `ios.scheme`/`androidScheme` must never change. Android uses the Android 12 icon-only system splash on a paper background (no bitmap splash drawables), a deliberate deviation from spec §8.
