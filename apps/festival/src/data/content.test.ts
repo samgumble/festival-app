@@ -7,7 +7,7 @@ describe("content repository", () => {
     expect(c.meta.contentVersion).toBe("2026.09.09.1");
     const idx = buildIndex(c);
     expect(idx.stagesById.get("main")?.color).toBe("sky");
-    expect(idx.setsByDay.sat.length).toBe(14);
+    expect(idx.setsByDay.sat.length).toBe(17);
     expect(idx.setsByArtist.get("nigel-wearne")?.length).toBe(3);
   });
 });

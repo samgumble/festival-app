@@ -22,25 +22,25 @@ describe("festivalState", () => {
 describe("day + stage grouping", () => {
   it("returns Saturday's sets in chronological order, grouped by stage sortOrder", () => {
     const sat = setsForDay(content.sets, "sat");
-    expect(sat.length).toBe(14);
+    expect(sat.length).toBe(17);
     expect(sat[0]?.id).toBe("sat-j-causeways-main-1200");
     const groups = groupByStage(sat, content.stages);
     expect(groups.map((g) => g.stage.id)).toEqual(["main", "blues", "truck", "camp"]);
     expect(groups[0]?.sets.map((s) => s.artistId)).toEqual([
-      "j-causeways", "judith-hill", "nether-hour", "charlie-musselwhite-ga20", "record-company", "taj-mahal-keb-mo",
+      "j-causeways", "judith-hill", "telluride-blues-challenge-winner-2026", "nether-hour", "charlie-musselwhite-ga20", "record-company", "taj-mahal-keb-mo",
     ]);
   });
 });
 
 describe("now / next at Saturday 3:40 PM", () => {
   const sat = setsForDay(content.sets, "sat");
-  it("Nether Hour is on the Main Stage with 20 minutes left", () => {
+  it("Nether Hour is on the Main Stage with 20 minutes left (alongside the Campground comedy set)", () => {
     const on = nowPlaying(sat, SAT_340);
-    expect(on.map((s) => s.artistId)).toEqual(["nether-hour"]);
+    expect(on.map((s) => s.artistId)).toEqual(["nether-hour", "troy-walker"]);
     expect(progress(on[0]!, SAT_340)).toBeCloseTo(40 / 60, 2);
   });
-  it("up next is Nigel Wearne (Truck 4:00) then Musselwhite (Main 4:30), one per stage", () => {
-    expect(upNext(sat, SAT_340, 2).map((s) => s.id)).toEqual(["sat-nigel-wearne-truck-1600", "sat-charlie-musselwhite-ga20-main-1630"]);
+  it("up next is Nigel Wearne (Truck 4:00) then the Blues Stage comedy set (4:00), one per stage", () => {
+    expect(upNext(sat, SAT_340, 2).map((s) => s.id)).toEqual(["sat-nigel-wearne-truck-1600", "sat-troy-walker-blues-1600"]);
   });
   it("Kirk Fletcher's 2:30 set has ended", () => {
     const kirk = sat.find((s) => s.id === "sat-kirk-fletcher-blues-1430")!;

@@ -245,6 +245,11 @@
       "id": "kiran-deol",
       "name": "Kiran Deol",
       "tier": "comedy"
+    },
+    {
+      "id": "telluride-blues-challenge-winner-2026",
+      "name": "2026 Telluride Blues Challenge Winner",
+      "tier": "lineup"
     }
   ],
   "sets": [
@@ -575,6 +580,50 @@
       "dayId": "sun",
       "start": "2026-09-20T20:00:00-06:00",
       "end": "2026-09-20T21:30:00-06:00"
+    },
+    {
+      "id": "sat-blues-challenge-winner-main-1445",
+      "artistId": "telluride-blues-challenge-winner-2026",
+      "stageId": "main",
+      "dayId": "sat",
+      "start": "2026-09-19T14:45:00-06:00",
+      "end": "2026-09-19T15:00:00-06:00"
+    },
+    {
+      "id": "sat-troy-walker-camp-1530",
+      "artistId": "troy-walker",
+      "stageId": "camp",
+      "dayId": "sat",
+      "start": "2026-09-19T15:30:00-06:00",
+      "end": "2026-09-19T16:30:00-06:00",
+      "note": "Stand-Up Comedy hosted by Troy Walker with Baron Vaughn, Kiran Deol & Hannah Jones"
+    },
+    {
+      "id": "sat-troy-walker-blues-1600",
+      "artistId": "troy-walker",
+      "stageId": "blues",
+      "dayId": "sat",
+      "start": "2026-09-19T16:00:00-06:00",
+      "end": "2026-09-19T17:00:00-06:00",
+      "note": "Stand-Up Comedy hosted by Troy Walker with Baron Vaughn, Kiran Deol & Hannah Jones"
+    },
+    {
+      "id": "sun-troy-walker-camp-1230",
+      "artistId": "troy-walker",
+      "stageId": "camp",
+      "dayId": "sun",
+      "start": "2026-09-20T12:30:00-06:00",
+      "end": "2026-09-20T13:30:00-06:00",
+      "note": "Stand-Up Comedy Hosted by Troy Walker with Baron Vaughn, Kiran Deol & Hannah Jones"
+    },
+    {
+      "id": "sun-troy-walker-blues-1600",
+      "artistId": "troy-walker",
+      "stageId": "blues",
+      "dayId": "sun",
+      "start": "2026-09-20T16:00:00-06:00",
+      "end": "2026-09-20T17:00:00-06:00",
+      "note": "Stand-Up Comedy Hosted by Troy Walker with Baron Vaughn, Kiran Deol & Hannah Jones"
     }
   ]
 }
