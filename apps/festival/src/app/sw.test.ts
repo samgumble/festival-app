@@ -52,4 +52,15 @@ describe("setupServiceWorker", () => {
     setupServiceWorker(PROD);
     expect(useUpdateStore.getState().offlineReady).toBe(true);
   });
+
+  it("never registers inside the native shell", () => {
+    stubServiceWorker(null);
+    (globalThis as { Capacitor?: unknown }).Capacitor = { isNativePlatform: () => true, getPlatform: () => "ios" };
+    try {
+      setupServiceWorker(PROD);
+      expect(registerSW).not.toHaveBeenCalled();
+    } finally {
+      delete (globalThis as { Capacitor?: unknown }).Capacitor;
+    }
+  });
 });

@@ -66,4 +66,9 @@ describe("install platform", () => {
     const { result } = renderHook(() => useInstall());
     expect(result.current.mode).toBe("prompt");
   });
+
+  it("mode is none inside the native shell", () => {
+    (globalThis as { Capacitor?: unknown }).Capacitor = { isNativePlatform: () => true, getPlatform: () => "ios" };
+    try { expect(installMode()).toBe("none"); } finally { delete (globalThis as { Capacitor?: unknown }).Capacitor; }
+  });
 });

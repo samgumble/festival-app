@@ -1,11 +1,12 @@
 import { motion } from "motion/react";
+import { haptics } from "@/platform/haptics";
 import { Columbine } from "./ornaments";
 import { SPRING_BLOOM, useMotionOk } from "./motion";
 
 export function Heart({ on, onToggle, label }: { on: boolean; onToggle: () => void; label: string }) {
   const ok = useMotionOk();
   return (
-    <button type="button" aria-pressed={on} aria-label={label} onClick={onToggle}
+    <button type="button" aria-pressed={on} aria-label={label} onClick={() => { if (!on) void haptics.tap(); onToggle(); }}
       className="grid h-12 w-12 shrink-0 place-items-center rounded-chip border border-hair bg-surface">
       <motion.span key={on ? "bloom" : "heart"} className="grid place-items-center"
         initial={ok ? { scale: 0.8 } : undefined} animate={{ scale: 1 }} transition={ok ? SPRING_BLOOM : { duration: 0 }}>
