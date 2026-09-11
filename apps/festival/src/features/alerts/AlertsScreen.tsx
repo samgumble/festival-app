@@ -70,7 +70,7 @@ export function AlertsScreen() {
         </Card>
       )}
       {all.length === 0 && (
-        <Card className="mt-6 py-8 text-center"><div className="font-display text-[20px] leading-6">All quiet in Town Park</div><p className="mt-1 text-[14px] text-fg-soft">Festival updates will appear here.</p></Card>
+        <Card className="mt-6 py-8 text-center"><p className="text-[14px] text-fg-soft">Festival updates will appear here.</p></Card>
       )}
       {[...groups.entries()].map(([label, items]) => (
         <section key={label} className="mt-4">

@@ -16,9 +16,10 @@ export function NowPre({ now }: { now: Date }) {
   const gates = gatesOpenAt(first);
   return (
     <>
-      <Hero>
+      <Hero />
+      <Card className="mt-3 text-center">
         <Countdown msUntil={gates.getTime() - now.getTime()} gatesLine={`${first.label.slice(0, 3)} Sep ${Number(first.date.slice(8))} · ${formatTime(gates)} · ${content.festival.venue.replace("Telluride ", "")}`} />
-      </Hero>
+      </Card>
       <div className="mt-4 flex items-baseline justify-between px-0.5">
         <Eyebrow tone="structure">Headliners</Eyebrow>
         <Link to="/lineup" className="eyebrow text-fg-soft">See lineup →</Link>

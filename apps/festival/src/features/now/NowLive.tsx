@@ -26,12 +26,11 @@ export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
   const pick = (setId: string) => ({ set: idx.setsById.get(setId)!, artist: idx.artistsById.get(idx.setsById.get(setId)!.artistId)!, stage: idx.stagesById.get(idx.setsById.get(setId)!.stageId)! });
   return (
     <>
-      <Hero compact>
-        <div className="absolute inset-x-3.5 bottom-2.5 flex items-end justify-between">
-          <div><Eyebrow className="whitespace-nowrap text-fg">{day.label.slice(0, 3)} · Town Park</Eyebrow><div className="font-display text-[24px] leading-7">Day {dayIndex} of {content.festival.days.length}</div></div>
-          <Chip tone="paper">Offline-ready ✓</Chip>
-        </div>
-      </Hero>
+      <Hero compact />
+      <Card className="mt-3 flex items-end justify-between">
+        <div><Eyebrow tone="structure" className="whitespace-nowrap">{day.label.slice(0, 3)} · Town Park</Eyebrow><div className="font-display text-[24px] leading-7">Day {dayIndex} of {content.festival.days.length}</div></div>
+        <Chip tone="sky">Offline-ready ✓</Chip>
+      </Card>
       {urgent && (
         <Link to={`/alerts/${urgent.id}`} className="mt-3 block">
           <Card className="border-l-[5px] border-l-ember py-2.5"><div className="flex items-center gap-2"><Chip tone="ember">Urgent</Chip><b className="min-w-0 flex-1 truncate text-[15px]">{urgent.title}</b><Eyebrow>{formatTime(parseIso(urgent.publishedAt))}</Eyebrow></div></Card>
