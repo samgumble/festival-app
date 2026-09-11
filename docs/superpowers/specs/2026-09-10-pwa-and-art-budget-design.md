@@ -29,13 +29,13 @@ Push/FCM, background sync, Capacitor, periodic content prefetch beyond Firestore
 ## 4. Art budget
 
 - Script `apps/festival/scripts/art-build.ts` (Node, spawns `cwebp`): for every `public/art/*.png` produce `public/art/<name>.webp`; files whose PNG has alpha (`sips -g hasAlpha` / list in the script) use `-lossless`, others `-q 82`. Prints a size table and **fails (exit 1) if `public/art/*.webp` totals more than 1,000,000 bytes**.
-- npm script `art:build` in `apps/festival`. Outputs are committed. PNG sources stay in the repo as the editable originals but are **not** precached (glob excludes `art/*.png`).
+- npm script `art:build` in `apps/festival`. Outputs are committed. PNG sources stay in the repo as the editable originals under `apps/festival/assets-src/art/` (moved out of `public/` in the final review so Vite never serves them; the `globIgnores` for `art/*.png` remains as a guard).
 - App references switch to `.webp`: `Hero.tsx` (sky, mountains-near, foreground, lockup), `InfoScreen.tsx` (lockup in the festival card, sbg), any other `art/*.png` reference found by grep. No `<picture>` fallback (WebP is universal on the supported browsers: iOS 14+, Chrome, Firefox, Edge).
 - Budget check in CI: the Vite build's precache manifest total must be ≤ 3,000,000 bytes; `vite-plugin-pwa`'s `maximumFileSizeToCacheInBytes` stays default (2 MiB per file), and a unit test on the build output isn't required — the `art:build` guard plus the plugin's per-file cap are the guards.
 
 Measured on 2026-09-10 (bytes): sky 187,706 · mountains-near 154,100 · foreground 133,168 · lockup 380,806 (lossless) · dates 82,308 · sbg 30,082 → 968,170 total.
 
-**Fonts.** `apps/festival/scripts/fonts-build.ts` runs `woff2_compress` on every `public/fonts/*/*.ttf`, writing the `.woff2` beside it (Bungee 40,528 · Bungee Shade 81,612 · Michroma 26,384 · DM Sans 89,116 · DM Sans Italic 112,616 → 350,256). `fonts.css` switches each `src` to `url(".../X.woff2") format("woff2")`. TTFs are kept as sources but excluded from the precache glob. npm script `fonts:build`; outputs committed.
+**Fonts.** `apps/festival/scripts/fonts-build.ts` runs `woff2_compress` on every `public/fonts/*/*.ttf`, writing the `.woff2` beside it (Bungee 40,528 · Bungee Shade 81,612 · Michroma 26,384 · DM Sans 89,116 · DM Sans Italic 112,616 → 350,256). `fonts.css` switches each `src` to `url(".../X.woff2") format("woff2")`. TTFs are kept as sources under `apps/festival/assets-src/fonts/<family>/` (with a copy of `OFL.txt`; the served `public/fonts/<family>/OFL.txt` stays beside the WOFF2) and excluded from the precache glob. npm script `fonts:build`; outputs committed.
 
 Precache estimate: JS ~1.13 MB (main ~600 kB + Firebase chunk ~534 kB, stored uncompressed) + art 0.97 MB + fonts 0.35 MB + CSS 34 kB + icons ≈ 60 kB + HTML/manifest ≈ **2.55 MB** (budget 3 MB).
 
@@ -75,7 +75,7 @@ VitePWA({
 })
 ```
 
-`src/app/sw.ts` exports `setupServiceWorker(): void`: no-op when `import.meta.env.DEV`, `import.meta.env.MODE === "test"`, or `!("serviceWorker" in navigator)`; otherwise calls `registerSW({ immediate: true, onNeedRefresh, onOfflineReady, onRegisteredSW })` from `virtual:pwa-register` and wires the callbacks into the update store. Called once from `main.tsx`.
+`src/app/sw.ts` exports `setupServiceWorker(): void`: no-op when `import.meta.env.DEV`, `import.meta.env.MODE === "test"`, or `!("serviceWorker" in navigator)`; otherwise calls `registerSW({ immediate: false, onNeedRefresh, onOfflineReady, onRegisterError })` from `virtual:pwa-register` and wires the callbacks into the update store. `immediate: false` (final review, 2026-09-10): revisioned precache entries (art, fonts, icons) are fetched a second time at install under a `__WB_REVISION__` cache key, so precaching waits for the window `load` event rather than racing first paint. Called once from `main.tsx`.
 
 Bundled content is already inside the JS bundle (`bundled.json` import), so a first launch with no network after install renders everything; Firestore persistence supplies the last live content on later launches. The GitHub Pages `404.html` copy stays in the workflow for first (uncached) deep-link loads; once the worker controls the page, `navigateFallback` serves `index.html` for every in-scope navigation.
 
