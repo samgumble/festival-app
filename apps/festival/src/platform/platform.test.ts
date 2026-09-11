@@ -39,10 +39,17 @@ describe("platform adapters on the web", () => {
   });
 
   it("native adapter failures resolve instead of rejecting (splash)", async () => {
+    (globalThis as { Capacitor?: unknown }).Capacitor = { isNativePlatform: () => true, getPlatform: () => "ios" };
+    vi.resetModules();
+    vi.doMock("@capacitor/splash-screen", () => ({ SplashScreen: { hide: vi.fn(async () => { throw new Error("native bridge down"); }) } }));
     try {
-      (globalThis as { Capacitor?: unknown }).Capacitor = { isNativePlatform: () => true, getPlatform: () => "ios" };
-      await expect(splash.hide()).resolves.toBeUndefined();
+      const { splash: splashModule } = await import("./splash");
+      await expect(splashModule.hide()).resolves.toBeUndefined();
+      const { SplashScreen } = await import("@capacitor/splash-screen");
+      expect(SplashScreen.hide).toHaveBeenCalledTimes(1);
     } finally {
+      vi.doUnmock("@capacitor/splash-screen");
+      vi.resetModules();
       delete (globalThis as { Capacitor?: unknown }).Capacitor;
     }
   });
