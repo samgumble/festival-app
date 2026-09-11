@@ -16,7 +16,7 @@ for (const theme of THEMES) for (const [clockName, devNow] of Object.entries(CLO
   test(`${clockName} ${theme} ${name}`, async ({ page }) => {
     await page.addInitScript(([t, now, favs]) => {
       localStorage.setItem("bb-ui", JSON.stringify({ state: { theme: t, devNow: now, lineupView: "list" }, version: 0 }));
-      localStorage.setItem("bb-plan", JSON.stringify({ state: { favorites: favs, resolutions: {}, reminders: [], settings: { leadMinutes: 15, bufferMinutes: 10 } }, version: 0 }));
+      localStorage.setItem("bb-plan", JSON.stringify({ state: { favorites: favs, resolutions: {}, remindersOn: false, settings: { leadMinutes: 15, bufferMinutes: 10 } }, version: 1 }));
     }, [theme, devNow, FAVORITES] as const);
     await page.goto(path);
     await page.evaluate(() => document.fonts.ready);

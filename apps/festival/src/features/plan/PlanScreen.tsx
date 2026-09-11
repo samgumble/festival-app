@@ -8,7 +8,7 @@ import { planToIcs, planToText } from "@/domain/ics";
 import { formatDuration, formatRange, formatTime, isoMs, minutesBetween, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
 import type { DayId } from "@bb/shared";
-import { downloadText } from "./download";
+import { share } from "@/platform/share";
 import { PlanEmpty } from "./PlanEmpty";
 import { PlanSettings } from "./PlanSettings";
 import { PlanTimeline } from "./PlanTimeline";
@@ -32,14 +32,13 @@ export function PlanScreen() {
     </div>
   );
   if (mine.length === 0) return <div>{title}<PlanEmpty />{settingsOpen && <PlanSettings onClose={() => setSettingsOpen(false)} />}</div>;
-  const exportIcs = () => downloadText("blues-and-brews-plan.ics", "text/calendar", planToIcs(mine, idx.artistsById, idx.stagesById, content.festival));
-  const share = async () => {
-    const text = planToText(mine, idx.artistsById, idx.stagesById, content.festival);
-    try {
-      if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
-    } catch {
-      /* user cancelled the share sheet */
-    }
+  const exportIcs = async () => {
+    try { await share.shareFile("blues-and-brews-plan.ics", "text/calendar", planToIcs(mine, idx.artistsById, idx.stagesById, content.festival)); }
+    catch { /* user cancelled the share sheet */ }
+  };
+  const shareText = async () => {
+    try { await share.shareText("My Blues & Brews plan", planToText(mine, idx.artistsById, idx.stagesById, content.festival)); }
+    catch { /* user cancelled the share sheet */ }
   };
   return (
     <div>
@@ -57,7 +56,7 @@ export function PlanScreen() {
         </Card>
       )}
       {daySets.length === 0 ? <p className="mt-6 text-center text-fg-soft">Nothing planned for this day yet.</p> : <PlanTimeline sets={daySets} now={now} />}
-      <div className="mt-2 flex gap-2"><Button size="sm" className="flex-1" onClick={exportIcs}>Add to calendar</Button><Button size="sm" className="flex-1" onClick={share}>Share as text</Button></div>
+      <div className="mt-2 flex gap-2"><Button size="sm" className="flex-1" onClick={exportIcs}>Add to calendar</Button><Button size="sm" className="flex-1" onClick={shareText}>Share as text</Button></div>
       {settingsOpen && <PlanSettings onClose={() => setSettingsOpen(false)} />}
     </div>
   );

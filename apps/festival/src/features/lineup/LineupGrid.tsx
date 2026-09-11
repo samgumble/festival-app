@@ -88,7 +88,6 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
           </div>
         </div>
       </div>
-      <p className="mt-2 text-[13px] text-fg-soft">Favorited sets are rimmed in sun. Tap a block for the artist.</p>
     </div>
   );
 }

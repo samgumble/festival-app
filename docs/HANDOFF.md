@@ -43,11 +43,11 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Design tokens + fonts | ✅ | Palette locked D-016; Tailwind v4 theme; Bungee/Bungee Shade/Michroma/DM Sans bundled |
 | Content seed | ✅ Sep 10 | bundled ✅; Firestore `content/published` = v2026.09.09.1 (41 sets, seeded by Sam via `npm run seed`; password via env only, e.g. `FIREBASE_ADMIN_PASSWORD="$(pbpaste)" FIREBASE_ADMIN_EMAIL=… npm run seed; pbcopy </dev/null`); re-verify vs official schedule before beta |
 | Now / Lineup | ✅ design pass | all states via dev clock; screenshots in `docs/screens/design-pass/` |
-| Plan / Alerts / Info / PWA | ✅ Sep 10 | Plan/Alerts/Info at rough fidelity; PWA: Workbox precache (2587 KiB), prompt-mode update banner, Info "Get the app" nudge (Chromium prompt / iOS sheet), offline e2e `npm run e2e:offline`. GitHub Pages serves `sw.js` with `Cache-Control: max-age=600`, so a new build can take up to ~10 min to surface the update banner |
+| Plan / Alerts / Info / PWA | ✅ Sep 10 | Plan/Alerts/Info at rough fidelity; PWA: Workbox precache (2605 KiB (grew by the Capacitor web-fallback chunks)), prompt-mode update banner, Info "Get the app" nudge (Chromium prompt / iOS sheet), offline e2e `npm run e2e:offline`. GitHub Pages serves `sw.js` with `Cache-Control: max-age=600`, so a new build can take up to ~10 min to surface the update banner |
 | Admin console | ✅ Sep 9 | https://samgumble.github.io/festival-admin/ (repo `festival-admin`, Pages) — sign-in, lineup editor, alerts, publish/rollback; no Functions/push (D-021) |
 | Live content in fan app | ✅ Sep 10 | Firestore `content/published` + `alerts` behind the repository seams; bundled fallback. Verified live on Pages Sep 10: edit → publish (v2026.09.10.1) → restore (v2026.09.10.2, content identical to seed) reflected in Info within seconds; alert send + delete round-trip through the fan inbox; `history/` holds 2026.09.09.1 and 2026.09.10.1 |
 | Web beta live for SBG | ✅ Sep 9 | https://samgumble.github.io/festival-app/ — auto-deploys from `main` via `.github/workflows/pages.yml`; live Firestore content + alerts since Sep 10 |
-| Native (icons, push, notifications) | ⬜ | Day 4 |
+| Native shell | ✅ Sep 10 | Capacitor 8 iOS/Android in `apps/festival/{ios,android}` (D-023); reminders = one switch over favorites via local notifications; haptics, status bar, splash, icons; simulator-verified. iOS template is SPM-only (no CocoaPods, no `.xcworkspace`; open `ios/App/App.xcodeproj`). Pending: Apple/Play accounts → TestFlight/closed track (STORE-CHECKLIST §1/§7); push needs Blaze (D-021) |
 | TestFlight / Play closed test | ⬜ | Mon Sep 14 |
 | iOS submitted | ⬜ | Mon Sep 14 — follow `STORE-CHECKLIST.md` §8 |
 | Store accounts / ownership decided | ⬜ | STORE-CHECKLIST §0 — urgent: SBG vs Sam accounts, Play account type, authorization letter |
@@ -90,16 +90,22 @@ npm run test                         # vitest across workspaces
 npm run test:rules                   # firestore rules against emulator
 npm run build                        # festival app → apps/festival/dist (+ bundled.json refreshed)
 npm run build:admin
-npm run cap:sync                     # build + npx cap sync
-npm run cap:ios / cap:android        # open Xcode / Android Studio
 npm run screenshots                  # playwright device-size screenshots into docs/screens
 npm run art:build · fonts:build · icons:build   # regenerate committed assets from assets-src/ (cwebp, woff2_compress, Playwright)
 npm run e2e:offline                      # build + airplane-mode Playwright check (local only)
+npm run cap:sync                     # build (BASE_PATH=/, firestore data source) + npx cap sync
+npm run cap:ios                      # open the iOS project in Xcode (apps/festival/ios/App/App.xcodeproj — SPM-only, no CocoaPods)
+npm run cap:android                  # open the Android project in Android Studio
+npm run cap:build:ios                # headless Debug build for iOS Simulator (no code signing)
+npm run cap:build:android            # headless Debug .apk build via Gradle
+npm run splash:build                 # regenerate the native splash screen assets from assets-src/
 ```
+
+Native builds are not in CI; `cap sync` output (`ios/App/App/public`, `android/app/src/main/assets/public`) is git-ignored and regenerated.
 
 ## 8. Environment on Sam's Mac (from the Sep 8 prototype; re-verify)
 
-Apple Silicon. Node 22.x, npm 10.x. Xcode 26.x installed, license accepted; **iOS platform/Simulator runtime may still need installing** (Xcode → Settings → Components). CocoaPods present (Capacitor 8 iOS uses SPM). Android Studio: an Intel build was installed by mistake earlier — **install the Apple Silicon (ARM64) build**, then SDK + JDK 21 via its wizard. Photoshop available for PSD layer export.
+Apple Silicon. Node 22.x, npm 10.x. Xcode 26.x installed, license accepted; **iOS platform/Simulator runtime may still need installing** (Xcode → Settings → Components). CocoaPods 1.17 installed but unused — the Capacitor 8 iOS project is Swift Package Manager only (open `apps/festival/ios/App/App.xcodeproj`). Android Studio: an Intel build was installed by mistake earlier — **install the Apple Silicon (ARM64) build**, then SDK + JDK 21 via its wizard. Photoshop available for PSD layer export.
 
 ## 9. Next actions (in order)
 

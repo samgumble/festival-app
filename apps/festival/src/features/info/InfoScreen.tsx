@@ -85,7 +85,9 @@ export function InfoScreen() {
       </Card>
 
       <Card className="mt-4 flex items-center gap-3">
-        <img src={asset("/art/sbg.webp")} alt="SBG Productions" className="h-11 w-11 rounded-[10px]" />
+        <span className="grid h-11 w-11 shrink-0 place-items-center rounded-[10px] bg-paper-light">
+          <img src={asset("/art/sbg.webp")} alt="SBG Productions" className="h-9 w-9" />
+        </span>
         <div className="flex-1 text-[13px] leading-[18px] text-fg-soft">Official app of the {festival.name}<br />© {festival.year} SBG Productions ·{" "}
           <button type="button" className={INLINE_LINK} onClick={() => setPrivacy(!privacy)}>Privacy</button> ·{" "}
           <button type="button" className={INLINE_LINK} onClick={() => setLicenses(!licenses)}>Licenses</button>

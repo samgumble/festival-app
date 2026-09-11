@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { runtime } from "./runtime";
 
 /**
  * Web install affordances behind a small interface (Capacitor builds get a no-op later):
@@ -40,6 +41,7 @@ export function isIosSafari(nav: Navigator = navigator): boolean {
 }
 
 export function installMode(): InstallMode {
+  if (runtime.isNative()) return "none";
   if (isStandalone()) return "installed";
   if (deferred) return "prompt";
   if (isIosSafari()) return "ios";

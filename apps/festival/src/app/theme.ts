@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { statusBar } from "@/platform/statusBar";
 import { useUiStore, type ThemeChoice } from "@/state/ui";
 
 export function resolveTheme(choice: ThemeChoice, prefersDark: boolean): "light" | "dark" {
@@ -10,7 +11,10 @@ export function useApplyTheme(): void {
   const choice = useUiStore((s) => s.theme);
   useEffect(() => {
     const mq = window.matchMedia("(prefers-color-scheme: dark)");
-    const apply = () => { document.documentElement.dataset.theme = resolveTheme(choice, mq.matches); };
+    const apply = () => {
+      document.documentElement.dataset.theme = resolveTheme(choice, mq.matches);
+      void statusBar.apply(resolveTheme(choice, mq.matches));
+    };
     apply();
     mq.addEventListener("change", apply);
     return () => mq.removeEventListener("change", apply);

@@ -36,7 +36,7 @@ describe("Alerts", () => {
   it("hides alerts from the future and shows the quiet state", async () => {
     useUiStore.setState({ devNow: "2026-09-17T18:00:00-06:00" });
     renderAt("/alerts");
-    expect(await screen.findByText(/all quiet in town park/i)).toBeInTheDocument();
+    expect(await screen.findByText(/Festival updates will appear here/)).toBeInTheDocument();
   });
 
   it("expand controls carry the 44px minimum height", async () => {
