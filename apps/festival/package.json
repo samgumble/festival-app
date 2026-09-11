@@ -13,10 +13,22 @@
     "fonts:build": "node scripts/fonts-build.ts",
     "icons:build": "node scripts/icons.ts",
     "screenshots": "playwright test",
-    "e2e:offline": "VITE_DATA_SOURCE=bundled npm run build && playwright test --config playwright.offline.config.ts"
+    "e2e:offline": "VITE_DATA_SOURCE=bundled npm run build && playwright test --config playwright.offline.config.ts",
+    "cap:sync": "BASE_PATH=/ VITE_DATA_SOURCE=firestore npm run build && cap sync",
+    "cap:ios": "cap open ios",
+    "cap:android": "cap open android",
+    "cap:build:ios": "cd ios/App && xcodebuild -project App.xcodeproj -scheme App -configuration Debug -destination 'generic/platform=iOS Simulator' -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tail -5",
+    "cap:build:android": "cd android && JAVA_HOME=/opt/homebrew/opt/openjdk@21 ./gradlew assembleDebug --console=plain -q"
   },
   "dependencies": {
     "@bb/shared": "*",
+    "@capacitor/app": "8.1.1",
+    "@capacitor/core": "8.5.1",
+    "@capacitor/haptics": "8.0.2",
+    "@capacitor/local-notifications": "8.3.1",
+    "@capacitor/share": "8.0.1",
+    "@capacitor/splash-screen": "8.0.2",
+    "@capacitor/status-bar": "8.0.3",
     "firebase": "12.19.0",
     "motion": "13.2.0",
     "react": "19.3.0",
@@ -26,6 +38,9 @@
     "zustand": "5.0.15"
   },
   "devDependencies": {
+    "@capacitor/android": "8.5.1",
+    "@capacitor/cli": "8.5.1",
+    "@capacitor/ios": "8.5.1",
     "@playwright/test": "1.63.0",
     "@tailwindcss/vite": "4.3.3",
     "@testing-library/jest-dom": "7.0.1",

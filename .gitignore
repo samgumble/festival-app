@@ -32,3 +32,22 @@ SBG Content/*.psd
 apps/festival/dist/
 apps/festival/test-results/
 apps/festival/playwright-report/
+
+# Capacitor native projects: sources are committed, generated web copies and build output are not
+apps/festival/ios/App/Pods/
+apps/festival/ios/App/App/public/
+apps/festival/ios/App/build/
+apps/festival/ios/App/App.xcworkspace/xcuserdata/
+apps/festival/ios/App/App.xcodeproj/xcuserdata/
+apps/festival/ios/App/App.xcodeproj/project.xcworkspace/xcuserdata/
+apps/festival/android/app/src/main/assets/public/
+apps/festival/android/app/src/main/assets/capacitor.config.json
+apps/festival/android/app/src/main/assets/capacitor.plugins.json
+apps/festival/android/.gradle/
+apps/festival/android/build/
+apps/festival/android/app/build/
+apps/festival/android/local.properties
+apps/festival/android/.idea/
+apps/festival/android/*.iml
+apps/festival/android/app/*.iml
+apps/festival/ios/App/App/capacitor.config.json
