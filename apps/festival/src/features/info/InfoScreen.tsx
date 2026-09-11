@@ -48,7 +48,7 @@ export function InfoScreen() {
     <div className="pt-3">
       <h1 className="font-display text-[32px] leading-9 text-structure-2">Info</h1>
       <Card padded={false} className="mt-2.5 overflow-hidden">
-        <div className="bg-night px-4 pb-2.5 pt-3.5 text-center"><img src={asset("/art/dates.webp")} alt={`September ${Number(first.date.slice(8))}–${Number(last.date.slice(8))}, ${festival.year}`} className="mx-auto w-[80%]" /></div>
+        <div className="bg-paper-light px-4 pb-2.5 pt-3.5 text-center"><img src={asset("/art/dates.webp")} alt={`September ${Number(first.date.slice(8))}–${Number(last.date.slice(8))}, ${festival.year}`} className="mx-auto w-[80%]" /></div>
         <div className="px-4">
           <Row label="Gates">{formatTime(fromDenver(first.date, first.gatesOpen))} daily</Row>
           <Row label="Venue">{festival.venue}</Row>
