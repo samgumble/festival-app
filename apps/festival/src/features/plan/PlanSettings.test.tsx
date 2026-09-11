@@ -17,7 +17,7 @@ import { usePlanStore } from "@/state/plan";
 
 describe("PlanSettings reminders switch", () => {
   beforeEach(() => {
-    usePlanStore.setState({ remindersOn: false });
+    usePlanStore.setState({ remindersOn: false, remindersRevoked: false });
     adapter.supported = true;
     adapter.request.mockResolvedValue("granted");
     adapter.exactAllowed.mockResolvedValue(true);
@@ -54,6 +54,27 @@ describe("PlanSettings reminders switch", () => {
     fireEvent.click(screen.getByRole("switch", { name: "Remind me before my sets" }));
     expect(await screen.findByText(/Notifications are off for this app in Settings/)).toBeInTheDocument();
     expect(usePlanStore.getState().remindersOn).toBe(false);
+  });
+
+  it("explains the switch via remindersRevoked even though Android's checkPermissions() only says \"prompt\"", async () => {
+    // useReminderSync already flipped the switch off and set remindersRevoked before this sheet
+    // mounted (matches: fan revokes in system Settings, relaunches, opens Plan settings). The
+    // sheet's own mount-time permission() check comes back "prompt", not "denied" — Android
+    // resets shouldShowRequestPermissionRationale on an external revoke — so remindersRevoked is
+    // what must carry the explanation.
+    adapter.permission.mockResolvedValue("prompt");
+    usePlanStore.setState({ remindersOn: false, remindersRevoked: true });
+    render(<PlanSettings onClose={() => {}} />);
+    expect(await screen.findByText(/Notifications are off for this app in Settings/)).toBeInTheDocument();
+    expect(screen.getByRole("switch", { name: "Remind me before my sets" })).not.toBeChecked();
+  });
+
+  it("clears remindersRevoked once the fan turns reminders back on", async () => {
+    usePlanStore.setState({ remindersOn: false, remindersRevoked: true });
+    render(<PlanSettings onClose={() => {}} />);
+    fireEvent.click(screen.getByRole("switch", { name: "Remind me before my sets" }));
+    await waitFor(() => expect(usePlanStore.getState().remindersOn).toBe(true));
+    expect(usePlanStore.getState().remindersRevoked).toBe(false);
   });
 
   it("turns off without asking", async () => {

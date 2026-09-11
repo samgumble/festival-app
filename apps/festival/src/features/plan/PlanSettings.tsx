@@ -4,8 +4,13 @@ import { notifications } from "@/platform/notifications";
 import { usePlanStore } from "@/state/plan";
 
 export function PlanSettings({ onClose }: { onClose: () => void }) {
-  const { settings, setSettings, remindersOn, setRemindersOn } = usePlanStore();
+  const { settings, setSettings, remindersOn, setRemindersOn, remindersRevoked, setRemindersRevoked } = usePlanStore();
   const [denied, setDenied] = useState(false);
+  // Android's checkPermissions() reports "prompt", not "denied", right after the fan revokes
+  // notifications in system Settings (shouldShowRequestPermissionRationale resets), so the
+  // literal `denied` check below misses that case entirely — `remindersRevoked` is the
+  // reliable signal useReminderSync leaves behind when it force-disables the switch for that reason.
+  const showDenied = denied || remindersRevoked;
   const [inexact, setInexact] = useState(false);
   const [pendingCount, setPendingCount] = useState<number | null>(null);
   const supported = notifications.isSupported();
@@ -19,18 +24,20 @@ export function PlanSettings({ onClose }: { onClose: () => void }) {
 
   const onToggle = async (v: boolean) => {
     if (busy.current) return;
-    if (!v) { setRemindersOn(false); setDenied(false); return; }
+    if (!v) { setRemindersOn(false); setDenied(false); setRemindersRevoked(false); return; }
     busy.current = true;
     try {
       const perm = await notifications.request();
-      if (perm !== "granted") { setDenied(true); setRemindersOn(false); return; }
+      if (perm !== "granted") { setDenied(true); setRemindersOn(false); setRemindersRevoked(false); return; }
       setDenied(false);
+      setRemindersRevoked(false);
       setRemindersOn(true);
       const exact = await notifications.exactAllowed();
       setInexact(!exact);
     } catch {
       setDenied(true);
       setRemindersOn(false);
+      setRemindersRevoked(false);
     } finally {
       busy.current = false;
     }
@@ -50,7 +57,7 @@ export function PlanSettings({ onClose }: { onClose: () => void }) {
               </div>
               <Toggle on={remindersOn} onChange={(v) => void onToggle(v)} label="Remind me before my sets" />
             </div>
-            {denied && <p className="mt-1.5 text-[13px] text-ember">Notifications are off for this app in Settings.</p>}
+            {showDenied && <p className="mt-1.5 text-[13px] text-ember">Notifications are off for this app in Settings.</p>}
             {inexact && (
               <p className="mt-1.5 text-[13px] text-fg-soft">
                 Reminders may arrive a few minutes late. <button type="button" className="underline" onClick={() => void notifications.requestExact().then((ok) => setInexact(!ok))}>Allow exact timing in Settings</button>
