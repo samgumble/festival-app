@@ -9,7 +9,11 @@
     "preview": "vite preview --port 5173",
     "test": "NODE_OPTIONS=--no-experimental-webstorage vitest run",
     "typecheck": "tsc -p tsconfig.json",
-    "screenshots": "playwright test"
+    "art:build": "node scripts/art-build.ts",
+    "fonts:build": "node scripts/fonts-build.ts",
+    "icons:build": "node scripts/icons.ts",
+    "screenshots": "playwright test",
+    "e2e:offline": "VITE_DATA_SOURCE=bundled npm run build && playwright test --config playwright.offline.config.ts"
   },
   "dependencies": {
     "@bb/shared": "*",
@@ -34,6 +38,9 @@
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3",
     "vite": "8.2.2",
-    "vitest": "4.1.11"
+    "vite-plugin-pwa": "1.3.0",
+    "vitest": "4.1.11",
+    "workbox-build": "7.4.1",
+    "workbox-window": "7.4.1"
   }
 }

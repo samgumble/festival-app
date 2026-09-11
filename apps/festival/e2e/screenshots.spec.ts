@@ -37,3 +37,25 @@ test("live light lineup-grid", async ({ page }) => {
   await page.addStyleTag({ content: "[data-devclock]{display:none!important}" });
   await page.screenshot({ path: `${OUT}/live-light-lineup-grid.png` });
 });
+
+test("live light update-banner", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("bb-ui", JSON.stringify({ state: { theme: "light", devNow: "2026-09-19T15:40:00-06:00", lineupView: "list" }, version: 0 }));
+  });
+  await page.goto("/?update=1");
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForTimeout(400);
+  await page.addStyleTag({ content: "[data-devclock]{display:none!important}" });
+  await page.screenshot({ path: `${OUT}/live-light-update-banner.png` });
+});
+
+test("pre light info-install-sheet", async ({ page }) => {
+  await page.addInitScript(() => {
+    localStorage.setItem("bb-ui", JSON.stringify({ state: { theme: "light", devNow: "2026-09-17T18:00:00-06:00", lineupView: "list" }, version: 0 }));
+  });
+  await page.goto("/info?install=ios");
+  await page.evaluate(() => document.fonts.ready);
+  await page.waitForTimeout(600);
+  await page.addStyleTag({ content: "[data-devclock]{display:none!important}" });
+  await page.screenshot({ path: `${OUT}/pre-light-info-install-sheet.png` });
+});
