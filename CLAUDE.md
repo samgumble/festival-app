@@ -15,7 +15,7 @@ React 19 + Vite 8 + TypeScript (strict) · Tailwind v4 tokens · `motion` · Rea
 - Every animation has a `prefers-reduced-motion` fallback; every screen renders from `bundled.json` offline.
 - Official logo lockups are used as images, unmodified. Fonts are bundled OFL files only (Bungee, Bungee Shade, Michroma, DM Sans).
 - Add dependencies only from the approved list in `docs/HANDOFF.md §6`; otherwise ask.
-- Generated assets (WebP art, WOFF2 fonts, icon PNGs) are committed; regenerate with the scripts, never hand-edit. The service worker never registers in dev/tests (D-022).
+- Generated assets (WebP art, WOFF2 fonts, icon PNGs) are committed; regenerate with the scripts, never hand-edit; sources live in `apps/festival/assets-src/` and are never served. The service worker never registers in dev/tests (D-022).
 
 ## Conventions
 - Conventional commits: `feat(scope): …`, `fix:`, `chore:`, `docs:`. Small atomic commits. `main` auto-deploys the web app to GitHub Pages, so keep CI green.
@@ -25,4 +25,4 @@ React 19 + Vite 8 + TypeScript (strict) · Tailwind v4 tokens · `motion` · Rea
 - Default festival "now" in dev: `VITE_FESTIVAL_NOW=2026-09-19T15:40:00-06:00` for live-state demos; production ignores it.
 
 ## Commands
-`npm run dev` · `npm test` · `npm run typecheck` · `npm run build` · `npm run content:build` · `npm run screenshots` · npm run e2e:offline · art:build · fonts:build · icons:build (the Firebase/Capacitor commands return when those days land).
+`npm run dev` · `npm test` · `npm run typecheck` · `npm run build` · `npm run content:build` · `npm run screenshots` · `npm run e2e:offline` · `npm run art:build` · `npm run fonts:build` · `npm run icons:build` (the Firebase/Capacitor commands return when those days land).

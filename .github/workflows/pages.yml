@@ -29,6 +29,7 @@ jobs:
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
       # SPA fallback: Pages serves 404.html for unknown paths such as /lineup
+      # Must run after the build so 404.html is not in the service-worker precache manifest
       - run: cp apps/festival/dist/index.html apps/festival/dist/404.html
       - uses: actions/upload-pages-artifact@v3
         with:
