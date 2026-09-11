@@ -57,4 +57,13 @@ describe("install platform", () => {
     expect(prompt).toHaveBeenCalledTimes(1);
     expect(result.current.mode).toBe("none");
   });
+
+  it("picks up an event that fired before the hook subscribed", () => {
+    vi.stubGlobal("navigator", nav(ANDROID, { platform: "Linux armv8l" }));
+    const target = new EventTarget() as unknown as Window;
+    captureInstallPrompt(target);
+    target.dispatchEvent(Object.assign(new Event("beforeinstallprompt", { cancelable: true }), { prompt: vi.fn(async () => {}), userChoice: Promise.resolve({ outcome: "accepted" as const }) }));
+    const { result } = renderHook(() => useInstall());
+    expect(result.current.mode).toBe("prompt");
+  });
 });

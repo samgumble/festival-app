@@ -51,6 +51,7 @@ export function useInstall(): { mode: InstallMode; prompt: () => Promise<void> }
   useEffect(() => {
     const l = () => setMode(installMode());
     listeners.add(l);
+    l(); // pick up an event that fired between first render and subscription
     return () => { listeners.delete(l); };
   }, []);
   return {

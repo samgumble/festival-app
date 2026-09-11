@@ -15,7 +15,6 @@ export default defineConfig({
     VitePWA({
       registerType: "prompt",
       injectRegister: false,
-      includeAssets: ["favicon.svg", "icons/*.png", "fonts/**/*.woff2", "art/*.webp"],
       manifest: {
         name: "Telluride Blues & Brews",
         short_name: "Blues & Brews",

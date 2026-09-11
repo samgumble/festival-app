@@ -14,10 +14,10 @@ export function UpdateBanner() {
   const dismiss = useUpdateStore((s) => s.dismiss);
   if (!needRefresh || dismissed) return null;
   return (
-    <motion.div role="status" initial={ok ? { opacity: 0 } : undefined} animate={{ opacity: 1 }} transition={{ duration: ok ? 0.15 : 0 }}
+    <motion.div aria-label="Update available" initial={ok ? { opacity: 0 } : undefined} animate={{ opacity: 1 }} transition={{ duration: ok ? 0.15 : 0 }}
       className="fixed inset-x-0 z-30 mx-auto max-w-[480px] px-4" style={{ bottom: ABOVE_TABS }}>
       <div className="flex items-center gap-3 rounded-card bg-night px-4 py-3 text-paper-light shadow-sheet">
-        <div className="min-w-0 flex-1">
+        <div role="status" className="min-w-0 flex-1">
           <span className="eyebrow block text-sky-light">Update</span>
           <span className="text-[14px] leading-5">A fresh festival guide is ready.</span>
         </div>

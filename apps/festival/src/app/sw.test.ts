@@ -1,9 +1,10 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { registerSW, updateSW } from "virtual:pwa-register";
+import { registerSW } from "virtual:pwa-register";
+import { updateSW } from "@/test/pwa-register.mock";
 import { setupServiceWorker } from "./sw";
 import { useUpdateStore } from "@/state/updates";
 
-type Options = { immediate?: boolean; onNeedRefresh?: () => void; onOfflineReady?: () => void };
+type Options = { immediate?: boolean; onNeedRefresh?: () => void; onOfflineReady?: () => void; onRegisterError?: (e: unknown) => void };
 const PROD = { dev: false, mode: "production" };
 
 function stubServiceWorker(controller: object | null) {
@@ -31,12 +32,12 @@ describe("setupServiceWorker", () => {
     expect(registerSW).not.toHaveBeenCalled();
   });
 
-  it("registers immediately in production and wires the callbacks into the store", async () => {
+  it("registers in production, deferred to the load event, and wires the callbacks into the store", async () => {
     stubServiceWorker(null);
     setupServiceWorker(PROD);
     expect(registerSW).toHaveBeenCalledTimes(1);
     const opts = vi.mocked(registerSW).mock.calls[0]![0] as Options;
-    expect(opts.immediate).toBe(true);
+    expect(opts.immediate).toBe(false);
     expect(useUpdateStore.getState().needRefresh).toBe(false);
     opts.onNeedRefresh!();
     expect(useUpdateStore.getState().needRefresh).toBe(true);

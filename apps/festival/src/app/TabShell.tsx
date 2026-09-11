@@ -8,13 +8,16 @@ import { useUpdateStore } from "@/state/updates";
 
 export function TabShell() {
   useApplyTheme();
+  const needRefresh = useUpdateStore((s) => s.needRefresh);
+  const dismissed = useUpdateStore((s) => s.dismissed);
+  const bannerVisible = needRefresh && !dismissed;
   useEffect(() => {
     // DEV-only: `?update=1` forces the banner so screenshots can capture it.
     if (import.meta.env.DEV && new URLSearchParams(window.location.search).get("update") === "1") useUpdateStore.getState().setNeedRefresh();
   }, []);
   return (
     <div className="mx-auto min-h-dvh max-w-[480px]">
-      <main className="px-4 pb-28 safe-t">
+      <main className={`px-4 safe-t ${bannerVisible ? "pb-44" : "pb-28"}`}>
         <Outlet />
       </main>
       <UpdateBanner />

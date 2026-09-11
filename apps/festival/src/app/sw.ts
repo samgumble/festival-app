@@ -10,9 +10,10 @@ export function setupServiceWorker(env: { dev: boolean; mode: string } = { dev: 
   const store = useUpdateStore.getState();
   if (navigator.serviceWorker.controller) store.setOfflineReady();
   const update = registerSW({
-    immediate: true,
+    immediate: false,
     onNeedRefresh: () => useUpdateStore.getState().setNeedRefresh(),
     onOfflineReady: () => useUpdateStore.getState().setOfflineReady(),
+    onRegisterError: (e) => console.warn("Service worker registration failed", e),
   });
   store.setApply(() => update(true));
 }

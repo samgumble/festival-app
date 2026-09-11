@@ -9,7 +9,9 @@ import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const out = resolve(here, "../public/icons");
-const svg = readFileSync(resolve(out, "icon.svg"), "utf8").replace(/<rect id="bg-rect"[^>]*\/>\s*/, "");
+const raw = readFileSync(resolve(out, "icon.svg"), "utf8");
+const svg = raw.replace(/<rect id="bg-rect"[^>]*\/>\s*/, "");
+if (svg === raw) throw new Error("icon.svg: bg-rect not found; the maskable icon would ship with a square edge");
 
 const VARIANTS = [
   { file: "icon-192.png", size: 192, inset: 0 },
