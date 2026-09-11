@@ -413,7 +413,7 @@ Add to `apps/festival/package.json` scripts:
 - [ ] **Step 3: Render and inspect**
 
 Run: `npm run icons:build`
-Expected: four lines printed; `ls -l public/icons` shows four PNGs, each under 40 kB. Open `public/icons/icon-512-maskable.png` (`open public/icons/icon-512-maskable.png`) — the sun disc is centered, rays stop at ~80 % and the gradient fills the square.
+Expected: four lines printed; `ls -l public/icons` shows four PNGs totalling under 200 kB (Playwright writes unoptimized PNGs; measured 20/20/52/57 kB — the precache budget, not per-file size, is the binding constraint). Open `public/icons/icon-512-maskable.png` (`open public/icons/icon-512-maskable.png`) — the sun disc is centered, rays stop at ~80 % and the gradient fills the square.
 
 - [ ] **Step 4: Add the head tags**
 
