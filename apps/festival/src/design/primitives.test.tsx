@@ -1,6 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
-import { Badge, Button, buttonClasses, Heart, SegmentedControl, Sheet, Toggle } from "./index";
+import { Badge, Button, buttonClasses, Card, Heart, SegmentedControl, Sheet, Toggle } from "./index";
 
 describe("Heart", () => {
   it("exposes pressed state and calls onToggle", () => {
