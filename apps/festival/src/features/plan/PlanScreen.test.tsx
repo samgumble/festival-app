@@ -1,5 +1,5 @@
-import { fireEvent, screen } from "@testing-library/react";
-import { beforeEach, describe, expect, it } from "vitest";
+import { fireEvent, screen, waitFor } from "@testing-library/react";
+import { beforeEach, describe, expect, it, vi } from "vitest";
 import { renderAt } from "@/test/render";
 import { useUiStore } from "@/state/ui";
 import { usePlanStore } from "@/state/plan";
@@ -77,5 +77,20 @@ describe("Plan", () => {
     // Nigel (kept) claims Dove (lost); Judith (kept) has no lost partner left → 2 rows, 1 Swap
     expect(screen.getAllByTestId("plan-row").length).toBe(2);
     expect(screen.getAllByRole("button", { name: /swap/i }).length).toBe(1);
+  });
+});
+
+// The share adapter is replaced for this file so a cancelled native share sheet can be simulated.
+const shareMock = vi.hoisted(() => ({ shareFile: vi.fn(async () => { throw new Error("cancelled"); }), shareText: vi.fn(async () => {}) }));
+vi.mock("@/platform/share", () => ({ share: shareMock }));
+
+describe("Plan share", () => {
+  it("a cancelled calendar share is swallowed, not surfaced", async () => {
+    useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00" });
+    usePlanStore.setState({ favorites: [MUSSEL], resolutions: {}, settings: { leadMinutes: 15, bufferMinutes: 10 }, remindersOn: false });
+    renderAt("/plan");
+    fireEvent.click(await screen.findByRole("button", { name: "Add to calendar" }));
+    await waitFor(() => expect(shareMock.shareFile).toHaveBeenCalledTimes(1));
+    expect(shareMock.shareFile.mock.calls[0]![0]).toBe("blues-and-brews-plan.ics");
   });
 });
