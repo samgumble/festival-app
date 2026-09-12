@@ -95,6 +95,7 @@ npm run screenshots                  # playwright device-size screenshots into d
 npm run art:build · fonts:build · icons:build   # regenerate committed assets from assets-src/ (cwebp, woff2_compress, Playwright)
 npm run e2e:offline                      # build + airplane-mode Playwright check (local only)
 npm run e2e:a11y                     # axe-core WCAG gate, every screen × both themes (needs network for axe; docs/COMPLIANCE.md §5)
+npm run store:shots                  # captioned store screenshots → docs/store/shots/{ios-6.9,android-phone}/ + Play feature graphic
 npm run cap:sync                     # build (BASE_PATH=/, firestore data source) + npx cap sync
 npm run cap:ios                      # open the iOS project in Xcode (apps/festival/ios/App/App.xcodeproj — SPM-only, no CocoaPods)
 npm run cap:android                  # open the Android project in Android Studio
