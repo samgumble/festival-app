@@ -1,5 +1,20 @@
 # Store screenshot plan — Telluride Blues & Brews
 
+## Generate the store-ready assets
+
+`npm run store:shots` (from `apps/festival`) runs `apps/festival/e2e/store-shots.spec.ts` against
+`apps/festival/playwright.store.config.ts` — a dedicated Playwright config (own dev-server-backed
+projects, doesn't touch `npm run screenshots` or `npm run e2e:offline`). It boots the dev server
+(`VITE_DATA_SOURCE=bundled`), captures each of the six screens below at the exact device pixel size
+for both targets, composites the paper/caption frame around each raw capture in-browser, and writes:
+
+- `docs/store/shots/ios-6.9/01-now.png` … `06-offline.png` — 1320×2868 (iPhone 6.9")
+- `docs/store/shots/android-phone/01-now.png` … `06-offline.png` — 1080×2340 (Android phone)
+- `docs/store/shots/play-feature-1024x500.png` — 1024×500 Play feature graphic (paper background, official lockup, no text)
+
+Re-run it any time the underlying screens or content change; the generated PNGs are committed
+(they're the deliverable), so regenerate and re-commit deliberately rather than by CI.
+
 Source states already exist: `apps/festival/e2e/screenshots.spec.ts` produces raw device-size screenshots into `docs/screens/design-pass/*.png` at three dev-clock states (`pre`/`live`/`post`) × two themes (`light`/`dark`) × six views (`now`, `lineup-list`, `plan`, `alerts`, `info`, `artist`), plus one-off variants (`live-light-lineup-grid`, `live-light-update-banner`, `pre-light-info-install-sheet`). These are review/design screenshots, not store-final assets — no captions, no device frame, and taken at whatever viewport Playwright's default project uses, not store-required pixel dimensions. This file plans the store-ready set; it does not add the generation script.
 
 ## Required sizes
@@ -38,6 +53,6 @@ Caption word counts: 6, 4, 5, 5, 5, 6 — all ≤ 8 words. None reference artist
 
 ## Notes
 
-- Screenshot #4 needs a fixture/favorites seed where two favorited sets actually overlap so the conflict UI renders — `apps/festival/e2e/screenshots.spec.ts` already seeds `FAVORITES` including `sat-charlie-musselwhite-ga20-main-1630` and `sat-albert-white-blues-1730`; confirm with whoever owns the follow-up script whether those two currently overlap, or adjust the seeded favorites so a real conflict is visible without inventing a fake one.
-- Generating the final captioned, correctly-sized, per-store assets from these raw screenshots is a **follow-up script**, out of scope for this docs pass — do not write it here. It should: (1) run Playwright at the exact 1320×2868 / 1080×2340 canvases (not just crop/upscale the existing design-pass captures, which are at review-viewport size), (2) composite the paper/Michroma caption band, (3) export per-store folders. Whoever picks this up should read `docs/PLAN.md` §5 (design tokens/type) and `apps/festival/assets-src/` (font sources) first.
-- Feature graphic (1024×500) is a separate, single asset (not a screenshot) — reuse the poster lockup crop already used in `apps/festival/public/art/` per `docs/ASSET-BRIEF.md`, not a UI screenshot.
+- Screenshot #4's conflict is real, not staged: `sat-charlie-musselwhite-ga20-main-1630` (16:30–17:40) and `sat-albert-white-blues-1730` (17:30–18:30) genuinely overlap by 10 minutes — verified directly against `packages/content/content-2026.json` start/end times. `store-shots.spec.ts` seeds both (plus two more favorites for a fuller Plan list) and sets an explicit `resolutions` entry keeping Charlie Musselwhite, so the shot shows an explicitly *resolved* conflict (solid "keeping…" row + dashed "Swap" row), per `apps/festival/src/state/plan.ts` / `apps/festival/src/domain/conflicts.ts`.
+- The generator is implemented: `apps/festival/e2e/store-shots.spec.ts` + `apps/festival/playwright.store.config.ts`. See "Generate the store-ready assets" above for the command and output paths.
+- Feature graphic (1024×500) is a separate, single asset (not a screenshot): paper background + grain, the official lockup (`apps/festival/public/art/lockup.webp`, unmodified) centered at ~70% width, no text.
