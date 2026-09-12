@@ -35,7 +35,8 @@ if (!adminDoc.exists()) {
   process.exit(3);
 }
 
-const publishedBy = cred.user.email ?? email;
+// World-readable docs carry the admin uid, not an email address (D-025).
+const publishedBy = cred.user.uid;
 
 const published = await getDoc(doc(db, "content", "published"));
 if (published.exists() && process.env.SEED_FORCE !== "1") {
@@ -67,5 +68,5 @@ try {
   process.exit(1);
 }
 
-console.log(`Seeded content/published and content/draft at v${content.meta.contentVersion} as ${publishedBy}.`);
+console.log(`Seeded content/published and content/draft at v${content.meta.contentVersion} as uid ${publishedBy} (${email}).`);
 process.exit(0);

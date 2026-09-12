@@ -1,10 +1,10 @@
 import { useState } from "react";
+import { Link } from "react-router";
 import { asset } from "@/app/assets";
 import type { ReactNode } from "react";
-import { Button, Card, Eyebrow, SegmentedControl, Toggle } from "@/design";
+import { Button, Card, Eyebrow, SegmentedControl } from "@/design";
 import { useContent, useContentStatus } from "@/data/content";
 import { formatTime, fromDenver, parseIso } from "@/domain/time";
-import { useAlertsStore } from "@/state/alerts";
 import { usePlanStore } from "@/state/plan";
 import { useUiStore } from "@/state/ui";
 import { InstallSheet } from "./InstallSheet";
@@ -34,9 +34,7 @@ export function InfoScreen() {
   const theme = useUiStore((s) => s.theme);
   const setTheme = useUiStore((s) => s.setTheme);
   const { settings, setSettings } = usePlanStore();
-  const { pushOptIn, setPushOptIn } = useAlertsStore();
   const [licenses, setLicenses] = useState(false);
-  const [privacy, setPrivacy] = useState(false);
   const install = useInstall();
   const offlineReady = useUpdateStore((s) => s.offlineReady);
   // DEV-only: `?install=ios` forces the iOS path with the sheet open, for screenshots.
@@ -79,7 +77,6 @@ export function InfoScreen() {
 
       <Eyebrow tone="structure" className="mt-4 block px-0.5">Settings</Eyebrow>
       <Card padded={false} className="mt-1.5 px-4 py-1">
-        <Row label="Festival alerts"><Toggle on={pushOptIn} onChange={setPushOptIn} label="Festival alerts" /></Row>
         <Row label="Set reminders"><SegmentedControl label="Reminder lead time" value={String(settings.leadMinutes)} onChange={(v) => setSettings({ leadMinutes: Number(v) as 5 | 15 | 30 })} options={[{ value: "5", label: "5" }, { value: "15", label: "15" }, { value: "30", label: "30" }]} /></Row>
         <Row label="Appearance"><SegmentedControl label="Appearance" value={theme} onChange={setTheme} options={[{ value: "system", label: "Auto" }, { value: "light", label: "Light" }, { value: "dark", label: "Dark" }]} /></Row>
       </Card>
@@ -89,13 +86,10 @@ export function InfoScreen() {
           <img src={asset("/art/sbg.webp")} alt="SBG Productions" className="h-9 w-9" />
         </span>
         <div className="flex-1 text-[13px] leading-[18px] text-fg-soft">Official app of the {festival.name}<br />© {festival.year} SBG Productions ·{" "}
-          <button type="button" className={INLINE_LINK} onClick={() => setPrivacy(!privacy)}>Privacy</button> ·{" "}
+          <Link to="/privacy" className={INLINE_LINK}>Privacy</Link> ·{" "}
           <button type="button" className={INLINE_LINK} onClick={() => setLicenses(!licenses)}>Licenses</button>
         </div>
       </Card>
-      {privacy && (
-        <Card className="mt-2 text-[14px] leading-5 text-fg-soft">No accounts. No analytics or ads. Your favorites, plan, and settings stay on this device. Festival alerts are delivered by the organizer; enabling notifications later uses Firebase Cloud Messaging solely to deliver them.</Card>
-      )}
       {licenses && (
         <Card className="mt-2 text-[14px] leading-5 text-fg-soft">{FONTS.map(([f, l]) => <div key={f}><b className="text-fg">{f}</b> — {l}</div>)}<div className="mt-1">Poster artwork © SBG Productions, used with permission.</div></Card>
       )}

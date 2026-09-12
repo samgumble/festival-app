@@ -6,6 +6,7 @@ import { ArtistSheet } from "@/features/lineup/ArtistSheet";
 import { PlanScreen } from "@/features/plan/PlanScreen";
 import { AlertsScreen } from "@/features/alerts/AlertsScreen";
 import { InfoScreen } from "@/features/info/InfoScreen";
+import { PrivacyScreen } from "@/features/info/PrivacyScreen";
 import { Gallery } from "@/design/Gallery";
 
 export function buildRoutes(): RouteObject[] {
@@ -15,6 +16,7 @@ export function buildRoutes(): RouteObject[] {
     { path: "plan", element: <PlanScreen /> },
     { path: "alerts", element: <AlertsScreen />, children: [{ path: ":id", element: null }] },
     { path: "info", element: <InfoScreen /> },
+    { path: "privacy", element: <PrivacyScreen /> },
   ];
   if (import.meta.env.DEV) children.push({ path: "design", element: <Gallery /> });
   return [{ path: "/", element: <TabShell />, children }];

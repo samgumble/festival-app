@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useMatch, useNavigate } from "react-router";
 import type { Alert } from "@bb/shared";
-import { Button, buttonClasses, Card, Chip, Eyebrow } from "@/design";
+import { buttonClasses, Card, Chip, Eyebrow } from "@/design";
 import { useFestivalClock } from "@/app/clock";
 import { useAlerts } from "@/data/alerts";
 import { formatTime, isoMs, parseIso, toDenverParts } from "@/domain/time";
@@ -42,7 +42,7 @@ export function AlertsScreen() {
   const match = useMatch("/alerts/:id");
   const routeId = match?.params.id ?? null;
   const all = useAlerts().filter((a) => isoMs(a.publishedAt) <= now.getTime());
-  const { readIds, pushOptIn, markRead, setPushOptIn } = useAlertsStore();
+  const { readIds, markRead } = useAlertsStore();
   const [expandedId, setExpandedId] = useState<string | null>(routeId);
   useEffect(() => { if (routeId) { setExpandedId(routeId); markRead(routeId); } }, [routeId, markRead]);
   const toggle = (id: string) => {
@@ -63,12 +63,6 @@ export function AlertsScreen() {
     <div className="pt-3">
       <h1 className="font-display text-[32px] leading-9 text-structure-2">Alerts</h1>
       <Eyebrow>From the festival{latest ? ` · updated ${formatTime(parseIso(latest.publishedAt))}` : ""}</Eyebrow>
-      {!pushOptIn && (
-        <Card className="mt-3.5 flex items-center gap-3 bg-gradient-to-br from-surface to-sky/10">
-          <div className="min-w-0 flex-1"><div className="text-[15px] font-semibold leading-5">Get alerts on your lock screen</div><div className="text-[13px] text-fg-soft">Weather holds, schedule changes, gate news.</div></div>
-          <Button variant="ink" size="sm" onClick={() => setPushOptIn(true)}>Enable</Button>
-        </Card>
-      )}
       {all.length === 0 && (
         <Card className="mt-6 py-8 text-center"><p className="text-[14px] text-fg-soft">Festival updates will appear here.</p></Card>
       )}
@@ -80,7 +74,7 @@ export function AlertsScreen() {
           </div>
         </section>
       ))}
-      <p className="mt-6 text-center text-[12px] text-fg-soft">Push notifications arrive with the native app. Until then, this inbox is the source.</p>
+      <p className="mt-6 text-center text-[12px] text-fg-soft">Updates from the festival organizer appear here.</p>
     </div>
   );
 }

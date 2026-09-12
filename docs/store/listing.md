@@ -98,7 +98,7 @@ Welcome to the official Telluride Blues & Brews Festival companion app. Browse t
 | Marketing URL | `https://www.tellurideblues.com` |
 | Support email | «support email» — not decided (STORE-CHECKLIST §0) |
 | Support URL | «support URL» — not decided (STORE-CHECKLIST §0) |
-| Privacy policy URL | «privacy policy URL» — not decided; draft policy text is in `docs/store/privacy-policy.md`, hosting recommendation in `docs/STORE-CHECKLIST.md` §5 |
+| Privacy policy URL | `https://samgumble.github.io/festival-app/privacy` (live, served by the app itself; move to a tellurideblues.com URL later if SBG prefers — the in-app page is the source of truth, D-025) |
 
 ## SKU / bundle (reference only, already locked)
 

@@ -22,6 +22,7 @@
   --color-sun-hot: #F09A1C;
   --color-amber: #D1973D;
   --color-ember: #D4452F;
+  --color-ember-deep: #B8341F; /* chip/badge fill: white text reaches 5.9:1 (ember itself is 4.47:1) */
   --color-bloom: #E0508F;
   --color-white: #FFFFFF;
 
@@ -64,6 +65,8 @@
   --color-tint-info: var(--tint-info);
   --color-tint-important: var(--tint-important);
   --color-tint-urgent: var(--tint-urgent);
+  /* plum accent for eyebrows/text: brand plum in light mode, a lifted plum in dark (7:1 on navy) */
+  --color-accent-plum: var(--accent-plum);
 }
 
 :root, [data-theme="light"] {
@@ -73,6 +76,7 @@
   --tint-info: color-mix(in oklab, var(--color-sky) 20%, var(--color-paper-light));
   --tint-important: color-mix(in oklab, var(--color-sun) 24%, var(--color-paper-light));
   --tint-urgent: color-mix(in oklab, var(--color-ember) 16%, var(--color-paper-light));
+  --accent-plum: var(--color-plum);
   --fg: var(--color-ink);
   --fg-soft: var(--color-ink-soft);
   --hair: rgba(30, 26, 26, 0.14);
@@ -89,11 +93,12 @@
   --bg: var(--color-night-deep);
   --surface: var(--color-night);
   --surface-2: var(--color-night-ink);
-  --tint-info: color-mix(in srgb, var(--color-sky) 34%, var(--color-night));
+  --tint-info: color-mix(in srgb, var(--color-sky) 22%, var(--color-night));
   --tint-important: color-mix(in srgb, var(--color-sun-hot) 34%, var(--color-night-ink));
   --tint-urgent: color-mix(in srgb, var(--color-ember) 42%, var(--color-night-ink));
+  --accent-plum: #D39BD5;
   --fg: var(--color-paper);
-  --fg-soft: #CDB99A;
+  --fg-soft: #DCC9A8; /* 4.6:1 on the dark info tint, 5.6:1 on night (axe, 2026-09-12) */
   --hair: rgba(235, 213, 179, 0.16);
   --structure: var(--color-sky-light);
   --structure-fill: var(--color-sky);

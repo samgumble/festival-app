@@ -17,7 +17,7 @@ export function SetRow({ set, artist, stage, now, showStage = false, dayLabel }:
   const isHeadliner = artist.tier === "headliner";
   const sub = live ? `On now · ${minutesLeft(set, now)} min left` : ended ? "Ended" : artist.tier === "musicmaker" ? "Music Maker Foundation" : isHeadliner ? "Headliner" : showStage ? stage.name : undefined;
   return (
-    <div className={`-mx-4 flex items-center gap-3 border-b border-hair px-4 py-2.5 ${live || isHeadliner ? "bg-gradient-to-r from-sun/20 to-transparent" : ""} ${ended ? "opacity-60" : ""}`}>
+    <div className={`-mx-4 flex items-center gap-3 border-b border-hair px-4 py-2.5 ${live || isHeadliner ? "bg-gradient-to-r from-sun/20 to-transparent" : ""} ${ended ? "opacity-85" : ""}`}>
       <button type="button" onClick={() => navigate(`/lineup/artist/${artist.id}`)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
         <span className={`w-20 shrink-0 text-[14px] font-semibold leading-[18px] tabular-nums ${live ? "text-fg" : "text-fg-soft"}`}>{dayLabel ? `${dayLabel} ` : ""}{live ? "● " : ""}{formatTime(start)}</span>
         <span className="min-w-0 flex-1">

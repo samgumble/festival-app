@@ -31,7 +31,7 @@ export function NowScreen() {
       )}
       <div className="mt-5 grid grid-cols-3 gap-2">
         {[["Site", festival.links.site], ["FAQ", festival.links.faq], ["Guide", festival.links.guide]].map(([label, href]) => (
-          <a key={label} href={href} target="_blank" rel="noreferrer" className="rounded-ctl border border-hair bg-surface py-3 text-center text-[15px] font-semibold text-structure-2">{label} ↗</a>
+          <a key={label} href={href} target="_blank" rel="noreferrer" className="rounded-ctl border border-hair bg-surface py-3 text-center text-[15px] font-semibold text-structure">{label} ↗</a>
         ))}
       </div>
     </div>

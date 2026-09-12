@@ -10,21 +10,18 @@ describe("Alerts", () => {
     useAlertsStore.setState({ readIds: [], pushOptIn: false });
   });
 
-  it("lists alerts newest first with severity labels and an opt-in card", async () => {
+  it("lists alerts newest first with severity labels", async () => {
     renderAt("/alerts");
     const titles = (await screen.findAllByTestId("alert-title")).map((n) => n.textContent);
     expect(titles[0]).toMatch(/Lightning hold/);
     expect(titles.at(-1)).toMatch(/Gates open at 11:30/);
     expect(screen.getByText("Urgent")).toBeInTheDocument();
-    expect(screen.getByText(/get alerts on your lock screen/i)).toBeInTheDocument();
   });
 
-  it("expanding an alert marks it read; the opt-in card hides once enabled", async () => {
+  it("expanding an alert marks it read", async () => {
     renderAt("/alerts");
     fireEvent.click((await screen.findAllByTestId("alert-title"))[1]!);
     expect(useAlertsStore.getState().readIds).toEqual(["fx-004"]);
-    fireEvent.click(screen.getByRole("button", { name: /enable/i }));
-    expect(screen.queryByText(/get alerts on your lock screen/i)).toBeNull();
   });
 
   it("deep link opens and reads the alert", async () => {

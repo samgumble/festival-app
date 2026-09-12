@@ -70,7 +70,7 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
                     <button key={s.id} type="button" data-favorite={fav} onClick={() => navigate(`/lineup/artist/${artist.id}`)}
                       aria-label={`${artist.name}, ${time}, ${grp.stage.name}`}
                       style={{ left: g.left(s), width }}
-                      className={`absolute top-2 h-12 rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] text-white ${STAGE_BG[grp.stage.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-60" : ""} ${width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : ""}`}>
+                      className={`absolute top-2 h-12 rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] text-white ${STAGE_BG[grp.stage.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-85" : ""} ${width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : ""}`}>
                       <span className="block h-full overflow-hidden">
                         <span className="block truncate">{artist.name}</span>
                         <span className="block text-[10px] font-normal opacity-85 tabular-nums">{time}{fav ? " ♥" : ""}</span>

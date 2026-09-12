@@ -112,3 +112,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** A read-only audit found the official schedule has 11 items the bundled content lacked; CLAUDE.md forbids inventing content, so only rows verbatim from `tellurideblues.com/schedule` were added, and Heritage Plaza (a 5th performance area) was scoped rather than shoehorned into the current 4-stage schema.
 
 **Consequences.** Two schedule-domain tests (`schedule.test.ts`) now assert two concurrent "now playing" sets at Sat 3:40 PM (Nether Hour + the Campground comedy set) and a different "up next" pair (the Blues Stage comedy set edges out Musselwhite at the 3:40 PM snapshot) — updated to match the corrected data, not weakened. Two pure fixture-count assertions (`content.test.ts`, `schedule.test.ts`) moved from 14 to 17 Saturday sets. Heritage Plaza remains a follow-up phase.
+
+## D-025 — Privacy policy served by the app; no staff PII in public documents; push UI removed until push exists; contrast fixes from an axe scan (2026-09-12)
+
+**Decision.** The privacy policy is a screen in the fan app (`/privacy`, `PrivacyScreen.tsx`), which also makes it a live URL for the stores (`https://samgumble.github.io/festival-app/privacy`); `docs/store/privacy-policy.md` mirrors it. World-readable Firestore documents record the publishing admin's uid, not email (`seed.ts`, admin `publish`/`restore`/`sendAlert`). The "Festival alerts" toggle, the Alerts "lock screen" opt-in card, and the "push notifications arrive with the native app" line are removed because push does not exist on Spark (D-021) — the app must not promise it. Chip/badge ember fill is `ember-deep` (#B8341F), the selected segment uses ink text, dark `--fg-soft` is #DCC9A8, and ghost buttons use `structure`; all from an axe-core scan (see `docs/COMPLIANCE.md`).
+
+**Why.** Sam's compliance checklists: a posted, accurate policy that names third parties; no personal data exposed by default-public reads; no claims the code can't back; WCAG AA contrast.
+
+**Consequences.** Any new data flow (accounts, push tokens, analytics) must update the policy text and `PRIVACY_EFFECTIVE` in the same commit. `useAlertsStore.pushOptIn` remains in the store unused until push ships.

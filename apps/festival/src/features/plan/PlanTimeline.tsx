@@ -15,7 +15,7 @@ function SetCardRow({ set, lost, conflict, now, onSwap }: { set: FestivalSet; lo
   const other = conflict ? (conflict.a.id === set.id ? conflict.b : conflict.a) : undefined;
   const otherName = other ? idx.artistsById.get(other.artistId)?.name : undefined;
   return (
-    <div className={`mb-2.5 rounded-2xl border bg-surface px-3 py-2.5 shadow-card ${lost ? "border-dashed border-hair opacity-60" : conflict ? "border-ember shadow-[0_0_0_2px_rgba(212,69,47,.18)]" : "border-hair"} ${artist.tier === "headliner" && !lost ? "bg-gradient-to-r from-sun/20 to-surface" : ""} ${ended ? "opacity-60" : ""}`}>
+    <div className={`mb-2.5 rounded-2xl border bg-surface px-3 py-2.5 shadow-card ${lost ? "border-dashed border-hair opacity-85" : conflict ? "border-ember shadow-[0_0_0_2px_rgba(212,69,47,.18)]" : "border-hair"} ${artist.tier === "headliner" && !lost ? "bg-gradient-to-r from-sun/20 to-surface" : ""} ${ended ? "opacity-85" : ""}`}>
       <div className="flex items-center gap-2">
         <Link to={`/lineup/artist/${artist.id}`} className="min-w-0 flex-1">
           <span className={`block truncate ${artist.tier === "headliner" ? "font-display text-[17px] leading-5" : "text-[16px] font-semibold leading-5"}`}>{artist.name}</span>

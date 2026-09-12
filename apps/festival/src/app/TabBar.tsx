@@ -28,7 +28,7 @@ export function TabBar() {
                 {label === "Plan" && <Badge count={favorites} tone="sun" />}
                 {label === "Alerts" && <Badge count={unread} tone="ember" />}
                 <Icon active={isActive} />
-                <span>{label}</span>
+                <span className={isActive ? "text-structure" : undefined}>{label}</span>
               </>
             )}
           </NavLink>

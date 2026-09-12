@@ -21,14 +21,24 @@ describe("Info", () => {
     expect(useUiStore.getState().theme).toBe("dark");
   });
 
-  it("inline privacy/licenses toggles carry a 44px hit area and reveal their panels", async () => {
+  it("privacy links to the policy page; the licenses toggle carries a 44px hit area and reveals its panel", async () => {
     renderAt("/info");
-    const privacy = await screen.findByRole("button", { name: "Privacy" });
+    const privacy = await screen.findByRole("link", { name: "Privacy" });
+    expect(privacy).toHaveAttribute("href", "/privacy");
     expect(privacy.className).toMatch(/before:-inset-y-\[13px\]/);
-    fireEvent.click(privacy);
-    expect(screen.getByText(/no accounts\. no analytics or ads/i)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Licenses" }));
+    const licenses = screen.getByRole("button", { name: "Licenses" });
+    expect(licenses.className).toMatch(/before:-inset-y-\[13px\]/);
+    fireEvent.click(licenses);
     expect(screen.getByText("Michroma")).toBeInTheDocument();
+  });
+
+  it("the policy page describes the real data practices", async () => {
+    renderAt("/privacy");
+    expect(await screen.findByRole("heading", { name: "Privacy" })).toBeInTheDocument();
+    expect(screen.getByText(/does not offer or require sign-in/)).toBeInTheDocument();
+    expect(screen.getByText(/Google Firebase \(Firestore\)/)).toBeInTheDocument();
+    expect(screen.getByText(/No analytics, advertising, or tracking/)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "tellurideblues.com" })).toHaveAttribute("href", "https://www.tellurideblues.com");
   });
 });
 
