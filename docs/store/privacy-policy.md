@@ -1,7 +1,7 @@
 # Privacy Policy — Telluride Blues & Brews app
 
 **Source of truth:** the policy is published inside the app and on the web at `/privacy`
-(`apps/festival/src/features/info/PrivacyScreen.tsx`; live at https://samgumble.github.io/festival-app/privacy until a
+(`apps/festival/src/features/info/PrivacyScreen.tsx`; live at https://samgumble.github.io/festival-app/privacy/ until a
 tellurideblues.com URL exists). This file mirrors that text for store submissions. When either changes, change both and
 bump `PRIVACY_EFFECTIVE` (D-025).
 

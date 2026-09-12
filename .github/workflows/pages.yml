@@ -29,6 +29,8 @@ jobs:
         env:
           BASE_PATH: /${{ github.event.repository.name }}/
       # SPA fallback: Pages serves 404.html for unknown paths such as /lineup
+      # /privacy/ must answer 200 (store link checkers reject 404s): a static copy of the app shell at that path
+      - run: mkdir -p apps/festival/dist/privacy && cp apps/festival/dist/index.html apps/festival/dist/privacy/index.html
       # Must run after the build so 404.html is not in the service-worker precache manifest
       - run: cp apps/festival/dist/index.html apps/festival/dist/404.html
       - uses: actions/upload-pages-artifact@v3

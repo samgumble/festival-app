@@ -17,7 +17,7 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 | ☑ | App display name | *"Telluride Blues & Brews"* (App Store name ≤ 30 chars; Play title ≤ 30) — locked in `capacitor.config.ts` `appName` |
 | ☑ | Bundle ID / application ID | *`com.sbgproductions.bluesandbrews`* — identical on both platforms; cannot change after first upload — locked in `capacitor.config.ts` `appId`, iOS `Info.plist`, and Android `build.gradle` `applicationId` |
 | ☐ | Support email + support URL | *e.g. app-support@… / tellurideblues.com/app* (required on both stores) |
-| ☑ | Privacy policy URL | `https://samgumble.github.io/festival-app/privacy` — live (the app serves its own policy at `/privacy`, D-025); swap to a tellurideblues.com URL later if SBG prefers |
+| ☑ | Privacy policy URL | `https://samgumble.github.io/festival-app/privacy/` — live (the app serves its own policy at `/privacy`, D-025); swap to a tellurideblues.com URL later if SBG prefers |
 | ☐ | Marketing URL | *https://www.tellurideblues.com* |
 | ☐ | Copyright line | *© 2026 SBG Productions* |
 | ☑ | iPhone-only for v1 | Set `TARGETED_DEVICE_FAMILY = 1` (iPhone) in Xcode so iPad screenshots are not required; iPad users still install in compatibility mode. Revisit in v1.1. |
