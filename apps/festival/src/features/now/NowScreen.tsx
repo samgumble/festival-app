@@ -24,7 +24,7 @@ export function NowScreen() {
           <div className="mt-5 flex items-baseline justify-between px-0.5"><Eyebrow tone="structure">Latest alerts</Eyebrow><Link to="/alerts" className="eyebrow text-fg-soft">All alerts →</Link></div>
           <div className="mt-1.5 space-y-2">
             {alerts.map((a) => (
-              <Link key={a.id} to={`/alerts/${a.id}`} className="block"><Card className={`border-l-[5px] py-2.5 ${a.severity === "urgent" ? "border-l-ember" : a.severity === "important" ? "border-l-sun" : "border-l-sky"}`}><div className="flex items-center gap-2"><b className="min-w-0 flex-1 truncate text-[15px]">{a.title}</b><Eyebrow>{formatTime(parseIso(a.publishedAt))}</Eyebrow></div></Card></Link>
+              <Link key={a.id} to={`/alerts/${a.id}`} className="block"><Card tint={a.severity} className="py-2.5"><div className="flex items-center gap-2"><b className="min-w-0 flex-1 truncate text-[15px]">{a.title}</b><Eyebrow>{formatTime(parseIso(a.publishedAt))}</Eyebrow></div></Card></Link>
             ))}
           </div>
         </>

@@ -96,3 +96,13 @@ describe("touch targets", () => {
     }
   });
 });
+
+describe("Card tint", () => {
+  it("swaps the surface background for the severity wash", () => {
+    const { container, rerender } = render(<Card tint="urgent">x</Card>);
+    expect(container.firstElementChild!.className).toMatch(/bg-tint-urgent/);
+    expect(container.firstElementChild!.className).not.toMatch(/bg-surface/);
+    rerender(<Card>x</Card>);
+    expect(container.firstElementChild!.className).toMatch(/bg-surface/);
+  });
+});

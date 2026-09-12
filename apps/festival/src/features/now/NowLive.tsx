@@ -33,7 +33,7 @@ export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
       </Card>
       {urgent && (
         <Link to={`/alerts/${urgent.id}`} className="mt-3 block">
-          <Card className="border-l-[5px] border-l-ember py-2.5"><div className="flex items-center gap-2"><Chip tone="ember">Urgent</Chip><b className="min-w-0 flex-1 truncate text-[15px]">{urgent.title}</b><Eyebrow>{formatTime(parseIso(urgent.publishedAt))}</Eyebrow></div></Card>
+          <Card tint="urgent" className="py-2.5"><div className="flex items-center gap-2"><Chip tone="ember">Urgent</Chip><b className="min-w-0 flex-1 truncate text-[15px]">{urgent.title}</b><Eyebrow>{formatTime(parseIso(urgent.publishedAt))}</Eyebrow></div></Card>
         </Link>
       )}
       <div className="mt-4 flex items-baseline justify-between px-0.5"><Eyebrow tone="structure">On stage now</Eyebrow><Link to="/lineup" className="eyebrow text-fg-soft">Up next →</Link></div>

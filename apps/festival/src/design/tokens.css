@@ -60,12 +60,19 @@
   --color-structure: var(--structure);
   --color-structure-2: var(--structure-2);
   --color-structure-fill: var(--structure-fill);
+  /* alert severity tints: the surface color washed with the severity color, per theme */
+  --color-tint-info: var(--tint-info);
+  --color-tint-important: var(--tint-important);
+  --color-tint-urgent: var(--tint-urgent);
 }
 
 :root, [data-theme="light"] {
   --bg: var(--color-paper);
   --surface: var(--color-paper-light);
   --surface-2: var(--color-paper-deep);
+  --tint-info: color-mix(in oklab, var(--color-sky) 20%, var(--color-paper-light));
+  --tint-important: color-mix(in oklab, var(--color-sun) 24%, var(--color-paper-light));
+  --tint-urgent: color-mix(in oklab, var(--color-ember) 16%, var(--color-paper-light));
   --fg: var(--color-ink);
   --fg-soft: var(--color-ink-soft);
   --hair: rgba(30, 26, 26, 0.14);
@@ -82,6 +89,9 @@
   --bg: var(--color-night-deep);
   --surface: var(--color-night);
   --surface-2: var(--color-night-ink);
+  --tint-info: color-mix(in srgb, var(--color-sky) 34%, var(--color-night));
+  --tint-important: color-mix(in srgb, var(--color-sun-hot) 34%, var(--color-night-ink));
+  --tint-urgent: color-mix(in srgb, var(--color-ember) 42%, var(--color-night-ink));
   --fg: var(--color-paper);
   --fg-soft: #CDB99A;
   --hair: rgba(235, 213, 179, 0.16);

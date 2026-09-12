@@ -8,15 +8,15 @@ import { formatTime, isoMs, parseIso, toDenverParts } from "@/domain/time";
 import { useAlertsStore } from "@/state/alerts";
 
 const SEV = {
-  info: { bar: "border-l-sky", tone: "sky" as const, label: "Info" },
-  important: { bar: "border-l-sun", tone: "sun" as const, label: "Important" },
-  urgent: { bar: "border-l-ember", tone: "ember" as const, label: "Urgent" },
+  info: { tone: "sky" as const, label: "Info" },
+  important: { tone: "sun" as const, label: "Important" },
+  urgent: { tone: "ember" as const, label: "Urgent" },
 };
 
 function AlertCard({ alert, expanded, unread, onToggle }: { alert: Alert; expanded: boolean; unread: boolean; onToggle: () => void }) {
   const sev = SEV[alert.severity];
   return (
-    <Card className={`border-l-[5px] ${sev.bar}`}>
+    <Card tint={alert.severity}>
       {/* min-h-11 keeps the expand control at the 44 px tap floor even for one-line titles */}
       <button type="button" onClick={onToggle} aria-expanded={expanded} className="flex min-h-11 w-full items-center gap-2 text-left">
         {unread && <span aria-label="Unread" className="h-2 w-2 shrink-0 rounded-chip bg-ember" />}
