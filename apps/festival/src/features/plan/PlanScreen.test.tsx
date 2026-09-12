@@ -81,7 +81,7 @@ describe("Plan", () => {
 });
 
 // The share adapter is replaced for this file so a cancelled native share sheet can be simulated.
-const shareMock = vi.hoisted(() => ({ shareFile: vi.fn(async () => { throw new Error("cancelled"); }), shareText: vi.fn(async () => {}) }));
+const shareMock = vi.hoisted(() => ({ shareFile: vi.fn(async (_file: string, _mime: string, _text: string) => { throw new Error("cancelled"); }), shareText: vi.fn(async (_title: string, _text: string) => {}) }));
 vi.mock("@/platform/share", () => ({ share: shareMock }));
 
 describe("Plan share", () => {
