@@ -26,4 +26,4 @@ React 19 + Vite 8 + TypeScript (strict) · Tailwind v4 tokens · `motion` · Rea
 - Default festival "now" in dev: `VITE_FESTIVAL_NOW=2026-09-19T15:40:00-06:00` for live-state demos; production ignores it.
 
 ## Commands
-`npm run dev` · `npm test` · `npm run typecheck` · `npm run build` · `npm run content:build` · `npm run screenshots` · `npm run e2e:offline` · `npm run art:build` · `npm run fonts:build` · `npm run icons:build` · `npm run cap:sync` · `npm run cap:ios` · `npm run cap:android` (the Firebase commands return when that day lands).
+`npm run dev` · `npm test` · `npm run typecheck` · `npm run build` · `npm run content:build` · `npm run screenshots` · `npm run e2e:offline` · `npm run e2e:a11y` · `npm run art:build` · `npm run fonts:build` · `npm run icons:build` · `npm run cap:sync` · `npm run cap:ios` · `npm run cap:android` (the Firebase commands return when that day lands).

@@ -1,8 +1,10 @@
 import { defineConfig } from "@playwright/test";
 
+// Accessibility gate (docs/COMPLIANCE.md §5): `npm run e2e:a11y`. Runs against the dev server with
+// bundled content; axe-core is fetched from cdnjs, so this needs network and stays out of the Pages workflow.
 export default defineConfig({
   testDir: "./e2e",
-  testIgnore: /(offline|a11y|store-shots)\.spec\.ts/,
+  testMatch: /a11y\.spec\.ts/,
   timeout: 90_000,
   workers: 1,
   reporter: "list",

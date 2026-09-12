@@ -58,7 +58,7 @@ Audited 2026-09-12 against two checklists Sam supplied (privacy/consumer items 1
 
 ## 5. Accessibility re-scan recipe
 
-From `apps/festival`, with the dev server available: copy a Playwright spec that injects `https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js` into each route (`/`, `/lineup`, `/plan`, `/alerts`, `/info`, `/privacy`, an artist sheet) in both themes and prints `axe.run` violations for tags `wcag2a, wcag2aa, wcag21a, wcag21aa, wcag22aa, best-practice`. The session's scratch version lived outside the repo on purpose (no new dependency); a checked-in `e2e/a11y.spec.ts` is the follow-up if this becomes a CI gate. Known accepted finding: `region` on the DEV-only `DevClock` pill.
+`cd apps/festival && npm run e2e:a11y` — `e2e/a11y.spec.ts` (config `playwright.a11y.config.ts`) injects axe-core 4.10 from cdnjs into every route (`/`, `/lineup`, `/plan`, `/alerts`, `/info`, `/privacy`, an artist sheet) in both themes and fails on any WCAG 2.x A/AA or best-practice violation. Needs network (for axe) and the dev server; it is not part of the Pages workflow. The single accepted finding — `region` on the DEV-only `DevClock` pill — is filtered inside the spec. Last clean run: 2026-09-12, 14/14.
 
 ## 6. Open items for Sam
 
