@@ -5,9 +5,11 @@ import { App } from "./app/App";
 import { setupServiceWorker } from "./app/sw";
 import { captureInstallPrompt } from "./platform/install";
 import { splash } from "./platform/splash";
+import { lockZoom } from "./platform/zoom";
 
 captureInstallPrompt();
 setupServiceWorker();
+lockZoom();
 // Backstop: the normal hide happens from TabShell after first paint; this guards a web-layer
 // failure that would otherwise leave the launch screen up forever. Web: no-op.
 setTimeout(() => void splash.hide(), 4000);
