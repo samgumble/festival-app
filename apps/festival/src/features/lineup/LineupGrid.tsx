@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import type { DayId, FestivalSet } from "@bb/shared";
 import { useNavigate } from "react-router";
 import { Button, Eyebrow } from "@/design";
@@ -9,7 +9,14 @@ import { usePlanStore } from "@/state/plan";
 import { placeOf } from "@/domain/place";
 
 const HOUR = 3_600_000;
-const LABEL_W = 70;
+// Stage/venue label column: wide enough that the longest single word in any row label fits on one
+// line (Michroma 9px caps ≈ 8.4px per character), so names wrap by word and the divider hugs them.
+const LABEL_MIN = 70, LABEL_MAX = 112, CHAR_PX = 8.4;
+function labelWidth(labels: string[]): number {
+  const longestWord = Math.max(0, ...labels.flatMap((l) => l.split(/\s+/)).map((w) => w.length));
+  return Math.min(LABEL_MAX, Math.max(LABEL_MIN, Math.ceil(longestWord * CHAR_PX) + 14));
+}
+// the timeline opens scrolled to noon (gates open 11:30) unless "now" falls on that day
 const BLOCK_GAP = 4;
 
 export function gridLayout(sets: FestivalSet[], pxPerHour: number) {
@@ -39,12 +46,22 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
   const scroller = useRef<HTMLDivElement>(null);
   const pxPerHour = 72;
   const sets = idx.setsByDay[dayId];
-  if (sets.length === 0) return <p className="mt-6 text-center text-fg-soft">No sets published for this day yet.</p>;
   const g = gridLayout(sets, pxPerHour);
   const lanes = gridLanes(sets, content.stages);
   const nowMs = now.getTime();
   const showNow = nowMs >= g.startMs && nowMs <= g.endMs;
   const jump = () => scroller.current?.scrollTo?.({ left: Math.max(0, g.x(nowMs) - 120), behavior: "smooth" });
+  const labelW = labelWidth(lanes.map((l) => l.label));
+  // initial position: the current time when the festival is live on this day, otherwise noon (Denver)
+  useEffect(() => {
+    const el = scroller.current;
+    if (!el) return;
+    const noon = g.hours.find((h) => formatTime(h) === "12:00 PM");
+    const target = showNow ? g.x(nowMs) - 120 : noon ? g.x(noon.getTime()) : 0;
+    el.scrollLeft = Math.max(0, target);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayId]);
+  if (sets.length === 0) return <p className="mt-6 text-center text-fg-soft">No sets published for this day yet.</p>;
   return (
     <div className="mt-3">
       <div className="mb-2 flex items-center justify-between px-0.5">
@@ -52,9 +69,9 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
         {showNow && <Button variant="sun" size="sm" onClick={jump}>● Jump to now</Button>}
       </div>
       <div className="flex overflow-hidden rounded-card border border-hair bg-surface">
-        <div className="shrink-0" style={{ width: LABEL_W }}>
+        <div className="shrink-0" style={{ width: labelW }}>
           <div className="h-7 border-b border-hair" />
-          {lanes.map((lane) => <div key={lane.key} className="micro flex h-[72px] items-start break-words border-b border-r border-hair px-1.5 pt-2 text-fg-soft last:border-b-0">{lane.label}</div>)}
+          {lanes.map((lane) => <div key={lane.key} className="micro flex h-[72px] items-start border-b border-r border-hair px-1.5 pt-2 text-fg-soft last:border-b-0">{lane.label}</div>)}
         </div>
         <div ref={scroller} className="relative flex-1 overflow-x-auto">
           <div className="relative" style={{ width: g.hours.length * pxPerHour }}>
