@@ -51,7 +51,7 @@ export function InfoScreen() {
         <div className="px-4">
           <Row label="Gates">{formatTime(fromDenver(first.date, first.gatesOpen))} daily</Row>
           <Row label="Venue">{festival.venue}</Row>
-          <Row label="Altitude">{festival.altitudeFt.toLocaleString()} ft — hydrate</Row>
+          <Row label="Altitude">{festival.altitudeFt.toLocaleString()} ft</Row>
         </div>
       </Card>
 
