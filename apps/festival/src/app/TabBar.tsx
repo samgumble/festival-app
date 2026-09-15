@@ -26,13 +26,13 @@ export function TabBar() {
       <CheckerRibbon rows={2} />
       <div className="grid grid-cols-5 bg-surface px-1 pt-2 safe-b">
         {TABS.map(({ to, label, Icon }) => (
-          <NavLink key={to} to={to} end={to === "/"} className={({ isActive }) => `relative grid h-14 place-items-center gap-1 micro ${isActive ? "text-sky" : "text-fg-soft"}`}>
+          <NavLink key={to} to={to} end={to === "/"} className={({ isActive }) => `relative grid min-h-14 min-w-0 place-items-center gap-1 micro ${isActive ? "text-sky" : "text-fg-soft"}`}>
             {({ isActive }) => (
               <>
                 {to === "/plan" && <Badge count={favorites} tone="sun" />}
                 {label === "Alerts" && <Badge count={unread} tone="ember" />}
                 <Icon active={isActive} />
-                <span className={`tracking-[0.02em] ${isActive ? "text-structure" : ""}`}>{label}</span>
+                <span className={`max-w-full truncate tracking-[0.02em] ${isActive ? "text-structure" : ""}`}>{label}</span>
               </>
             )}
           </NavLink>

@@ -20,7 +20,7 @@ export function NowPre({ now }: { now: Date }) {
       <Card className="mt-3 text-center">
         <Countdown msUntil={gates.getTime() - now.getTime()} gatesLine={`${first.label.slice(0, 3)} Sep ${Number(first.date.slice(8))} · ${formatTime(gates)} · ${content.festival.venue.replace("Telluride ", "")}`} />
       </Card>
-      <div className="mt-4 flex items-baseline justify-between px-0.5">
+      <div className="mt-4 flex flex-wrap items-baseline justify-between gap-x-3 px-0.5">
         <Eyebrow tone="structure">Headliners</Eyebrow>
         <Link to="/lineup" className="eyebrow text-fg-soft">See lineup →</Link>
       </div>

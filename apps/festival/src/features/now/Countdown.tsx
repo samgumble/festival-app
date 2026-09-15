@@ -6,8 +6,10 @@ export function Countdown({ msUntil, gatesLine }: { msUntil: number; gatesLine: 
   return (
     <div className="text-center">
       <Eyebrow tone="structure">Gates open in</Eyebrow>
-      <div className="font-shade text-[56px] leading-none text-structure tabular-nums" aria-label={`${days} days ${hours} hours`}>
-        {days}<span className="font-shade text-[24px] align-top mx-1">days</span>{String(hours).padStart(2, "0")}<span className="font-shade text-[24px] align-top ml-1">hrs</span>
+      {/* two nowrap units inside a wrapping row: at 200% text size "16 hrs" drops to its own line instead of clipping */}
+      <div className="flex flex-wrap items-start justify-center gap-x-2 font-shade text-[56px] leading-none text-structure tabular-nums" aria-label={`${days} days ${hours} hours`}>
+        <span className="whitespace-nowrap">{days}<span className="font-shade text-[24px] align-top ml-1">days</span></span>
+        <span className="whitespace-nowrap">{String(hours).padStart(2, "0")}<span className="font-shade text-[24px] align-top ml-1">hrs</span></span>
       </div>
       <Eyebrow className="mt-1">{gatesLine}</Eyebrow>
     </div>

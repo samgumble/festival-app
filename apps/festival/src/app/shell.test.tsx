@@ -1,4 +1,4 @@
-import { screen } from "@testing-library/react";
+import { screen, within } from "@testing-library/react";
 import { beforeEach, describe, expect, it } from "vitest";
 import { renderAt } from "@/test/render";
 import { usePlanStore } from "@/state/plan";
@@ -21,7 +21,8 @@ describe("tab shell", () => {
   it("shows the favorites count on the Schedule tab", async () => {
     usePlanStore.setState({ favorites: ["a", "b", "c"] });
     renderAt("/");
-    expect(await screen.findByText("3")).toBeInTheDocument();
+    const tab = await screen.findByRole("link", { name: /schedule/i });
+    expect(within(tab).getByText("3")).toBeInTheDocument();
   });
 
   it("gives main extra bottom padding so the update banner never covers content", async () => {

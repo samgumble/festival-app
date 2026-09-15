@@ -36,7 +36,7 @@ export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
           <Card tint="urgent" className="py-2.5"><div className="flex items-center gap-2"><Chip tone="ember">Urgent</Chip><b className="min-w-0 flex-1 truncate text-[15px]">{urgent.title}</b><Eyebrow>{formatTime(parseIso(urgent.publishedAt))}</Eyebrow></div></Card>
         </Link>
       )}
-      <div className="mt-4 flex items-baseline justify-between px-0.5"><Eyebrow tone="structure">On stage now</Eyebrow><Link to="/lineup" className="eyebrow text-fg-soft">Up next →</Link></div>
+      <div className="mt-4 flex flex-wrap items-baseline justify-between gap-x-3 px-0.5"><Eyebrow tone="structure">On stage now</Eyebrow><Link to="/lineup" className="eyebrow text-fg-soft">Up next →</Link></div>
       <div className="mt-1.5 space-y-2">
         {on.length === 0 && <Card><div className="text-[15px] text-fg-soft">{next.length ? "Nothing on right now — next sets below." : `That's a wrap on ${day.label}. Thank you, Town Park.`}</div></Card>}
         {on.map((s) => { const p = pick(s.id); return <SetCard key={s.id} {...p} now={now} emphasis="now" />; })}
@@ -48,7 +48,7 @@ export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
           ); })}
         </div>
       )}
-      <div className="mt-4 flex items-baseline justify-between px-0.5"><Eyebrow tone="plum">Your next set</Eyebrow><Link to="/plan" className="eyebrow text-fg-soft">My Schedule →</Link></div>
+      <div className="mt-4 flex flex-wrap items-baseline justify-between gap-x-3 px-0.5"><Eyebrow tone="plum">Your next set</Eyebrow><Link to="/plan" className="eyebrow text-fg-soft">My Schedule →</Link></div>
       <div className="mt-1.5">
         {myNext ? (() => { const p = pick(myNext.id); return (
           <Card className="flex items-center gap-3 border-plum">
