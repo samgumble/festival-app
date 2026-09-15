@@ -26,13 +26,13 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 ## 1. Accounts and enrollment
 
 ### Apple
-- ☐ Apple Developer Program enrollment approved (status: pending as of Sep 9). Individual: ID verification; Organization: D-U-N-S, legal-entity verification, may take 1–2+ weeks. Call Apple Developer Support to ask about expediting if it stalls.
+- ☐ Apple Developer Program enrollment approved (submitted Aug 31; still pending Sep 14 — two weeks in, worth a call to Apple Developer Support). Individual: ID verification; Organization: D-U-N-S, legal-entity verification, may take 1–2+ weeks. Call Apple Developer Support to ask about expediting if it stalls.
 - ☐ Sign in to App Store Connect; accept the latest Program License Agreement (Account Holder only). No banking/tax forms needed for a free app without IAP.
 - ☐ Add Sam (or SBG staff) as users with **App Manager** role if the account holder is someone else.
 - ☐ Two-factor authentication on the Apple ID (required).
 
 ### Google
-- ☐ Play Console developer account approved (pending as of Sep 9). Personal accounts require identity verification; organization accounts need D-U-N-S and a verified org email/website/phone.
+- ☑ Play Console developer account approved (Sam confirmed Sep 14). Personal accounts require identity verification; organization accounts need D-U-N-S and a verified org email/website/phone.
 - ☐ If personal: plan the **closed-testing** route for the 2026 festival (§7) and production access after.
 - ☐ Play App Signing accepted (default; Google holds the app signing key, you keep an **upload key**).
 
@@ -57,8 +57,8 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 ### Google
 - ☑ `applicationId` set in `android/app/build.gradle`; `versionCode` integer increments every upload; `versionName` "1.0.0".
 - ☑ `targetSdkVersion` / `compileSdkVersion` = **36** (Android 16) — required for new apps since Aug 31 2026. ⚠ Confirm Capacitor 8 template defaults; bump if lower.
-- ☐ Create the **upload keystore** (`keytool -genkeypair -v -keystore bb-upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000`) stored **outside the repo** and in the vault with its passwords. Losing it is recoverable via Play App Signing key reset, but avoid it.
-- ☐ Build an **Android App Bundle (.aab)**, not an APK: Android Studio → Build → Generate Signed Bundle.
+- ☐ Create the **upload keystore** at `~/Keys/bb-upload.jks` (alias `upload`; `keytool -genkeypair -v -keystore ~/Keys/bb-upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000 -dname 'CN=SBG Productions, O=SBG Productions, L=Telluride, ST=Colorado, C=US'`), back it up to the vault with its password. `app/build.gradle` signs release builds from it when `BB_UPLOAD_PASSWORD` is set (`BB_UPLOAD_PASSWORD="$(pbpaste)" npm run cap:bundle:android; pbcopy </dev/null`). Losing it is recoverable via Play App Signing key reset, but avoid it.
+- ☐ Build an **Android App Bundle (.aab)**, not an APK: `npm run cap:bundle:android` (after `npm run cap:sync`) → `android/app/build/outputs/bundle/release/app-release.aab` (git-ignored).
 - ☑ Adaptive icon (foreground/background/monochrome), themed-icon check on Android 13+, notification small icon is white-on-transparent (see `ASSET-BRIEF.md §2`).
 - ☐ Edge-to-edge and predictive-back behave on Android 15/16 (required behaviors when targeting 35+).
 - ☐ Play Console → App content → declare the SCHEDULE_EXACT_ALARM use case (set reminders at a user-chosen time); the local-notifications plugin merges the permission unconditionally.

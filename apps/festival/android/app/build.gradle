@@ -16,10 +16,27 @@ android {
             ignoreAssetsPattern = '!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~'
         }
     }
+    // Play upload key (STORE-CHECKLIST §2): the keystore lives OUTSIDE the repo (default ~/Keys/bb-upload.jks)
+    // and its password arrives only through the environment at build time, e.g.
+    //   BB_UPLOAD_PASSWORD="$(pbpaste)" npm run cap:bundle:android; pbcopy </dev/null
+    // Without both, release builds are unsigned (fine for local checks, rejected by Play).
+    def uploadStore = file(System.getenv("BB_UPLOAD_KEYSTORE") ?: "${System.getProperty('user.home')}/Keys/bb-upload.jks")
+    def uploadPassword = System.getenv("BB_UPLOAD_PASSWORD")
+    signingConfigs {
+        release {
+            if (uploadStore.exists() && uploadPassword) {
+                storeFile uploadStore
+                storePassword uploadPassword
+                keyAlias "upload"
+                keyPassword uploadPassword
+            }
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
 }

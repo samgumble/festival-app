@@ -51,3 +51,5 @@ apps/festival/android/.idea/
 apps/festival/android/*.iml
 apps/festival/android/app/*.iml
 apps/festival/ios/App/App/capacitor.config.json
+keystore.properties
+*.aab

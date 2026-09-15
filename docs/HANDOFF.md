@@ -29,7 +29,7 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Fan app repo | https://github.com/samgumble/festival-app (public, generic name for now) — this monorepo |
 | Admin console repo | https://github.com/samgumble/festival-admin (public; built Day 3, separate from the monorepo per D-018) |
 | Firebase project | `bb-festival-2026` (project number 221524343225), **Spark/free plan, no card** — owner sam.gumble@gmail.com. Auth: Email/Password enabled, self sign-up disabled (Sep 10; new admins are added in the console + an `admins/{uid}` doc), admin user sam.gumble@gmail.com (uid `YQlsno0sgAbQZJKRuKB7m1XvCqL2`, allowlisted in `admins/`), authorized domain `samgumble.github.io`. Firestore `(default)` in `nam5`, production rules. Web app `festival-web`; config in `packages/shared/src/firebase.config.ts` |
-| Store records | Apple + Google accounts pending approval as of Sep 9; record team IDs / app IDs here when created |
+| Store records | Google Play developer account approved (Sam, Sep 14). Apple Developer Program submitted Aug 31, still pending Sep 14. Record team IDs / app IDs here when created |
 | Official content sources | tellurideblues.com `/lineup`, `/schedule`, `/faqs`, the 2026 festival guide news post |
 | Claude Project | "Blues and Brews Fable 5.1" — mirrors these docs |
 
@@ -100,6 +100,7 @@ npm run cap:sync                     # build (BASE_PATH=/, firestore data source
 npm run cap:ios                      # open the iOS project in Xcode (apps/festival/ios/App/App.xcodeproj — SPM-only, no CocoaPods)
 npm run cap:android                  # open the Android project in Android Studio
 npm run cap:build:ios                # headless Debug build for iOS Simulator (no code signing)
+BB_UPLOAD_PASSWORD="$(pbpaste)" npm run cap:bundle:android; pbcopy </dev/null   # signed Play bundle from ~/Keys/bb-upload.jks (STORE-CHECKLIST §2)
 ~/Library/Android/sdk/emulator/emulator -avd bb36 -gpu host   # Android emulator MUST use the host GPU: SwiftShader (-gpu swiftshader_indirect) leaves stale frames layered over the WebView (seen Sep 14); the AVD config now has hw.gpu.mode=host so Android Studio launches match
 npm run cap:build:android            # headless Debug .apk build via Gradle
 npm run splash:build                 # regenerate the native splash screen assets from assets-src/
