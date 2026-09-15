@@ -91,6 +91,6 @@ describe("Plan share", () => {
     renderAt("/plan");
     fireEvent.click(await screen.findByRole("button", { name: "Add to calendar" }));
     await waitFor(() => expect(shareMock.shareFile).toHaveBeenCalledTimes(1));
-    expect(shareMock.shareFile.mock.calls[0]![0]).toBe("blues-and-brews-plan.ics");
+    expect(shareMock.shareFile.mock.calls[0]![0]).toBe("blues-and-brews-schedule.ics");
   });
 });

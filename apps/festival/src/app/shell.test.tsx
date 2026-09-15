@@ -18,7 +18,7 @@ describe("tab shell", () => {
     expect(screen.getByRole("link", { name: /lineup/i })).toHaveAttribute("aria-current", "page");
   });
 
-  it("shows the favorites count on the Plan tab", async () => {
+  it("shows the favorites count on the Schedule tab", async () => {
     usePlanStore.setState({ favorites: ["a", "b", "c"] });
     renderAt("/");
     expect(await screen.findByText("3")).toBeInTheDocument();

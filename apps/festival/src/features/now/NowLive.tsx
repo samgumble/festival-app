@@ -56,7 +56,7 @@ export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
               <div className="text-[16px] font-semibold leading-5">{p.artist.name}</div>
               <div className="text-[13px] text-fg-soft tabular-nums">{formatDuration(minutesBetween(now, parseIso(myNext.start)))} · {formatRange(parseIso(myNext.start), parseIso(myNext.end))} · {p.stage.name}</div>
             </Link>
-            <Link to="/plan" className={buttonClasses({ size: "sm" })}>Plan</Link>
+            <Link to="/plan" className={buttonClasses({ size: "sm" })}>Schedule</Link>
           </Card>
         ); })() : (
           <Card className="flex items-center gap-3">

@@ -36,7 +36,7 @@ export function Gallery() {
         <Mountains className="mt-3 h-24" />
       </section>
       <section className="space-y-3"><Eyebrow tone="structure">Primitives</Eyebrow>
-        <div className="flex flex-wrap gap-2"><Button variant="sun">Remind me</Button><Button variant="ink">Enable alerts</Button><Button>Share plan</Button><Button variant="sun" size="sm">Jump to now</Button></div>
+        <div className="flex flex-wrap gap-2"><Button variant="sun">Remind me</Button><Button variant="ink">Enable alerts</Button><Button>Share schedule</Button><Button variant="sun" size="sm">Jump to now</Button></div>
         <div className="flex flex-wrap gap-2"><Chip tone="sky">Main Stage</Chip><Chip tone="plum">Blues Stage</Chip><Chip tone="pine">Truck</Chip><Chip tone="violet">Camp</Chip><Chip tone="sun">● Now</Chip><Chip tone="ember">Urgent</Chip><Chip tone="paper">Up next</Chip></div>
         <SegmentedControl label="Day" value={day} onChange={setDay} options={[{ value: "fri", label: "Fri" }, { value: "sat", label: "Sat" }, { value: "sun", label: "Sun" }]} />
         <div className="flex items-center gap-3"><Heart on={on} onToggle={() => setOn(!on)} label="Favorite" /><Toggle on={on} onChange={setOn} label="Toggle" /><span className="relative h-6 w-6 rounded-chip bg-surface-2"><Badge count={3} tone="sun" /></span></div>

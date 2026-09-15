@@ -28,16 +28,16 @@ export function PlanScreen() {
   const title = (
     <div className="flex items-end justify-between pt-3">
       <h1 className="font-display text-[32px] leading-9 text-structure-2">My Schedule</h1>
-      <Button size="sm" aria-label="Plan settings" onClick={() => setSettingsOpen(true)}>⚙</Button>
+      <Button size="sm" aria-label="Schedule settings" onClick={() => setSettingsOpen(true)}>⚙</Button>
     </div>
   );
   if (mine.length === 0) return <div>{title}<PlanEmpty />{settingsOpen && <PlanSettings onClose={() => setSettingsOpen(false)} />}</div>;
   const exportIcs = async () => {
-    try { await share.shareFile("blues-and-brews-plan.ics", "text/calendar", planToIcs(mine, idx.artistsById, idx.stagesById, content.festival)); }
+    try { await share.shareFile("blues-and-brews-schedule.ics", "text/calendar", planToIcs(mine, idx.artistsById, idx.stagesById, content.festival)); }
     catch { /* user cancelled the share sheet */ }
   };
   const shareText = async () => {
-    try { await share.shareText("My Blues & Brews plan", planToText(mine, idx.artistsById, idx.stagesById, content.festival)); }
+    try { await share.shareText("My Blues & Brews schedule", planToText(mine, idx.artistsById, idx.stagesById, content.festival)); }
     catch { /* user cancelled the share sheet */ }
   };
   return (

@@ -23,7 +23,7 @@ Suggested review path:
 2. Go to Lineup, search or browse, and favorite two or three sets using the heart icon.
 3. Go to Plan — see your personal schedule build automatically, with a conflict flagged if you favorited overlapping sets.
 4. Turn on "Remind me before my sets" (Plan or Info) — a native notification permission prompt appears with an in-app explanation first.
-5. Put the device in Airplane Mode and relaunch the app — the lineup, your plan, and the Alerts tab still render fully.
+5. Put the device in Airplane Mode and relaunch the app — the lineup, your schedule, and the Alerts tab still render fully.
 6. Open Alerts to see organizer-published festival updates.
 
 Privacy: no accounts, no analytics SDK, no advertising, no location tracking. Favorites, plan, and settings stay on the device. See the App Privacy answers in this submission and `docs/store/privacy-answers.md` in the source repository for the full reasoning.

@@ -12,7 +12,7 @@ The app does not offer or require sign-in. There are no user accounts, usernames
 
 ## What stays on your device
 These are kept only on your own phone or browser, never on a server we control:
-- your favorited sets and the plan built from them, including any conflict choices
+- your favorited sets and the schedule built from them, including any conflict choices
 - your settings: appearance, reminder lead time, whether set reminders are on, and which alerts you have read
 
 Deleting the app, or clearing the website's data in your browser, erases all of it. We have no copy.

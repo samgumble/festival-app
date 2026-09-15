@@ -22,7 +22,7 @@ describe("ArtistSheet", () => {
   it("offers a single-set add button and no reminder control yet", async () => {
     renderAt("/lineup/artist/nether-hour");
     const dialog = await screen.findByRole("dialog");
-    fireEvent.click(within(dialog).getByRole("button", { name: /add to plan/i }));
+    fireEvent.click(within(dialog).getByRole("button", { name: /add to schedule/i }));
     expect(usePlanStore.getState().favorites).toEqual(["sat-nether-hour-main-1500"]);
     expect(within(dialog).queryByRole("switch")).toBeNull();
   });

@@ -53,7 +53,7 @@ export function ArtistSheet() {
       </div>
       {single && (
         <div className="mt-3 flex items-center gap-2">
-          <Button variant={inPlan ? "ghost" : "sun"} className="flex-1" onClick={() => toggleFavorite(single.id)}>{inPlan ? "✓ In your plan" : "Add to plan"}</Button>
+          <Button variant={inPlan ? "ghost" : "sun"} className="flex-1" onClick={() => toggleFavorite(single.id)}>{inPlan ? "✓ In your schedule" : "Add to schedule"}</Button>
         </div>
       )}
       <div className="mt-3 flex gap-2">

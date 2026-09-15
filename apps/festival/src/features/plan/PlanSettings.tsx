@@ -44,8 +44,8 @@ export function PlanSettings({ onClose }: { onClose: () => void }) {
   };
 
   return (
-    <Sheet onClose={onClose} title="Plan settings">
-      <h2 className="font-display text-[24px] leading-7">Plan settings</h2>
+    <Sheet onClose={onClose} title="Schedule settings">
+      <h2 className="font-display text-[24px] leading-7">Schedule settings</h2>
       <div className="mt-4 space-y-4">
         {supported && (
           <div>

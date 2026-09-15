@@ -23,14 +23,14 @@ Official 2026 Festival Guide
 ## Short description (Play ≤ 80)
 
 ```
-Official Telluride Blues & Brews Festival companion: lineup, plan, and alerts.
+Official Telluride Blues & Brews Festival companion: lineup, schedule, alerts.
 ```
 78 characters.
 
 ## Promotional text (Apple ≤ 170 — editable without a new build)
 
 ```
-Official companion for the 32nd Telluride Blues & Brews Festival, Sep 18-20, 2026, Telluride Town Park. Browse the lineup, build your plan, catch festival alerts.
+Official companion for the 32nd Telluride Blues & Brews Festival, Sep 18-20, 2026, Telluride Town Park. Browse the lineup, build your schedule, catch festival alerts.
 ```
 162 characters. This field can be swapped closer to the festival for something timelier (e.g. gate times, a schedule-change notice) without shipping a new build — see App Store Connect → Version → Promotional Text.
 
@@ -43,15 +43,15 @@ Now shows what is happening at the festival right now: which stage is live, what
 
 Lineup is the full official schedule across all four stages (Main Stage, Blues Stage, Truck Stage, and Campground Sessions), organized by day. Search by artist, switch between a list view and a stage-by-stage timeline grid, and tap any set for details.
 
-Plan lets you favorite the sets you do not want to miss. The app builds your personal festival schedule automatically, flags time conflicts between stages, and helps you decide what to see next. Turn on set reminders and your phone notifies you before each favorited set starts, using on-device local notifications.
+Schedule lets you favorite the sets you do not want to miss. The app builds your personal festival schedule automatically, flags time conflicts between stages, and helps you decide what to see next. Turn on set reminders and your phone notifies you before each favorited set starts, using on-device local notifications.
 
 Alerts is where updates from SBG Productions, the festival's producer, appear inside the app.
 
 Info covers festival essentials: dates, gate times, venue, altitude, official links, and notification and appearance settings.
 
-The app is built to work at the festival grounds: the full lineup, your plan, and your last-known alerts are all available offline, even with no signal in Town Park.
+The app is built to work at the festival grounds: the full lineup, your schedule, and your last-known alerts are all available offline, even with no signal in Town Park.
 
-There are no accounts and no sign-in. There is no analytics and no advertising. Your favorites, plan, and settings stay on your device. Official Telluride Blues & Brews Festival artwork appears with the permission of SBG Productions.
+There are no accounts and no sign-in. There is no analytics and no advertising. Your favorites, schedule, and settings stay on your device. Official Telluride Blues & Brews Festival artwork appears with the permission of SBG Productions.
 ```
 1474 characters. Paste as-is into both Apple's Description field and Play's Full description field.
 
@@ -88,7 +88,7 @@ Reason: the app has no music playback, streaming, or audio content — it is a s
 ## What's New (version 1.0.0)
 
 ```
-Welcome to the official Telluride Blues & Brews Festival companion app. Browse the full 2026 lineup, build your personal plan with conflict detection, turn on set reminders, and get alerts from the festival organizer — all working offline at Town Park.
+Welcome to the official Telluride Blues & Brews Festival companion app. Browse the full 2026 lineup, build your personal schedule with conflict detection, turn on set reminders, and get alerts from the festival organizer — all working offline at Town Park.
 ```
 
 ## URLs

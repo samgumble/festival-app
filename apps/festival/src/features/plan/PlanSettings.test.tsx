@@ -58,7 +58,7 @@ describe("PlanSettings reminders switch", () => {
 
   it("explains the switch via remindersRevoked even though Android's checkPermissions() only says \"prompt\"", async () => {
     // useReminderSync already flipped the switch off and set remindersRevoked before this sheet
-    // mounted (matches: fan revokes in system Settings, relaunches, opens Plan settings). The
+    // mounted (matches: fan revokes in system Settings, relaunches, opens Schedule settings). The
     // sheet's own mount-time permission() check comes back "prompt", not "denied" — Android
     // resets shouldShowRequestPermissionRationale on an external revoke — so remindersRevoked is
     // what must carry the explanation.

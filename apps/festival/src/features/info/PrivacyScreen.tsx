@@ -25,7 +25,7 @@ export function PrivacyScreen() {
       <Section title="What stays on your device">
         <p>These are kept only on your own phone or browser, never on a server we control:</p>
         <ul className="mt-1.5 list-disc space-y-1 pl-5">
-          <li>your favorited sets and the plan built from them, including any conflict choices</li>
+          <li>your favorited sets and the schedule built from them, including any conflict choices</li>
           <li>your settings: appearance, reminder lead time, whether set reminders are on, and which alerts you have read</li>
         </ul>
         <p className="mt-1.5">Deleting the app, or clearing the website's data in your browser, erases all of it. We have no copy.</p>

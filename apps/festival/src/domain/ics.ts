@@ -27,7 +27,7 @@ export function planToIcs(sets: FestivalSet[], artistsById: Map<string, Artist>,
 }
 
 export function planToText(sets: FestivalSet[], artistsById: Map<string, Artist>, stagesById: Map<string, Stage>, festival: Festival): string {
-  const out = [`My ${festival.name} plan`];
+  const out = [`My ${festival.name} schedule`];
   for (const day of festival.days) {
     const daySets = sets.filter((s) => s.dayId === day.id).sort((a, b) => isoMs(a.start) - isoMs(b.start));
     if (daySets.length === 0) continue;
