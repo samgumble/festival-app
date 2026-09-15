@@ -1,7 +1,7 @@
 import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 
-const adapter = vi.hoisted(() => ({
+const adapter = vi.hoisted(() => ({ schedule: vi.fn(async (_items: Array<{ id: number; title: string; at: number }>) => {}),
   supported: true,
   request: vi.fn(async () => "granted" as "granted" | "denied"),
   exactAllowed: vi.fn(async () => true),
@@ -9,7 +9,7 @@ const adapter = vi.hoisted(() => ({
   permission: vi.fn(async () => "prompt" as "granted" | "denied" | "prompt"),
 }));
 vi.mock("@/platform/notifications", () => ({
-  notifications: { isSupported: () => adapter.supported, request: adapter.request, exactAllowed: adapter.exactAllowed, requestExact: adapter.requestExact, permission: adapter.permission, pending: async () => [], schedule: async () => {}, cancel: async () => {}, onTap: () => () => {} },
+  notifications: { isSupported: () => adapter.supported, request: adapter.request, exactAllowed: adapter.exactAllowed, requestExact: adapter.requestExact, permission: adapter.permission, pending: async () => [], schedule: adapter.schedule, cancel: async () => {}, onTap: () => () => {} },
 }));
 
 import { PlanSettings } from "./PlanSettings";
@@ -95,5 +95,15 @@ describe("PlanSettings reminders switch", () => {
     resolveRequest("granted");
     await waitFor(() => expect(usePlanStore.getState().remindersOn).toBe(true));
     expect(adapter.request).toHaveBeenCalledTimes(1);
+  });
+
+  it("sends a test reminder about 8 seconds out", async () => {
+    render(<PlanSettings onClose={() => {}} />);
+    fireEvent.click(screen.getByRole("button", { name: /send a test reminder/i }));
+    await waitFor(() => expect(adapter.schedule).toHaveBeenCalled());
+    const items = adapter.schedule.mock.calls[0]![0];
+    expect(items[0]!.title).toBe("Test reminder");
+    expect(items[0]!.at - Date.now()).toBeGreaterThan(5_000);
+    expect(await screen.findByText(/arriving in a few seconds/i)).toBeInTheDocument();
   });
 });

@@ -6,7 +6,8 @@ import { useReminderToggle } from "./useReminderToggle";
 
 export function PlanSettings({ onClose }: { onClose: () => void }) {
   const { settings, setSettings } = usePlanStore();
-  const { supported, remindersOn, showDenied, inexact, toggle: onToggle, requestExact, openSettings } = useReminderToggle();
+  const { supported, remindersOn, showDenied, inexact, toggle: onToggle, requestExact, openSettings, sendTest } = useReminderToggle();
+  const [testState, setTestState] = useState<"idle" | "sent" | "blocked">("idle");
   const [pendingCount, setPendingCount] = useState<number | null>(null);
 
   return (
@@ -29,6 +30,11 @@ export function PlanSettings({ onClose }: { onClose: () => void }) {
                 Reminders may arrive a few minutes late. <button type="button" className="underline" onClick={requestExact}>Allow exact timing in Settings</button>
               </p>
             )}
+            <p className="mt-2 text-[13px] text-fg-soft">
+              <button type="button" className="underline" onClick={() => void sendTest().then((ok) => setTestState(ok ? "sent" : "blocked"))}>Send a test reminder</button>
+              {testState === "sent" && " · arriving in a few seconds — lock the phone or switch apps to see it"}
+              {testState === "blocked" && " · allow notifications first"}
+            </p>
             {import.meta.env.DEV && (
               <button type="button" className="mt-1.5 text-[12px] underline text-fg-soft" onClick={() => void notifications.pending().then((p) => setPendingCount(p.length)).catch(() => {})}>
                 pending: {pendingCount ?? "?"}

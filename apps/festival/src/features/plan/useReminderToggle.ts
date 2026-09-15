@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { notifications } from "@/platform/notifications";
+import { TEST_REMINDER_ID } from "@/domain/reminders";
 import { usePlanStore } from "@/state/plan";
 
 /**
@@ -44,5 +45,13 @@ export function useReminderToggle() {
   };
   const requestExact = () => void notifications.requestExact().then((ok) => setInexact(!ok));
   const openSettings = () => notifications.openSettings();
-  return { supported, remindersOn, showDenied, inexact, leadMinutes: settings.leadMinutes, toggle, requestExact, openSettings };
+  /** Fires a one-off notification in ~8 s so a fan can see what a reminder looks like. Resolves false if permission is missing. */
+  const sendTest = async (): Promise<boolean> => {
+    const perm = await notifications.request();
+    if (perm !== "granted") { setDenied(true); return false; }
+    setDenied(false);
+    await notifications.schedule([{ id: TEST_REMINDER_ID, setId: "test", title: "Test reminder", body: `Reminders are working. You'll get one ${settings.leadMinutes} min before each favorite.`, at: Date.now() + 8_000 }]);
+    return true;
+  };
+  return { supported, remindersOn, showDenied, inexact, leadMinutes: settings.leadMinutes, toggle, requestExact, openSettings, sendTest };
 }

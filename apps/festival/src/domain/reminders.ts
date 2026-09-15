@@ -43,12 +43,16 @@ export function planReminders({ favorites, sets, artistsById, stagesById, leadMi
 }
 
 /** Minimal change set: cancel what is gone or moved, schedule what is new or moved. */
+/** Reserved id for the "Send a test reminder" button; the sync never cancels it. */
+export const TEST_REMINDER_ID = 999_000_001; // outside hashId's range of real set ids
+
 export function diffReminders(desired: ReminderItem[], pending: Array<{ id: number; at?: number }>): { cancel: number[]; schedule: ReminderItem[] } {
   const want = new Map(desired.map((d) => [d.id, d]));
   const have = new Map(pending.map((p) => [p.id, p]));
   const cancel: number[] = [];
   const schedule: ReminderItem[] = [];
   for (const p of pending) {
+    if (p.id === TEST_REMINDER_ID) continue;
     const d = want.get(p.id);
     if (!d || (p.at !== undefined && p.at !== d.at)) cancel.push(p.id);
   }

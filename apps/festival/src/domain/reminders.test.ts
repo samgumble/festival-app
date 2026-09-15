@@ -58,3 +58,11 @@ describe("diffReminders", () => {
     expect(diffReminders([a], [{ id: 1 }])).toEqual({ cancel: [], schedule: [] });
   });
 });
+
+describe("test reminder", () => {
+  it("is never cancelled by the sync diff", async () => {
+    const { diffReminders, TEST_REMINDER_ID } = await import("./reminders");
+    const { cancel } = diffReminders([], [{ id: TEST_REMINDER_ID, at: 1 }, { id: 42, at: 2 }]);
+    expect(cancel).toEqual([42]);
+  });
+});
