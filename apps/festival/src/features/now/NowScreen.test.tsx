@@ -13,6 +13,7 @@ describe("Now screen states", () => {
     expect(await screen.findByText(/gates open in/i)).toBeInTheDocument();
     expect(screen.getByText(/Fri Sep 18 · 11:30 AM/)).toBeInTheDocument();
     expect(screen.getByText("Marcus King Band")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /get tickets/i })).toHaveAttribute("href", "https://telluride.frontgatetickets.com/");
   });
 
   it("live shows what is on stage and the user's next favorited set", async () => {

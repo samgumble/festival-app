@@ -21,7 +21,7 @@ Deleting the app, or clearing the website's data in your browser, erases all of 
 - **Lineup and alerts.** The app reads the current schedule and organizer alerts from a public, read-only database run by SBG Productions on Google Firebase (Firestore). Like any internet request, Google's servers see your device's IP address while serving it. Nothing about you is sent, stored, or linked to you.
 - **The web version** is served from GitHub Pages, which receives ordinary web-server request information to deliver the page. There is no analytics or tracking on top of that.
 - **Set reminders** (iPhone and Android app only) are scheduled on your device with the operating system's local notifications. They are not sent through us or any push service.
-- **Links** to tellurideblues.com and to maps open in your browser or maps app, which have their own privacy practices.
+- **Links** to tellurideblues.com, to the ticket seller (telluride.frontgatetickets.com), and to maps open in your browser or maps app, which have their own privacy practices.
 
 ## What we do not do
 - No analytics, advertising, or tracking software of any kind.

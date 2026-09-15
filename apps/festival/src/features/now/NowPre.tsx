@@ -39,8 +39,8 @@ export function NowPre({ now }: { now: Date }) {
           );
         })}
       </div>
-      {favorites.length === 0 && (
-        <Link to="/lineup" className={`mt-3 ${buttonClasses({ variant: "sun", full: true })}`}>Build your plan</Link>
+      {content.festival.links.tickets && (
+        <a href={content.festival.links.tickets} target="_blank" rel="noreferrer" className={`mt-3 ${buttonClasses({ variant: "sun", full: true })}`}>Get tickets ↗</a>
       )}
     </>
   );

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "contentVersion": "2026.09.14.1",
+    "contentVersion": "2026.09.14.2",
     "publishedAt": "2026-09-14T12:00:00-06:00",
     "publishedBy": "seed",
     "sources": [
@@ -42,7 +42,8 @@
       "lineup": "https://www.tellurideblues.com/lineup",
       "schedule": "https://www.tellurideblues.com/schedule",
       "faq": "https://www.tellurideblues.com/faqs",
-      "guide": "https://www.tellurideblues.com/news/the-official-telluride-blues-brews-festival-guide"
+      "guide": "https://www.tellurideblues.com/news/the-official-telluride-blues-brews-festival-guide",
+      "tickets": "https://telluride.frontgatetickets.com/"
     }
   },
   "stages": [
