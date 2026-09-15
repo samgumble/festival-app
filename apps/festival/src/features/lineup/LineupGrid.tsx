@@ -53,7 +53,7 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
       <div className="flex overflow-hidden rounded-card border border-hair bg-surface">
         <div className="shrink-0" style={{ width: LABEL_W }}>
           <div className="h-7 border-b border-hair" />
-          {groups.map((grp) => <div key={grp.stage.id} className="micro flex h-16 items-start border-b border-r border-hair px-1.5 pt-2 text-fg-soft last:border-b-0">{grp.stage.shortName}</div>)}
+          {groups.map((grp) => <div key={grp.stage.id} className="micro flex h-[72px] items-start border-b border-r border-hair px-1.5 pt-2 text-fg-soft last:border-b-0">{grp.stage.shortName}</div>)}
         </div>
         <div ref={scroller} className="relative flex-1 overflow-x-auto">
           <div className="relative" style={{ width: g.hours.length * pxPerHour }}>
@@ -61,7 +61,7 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
               {g.hours.map((h) => <div key={h.getTime()} style={{ width: pxPerHour }} className="px-1 py-1.5 tabular-nums">{formatTime(h).replace(":00", "")}</div>)}
             </div>
             {groups.map((grp) => (
-              <div key={grp.stage.id} data-testid={`lane-${grp.stage.id}`} className="relative h-16 border-b border-hair last:border-b-0">
+              <div key={grp.stage.id} data-testid={`lane-${grp.stage.id}`} className="relative h-[72px] border-b border-hair last:border-b-0">
                 {grp.sets.map((s) => {
                   const artist = idx.artistsById.get(s.artistId)!;
                   const fav = favorites.includes(s.id);
@@ -71,9 +71,9 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
                     <button key={s.id} type="button" data-favorite={fav} onClick={() => navigate(`/lineup/artist/${artist.id}`)}
                       aria-label={`${artist.name}, ${time}, ${grp.stage.name}`}
                       style={{ left: g.left(s), width }}
-                      className={`absolute top-2 h-12 rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] ${STAGE_BG[grp.stage.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-85" : ""} ${width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : ""}`}>
+                      className={`absolute top-2 h-14 rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] ${STAGE_BG[grp.stage.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-85" : ""} ${width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : ""}`}>
                       <span className="block h-full overflow-hidden">
-                        <span className="block truncate">{artist.name}</span>
+                        <span className="line-clamp-2 break-words">{artist.name}</span>
                         <span className="block text-[10px] font-normal opacity-85 tabular-nums">{time}{fav ? " ♥" : ""}</span>
                       </span>
                     </button>
