@@ -1,4 +1,5 @@
-import { Columbine, Heart, RainbowArch } from "@/design";
+import { asset } from "@/app/assets";
+import { Heart } from "@/design";
 import { useContent, useContentIndex } from "@/data/content";
 import { headliners } from "@/domain/schedule";
 import { formatTime, parseIso } from "@/domain/time";
@@ -10,9 +11,9 @@ export function PlanEmpty() {
   const { favorites, toggleFavorite } = usePlanStore();
   return (
     <div className="mt-4">
-      <div className="relative overflow-hidden rounded-hero bg-night px-6 pb-6 pt-24 text-center">
-        <RainbowArch />
-        <div className="relative"><Columbine size={56} className="mx-auto" /></div>
+      <div className="relative h-[210px] overflow-hidden rounded-hero bg-night">
+        <img src={asset("/art/plan-hero.webp")} alt="" aria-hidden="true" draggable={false}
+          className="absolute inset-0 h-full w-full select-none object-cover object-center" />
       </div>
       <div className="mt-4 space-y-2">
         {headliners(content.artists).map((a) => {

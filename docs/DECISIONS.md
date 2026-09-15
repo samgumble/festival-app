@@ -136,3 +136,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** Sponsor attribution is part of the official stage name; the registered mark is the correct notice for Sierra Nevada Brewing Co.'s mark, and the licenses card already holds third-party attributions.
 
 **Consequences.** Any future sponsor names follow the same pattern: full name in `name`, unsponsored word in `shortName`, attribution line in Licenses. The alerts fixture still says "Truck Stage" in sample text, which is fine for sample data.
+
+## D-028 — Plan tab empty state uses a festival photo (2026-09-14)
+
+**Decision.** The empty "My Schedule" state opens with a 210 px photo hero (`public/art/plan-hero.webp`, built from `assets-src/art/plan-hero.png`, a 900 px downscale of the Main Stage-at-dusk photo Sam supplied from his Downloads, filename credited to Alive Coverage) instead of the rainbow arch and columbine. The photo is decorative (`alt=""`), object-cover, centered. Info → Licenses credits "Festival photography © Alive Coverage, used with permission of SBG Productions" — Sam to confirm the credit wording. The WebP art set totals 999,302 bytes, just inside the 1,000,000-byte budget; the next photo will need a budget change or a smaller crop.
+
+**Why.** Owner request: a real festival image sells the plan better than an illustration.
+
+**Consequences.** `RainbowArch` stays in the design gallery only. Any further photos go through `npm run art:build` and must stay inside the art budget; the original 3 MB JPEG is not committed.
