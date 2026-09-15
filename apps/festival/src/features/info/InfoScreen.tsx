@@ -83,7 +83,7 @@ export function InfoScreen() {
         {reminders.supported && (
           <>
             <Row label="Remind me before my sets"><Toggle on={reminders.remindersOn} onChange={(v) => void reminders.toggle(v)} label="Remind me before my sets" /></Row>
-            {reminders.showDenied && <p className="pb-2 text-[13px] text-ember">Notifications are off for this app in Settings.</p>}
+            {reminders.showDenied && <p className="pb-2 text-[13px] text-ember">Notifications are off for this app in Settings. <button type="button" className="underline" onClick={reminders.openSettings}>Open Settings</button></p>}
           </>
         )}
         <Row label="Lead time"><SegmentedControl label="Reminder lead time" value={String(settings.leadMinutes)} onChange={(v) => setSettings({ leadMinutes: Number(v) as 5 | 15 | 30 })} options={[{ value: "5", label: "5" }, { value: "15", label: "15" }, { value: "30", label: "30" }]} /></Row>

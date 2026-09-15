@@ -13,7 +13,7 @@ export function ReminderPrompt({ count }: { count: number }) {
       <div className="min-w-0 flex-1">
         <Eyebrow tone="structure">Reminders</Eyebrow>
         <div className="text-[15px]">Get a heads-up {r.leadMinutes} min before each favorite.</div>
-        {r.showDenied && <p className="mt-0.5 text-[13px] text-ember">Notifications are off for this app in Settings.</p>}
+        {r.showDenied && <p className="mt-0.5 text-[13px] text-ember">Notifications are off for this app in Settings. <button type="button" className="underline" onClick={r.openSettings}>Open Settings</button></p>}
       </div>
       <Button variant="sun" size="sm" onClick={() => void r.toggle(true)}>Turn on</Button>
     </Card>

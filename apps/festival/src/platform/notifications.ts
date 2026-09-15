@@ -31,6 +31,20 @@ export const notifications = {
     const { display } = await LocalNotifications.checkPermissions();
     return display === "granted" ? "granted" : display === "denied" ? "denied" : "prompt";
   },
+  /**
+   * Deep link to this app's notification settings, for when the OS prompt was declined once and
+   * will not be shown again. iOS opens the app's Settings page; Android opens its notification page.
+   */
+  settingsUrl(appId = "com.sbgproductions.bluesandbrews"): string | null {
+    const p = runtime.platform();
+    if (p === "ios") return "app-settings:";
+    if (p === "android") return `intent:#Intent;action=android.settings.APP_NOTIFICATION_SETTINGS;S.android.provider.extra.APP_PACKAGE=${appId};end`;
+    return null;
+  },
+  openSettings(): void {
+    const url = notifications.settingsUrl();
+    if (url) window.location.href = url;
+  },
   async request(): Promise<"granted" | "denied"> {
     if (!runtime.isNative()) return "denied";
     const { LocalNotifications } = await import("@capacitor/local-notifications");

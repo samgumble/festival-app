@@ -43,5 +43,6 @@ export function useReminderToggle() {
     }
   };
   const requestExact = () => void notifications.requestExact().then((ok) => setInexact(!ok));
-  return { supported, remindersOn, showDenied, inexact, leadMinutes: settings.leadMinutes, toggle, requestExact };
+  const openSettings = () => notifications.openSettings();
+  return { supported, remindersOn, showDenied, inexact, leadMinutes: settings.leadMinutes, toggle, requestExact, openSettings };
 }

@@ -103,3 +103,17 @@ describe("platform adapters on the web", () => {
     expect(pendingAt({})).toBeUndefined();
   });
 });
+
+describe("notifications.settingsUrl", () => {
+  it("targets the app's notification settings per platform", async () => {
+    const { notifications } = await import("./notifications");
+    const g = globalThis as { Capacitor?: { isNativePlatform: () => boolean; getPlatform: () => string } };
+    g.Capacitor = { isNativePlatform: () => true, getPlatform: () => "ios" };
+    expect(notifications.settingsUrl()).toBe("app-settings:");
+    g.Capacitor = { isNativePlatform: () => true, getPlatform: () => "android" };
+    expect(notifications.settingsUrl()).toContain("APP_NOTIFICATION_SETTINGS");
+    expect(notifications.settingsUrl()).toContain("com.sbgproductions.bluesandbrews");
+    delete g.Capacitor;
+    expect(notifications.settingsUrl()).toBeNull();
+  });
+});
