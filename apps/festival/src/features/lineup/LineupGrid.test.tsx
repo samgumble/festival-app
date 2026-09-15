@@ -37,7 +37,9 @@ describe("LineupGrid", () => {
   it("renders a lane per stage, a now line, and favorited blocks", async () => {
     renderAt("/lineup");
     expect(await screen.findByTestId("now-line")).toBeInTheDocument();
-    expect(screen.getAllByTestId(/^lane-/).length).toBe(8);
+    expect(screen.getAllByTestId(/^lane-/).length).toBe(14); // 6 stage rows + 5 juke venues + 3 special-event venues
+    expect(screen.getByTestId("lane-juke:Liz")).toBeInTheDocument();
+    expect(screen.getByTestId("lane-special:Elks Park")).toBeInTheDocument();
     const block = screen.getByRole("button", { name: /Charlie Musselwhite & GA-20/ });
     expect(block).toHaveAttribute("data-favorite", "true");
     fireEvent.click(block);

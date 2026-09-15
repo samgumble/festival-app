@@ -33,6 +33,25 @@ export function groupByStage(sets: FestivalSet[], stages: Stage[]): StageGroup[]
     .filter((g) => g.sets.length > 0);
 }
 
+export interface GridLane { key: string; label: string; stage: Stage; sets: FestivalSet[] }
+
+/**
+ * Timeline rows: one per stage, except that a stage whose sets happen at several venues that day
+ * (Juke Joints, Special Events) gets one row per venue, ordered by each venue's first set, so the
+ * grid shows where each show actually is. Sets without a venue keep the stage's own row first.
+ */
+export function gridLanes(sets: FestivalSet[], stages: Stage[]): GridLane[] {
+  return groupByStage(sets, stages).flatMap((g) => {
+    const venues = [...new Set(g.sets.map((s) => s.venue).filter((v): v is string => !!v))];
+    if (venues.length < 2) return [{ key: g.stage.id, label: g.stage.shortName, stage: g.stage, sets: g.sets }];
+    const lanes: GridLane[] = [];
+    const bare = g.sets.filter((s) => !s.venue);
+    if (bare.length > 0) lanes.push({ key: g.stage.id, label: g.stage.shortName, stage: g.stage, sets: bare });
+    for (const venue of venues) lanes.push({ key: `${g.stage.id}:${venue}`, label: venue, stage: g.stage, sets: g.sets.filter((s) => s.venue === venue) });
+    return lanes;
+  });
+}
+
 export function nowPlaying(sets: FestivalSet[], now: Date): FestivalSet[] {
   const t = now.getTime();
   return sets.filter((s) => isoMs(s.start) <= t && t < isoMs(s.end)).sort(byStart);

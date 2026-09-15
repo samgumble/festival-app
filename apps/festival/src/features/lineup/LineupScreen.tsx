@@ -4,6 +4,7 @@ import { useContent, useContentIndex } from "@/data/content";
 import { searchArtists } from "@/domain/schedule";
 import { LineupList } from "./LineupList";
 import { LineupGrid } from "./LineupGrid";
+import { ResetFavorites } from "./ResetFavorites";
 import { SetRow } from "./SetRow";
 import { useLineupState } from "./useLineupState";
 
@@ -44,6 +45,7 @@ export function LineupScreen() {
       ) : (
         <LineupGrid dayId={day} now={now} />
       )}
+      {!searching && <ResetFavorites />}
       <Outlet />
     </div>
   );

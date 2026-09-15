@@ -18,6 +18,8 @@ interface PlanState {
    */
   remindersRevoked: boolean;
   toggleFavorite: (setId: string) => void;
+  /** Empties the schedule: favorites and conflict choices (reminders follow via useReminderSync). */
+  clearFavorites: () => void;
   resolve: (conflictKey: string, keepSetId: string) => void;
   setSettings: (patch: Partial<PlanSettings>) => void;
   setRemindersOn: (v: boolean) => void;
@@ -35,6 +37,7 @@ export const usePlanStore = create<PlanState>()(
       remindersOn: false,
       remindersRevoked: false,
       toggleFavorite: (id) => set((s) => ({ favorites: toggle(s.favorites, id) })),
+      clearFavorites: () => set({ favorites: [], resolutions: {} }),
       resolve: (key, keep) => set((s) => ({ resolutions: { ...s.resolutions, [key]: keep } })),
       setSettings: (patch) => set((s) => ({ settings: { ...s.settings, ...patch } })),
       setRemindersOn: (remindersOn) => set({ remindersOn }),

@@ -3,7 +3,7 @@ import type { DayId, FestivalSet } from "@bb/shared";
 import { useNavigate } from "react-router";
 import { Button, Eyebrow } from "@/design";
 import { useContent, useContentIndex } from "@/data/content";
-import { groupByStage, isEnded } from "@/domain/schedule";
+import { gridLanes, isEnded } from "@/domain/schedule";
 import { formatTime, isoMs, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
 import { placeOf } from "@/domain/place";
@@ -41,7 +41,7 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
   const sets = idx.setsByDay[dayId];
   if (sets.length === 0) return <p className="mt-6 text-center text-fg-soft">No sets published for this day yet.</p>;
   const g = gridLayout(sets, pxPerHour);
-  const groups = groupByStage(sets, content.stages);
+  const lanes = gridLanes(sets, content.stages);
   const nowMs = now.getTime();
   const showNow = nowMs >= g.startMs && nowMs <= g.endMs;
   const jump = () => scroller.current?.scrollTo?.({ left: Math.max(0, g.x(nowMs) - 120), behavior: "smooth" });
@@ -54,15 +54,15 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
       <div className="flex overflow-hidden rounded-card border border-hair bg-surface">
         <div className="shrink-0" style={{ width: LABEL_W }}>
           <div className="h-7 border-b border-hair" />
-          {groups.map((grp) => <div key={grp.stage.id} className="micro flex h-[72px] items-start border-b border-r border-hair px-1.5 pt-2 text-fg-soft last:border-b-0">{grp.stage.shortName}</div>)}
+          {lanes.map((lane) => <div key={lane.key} className="micro flex h-[72px] items-start break-words border-b border-r border-hair px-1.5 pt-2 text-fg-soft last:border-b-0">{lane.label}</div>)}
         </div>
         <div ref={scroller} className="relative flex-1 overflow-x-auto">
           <div className="relative" style={{ width: g.hours.length * pxPerHour }}>
             <div className="flex h-7 border-b border-hair text-[11px] font-semibold text-fg-soft">
               {g.hours.map((h) => <div key={h.getTime()} style={{ width: pxPerHour }} className="px-1 py-1.5 tabular-nums">{formatTime(h).replace(":00", "")}</div>)}
             </div>
-            {groups.map((grp) => (
-              <div key={grp.stage.id} data-testid={`lane-${grp.stage.id}`} className="relative h-[72px] border-b border-hair last:border-b-0">
+            {lanes.map((grp) => (
+              <div key={grp.key} data-testid={`lane-${grp.key}`} className="relative h-[72px] border-b border-hair last:border-b-0">
                 {grp.sets.map((s) => {
                   const artist = idx.artistsById.get(s.artistId)!;
                   const fav = favorites.includes(s.id);
