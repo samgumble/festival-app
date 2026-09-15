@@ -16,8 +16,8 @@ describe("Plan", () => {
 
   it("empty state invites the user with headliner quick-adds", async () => {
     renderAt("/plan");
-    expect(await screen.findByText(/your weekend starts here/i)).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /favorite marcus king band/i }));
+    expect(await screen.findByRole("heading", { name: /my schedule/i })).toBeInTheDocument();
+    fireEvent.click(await screen.findByRole("button", { name: /favorite marcus king band/i }));
     expect(usePlanStore.getState().favorites).toEqual(["fri-marcus-king-band-main-2000"]);
   });
 

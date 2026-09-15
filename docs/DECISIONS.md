@@ -128,3 +128,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** No Cloud Functions on Spark (D-021) means no server-side timer; Firestore documents with a future timestamp plus client-side gating give the same fan experience with zero infrastructure. Alerts are public festival notices, so a fan who reads Firestore directly seeing one a few hours early is acceptable.
 
 **Consequences.** Delivery time depends on each phone's clock, and phones that are offline at the moment will see it on their next sync (same as any alert). Rules stay unchanged (`publishedAt` must be a string; no time comparison). The Dashboard's "Last alert" shows the last one that has actually gone out.
+
+## D-027 — Truck Stage carries its sponsor name with the registered mark (2026-09-14)
+
+**Decision.** The stage is named "Truck Stage by Sierra Nevada®" (owner wording; the official schedule page writes "Truck Stage presented by Sierra Nevada"). `shortName` stays "Truck" so grid columns and Now chips keep their width. The ® symbol travels with the name wherever it renders, and the Info → Licenses card carries "Sierra Nevada® is a registered trademark of Sierra Nevada Brewing Co." Content version bumped to 2026.09.14.1; Firestore needs a re-seed to match. Same day, at the owner's request, the Plan screen title became "My Schedule" (tab label stays "Plan") and the empty-state copy was removed, leaving the arch art and headliner quick-adds.
+
+**Why.** Sponsor attribution is part of the official stage name; the registered mark is the correct notice for Sierra Nevada Brewing Co.'s mark, and the licenses card already holds third-party attributions.
+
+**Consequences.** Any future sponsor names follow the same pattern: full name in `name`, unsponsored word in `shortName`, attribution line in Licenses. The alerts fixture still says "Truck Stage" in sample text, which is fine for sample data.

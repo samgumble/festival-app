@@ -27,7 +27,7 @@ export function PlanScreen() {
   const next = nextUp(mine, now, resolutions, settings.bufferMinutes);
   const title = (
     <div className="flex items-end justify-between pt-3">
-      <h1 className="font-display text-[32px] leading-9 text-structure-2">My Plan</h1>
+      <h1 className="font-display text-[32px] leading-9 text-structure-2">My Schedule</h1>
       <Button size="sm" aria-label="Plan settings" onClick={() => setSettingsOpen(true)}>⚙</Button>
     </div>
   );

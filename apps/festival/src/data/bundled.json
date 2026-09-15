@@ -1,7 +1,7 @@
 {
   "meta": {
-    "contentVersion": "2026.09.09.1",
-    "publishedAt": "2026-09-09T12:00:00-06:00",
+    "contentVersion": "2026.09.14.1",
+    "publishedAt": "2026-09-14T12:00:00-06:00",
     "publishedBy": "seed",
     "sources": [
       "https://www.tellurideblues.com/lineup",
@@ -62,7 +62,7 @@
     },
     {
       "id": "truck",
-      "name": "Truck Stage",
+      "name": "Truck Stage by Sierra Nevada®",
       "shortName": "Truck",
       "color": "pine",
       "sortOrder": 3

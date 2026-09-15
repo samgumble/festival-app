@@ -12,7 +12,7 @@ export function PlanEmpty() {
     <div className="mt-4">
       <div className="relative overflow-hidden rounded-hero bg-night px-6 pb-6 pt-24 text-center">
         <RainbowArch />
-        <div className="relative"><Columbine size={56} className="mx-auto" /><div className="mt-2 font-display text-[24px] leading-7 text-paper">Your weekend starts here</div><p className="mt-1 text-[15px] text-paper/80">Tap the heart on any set and it lands in your plan.</p></div>
+        <div className="relative"><Columbine size={56} className="mx-auto" /></div>
       </div>
       <div className="mt-4 space-y-2">
         {headliners(content.artists).map((a) => {

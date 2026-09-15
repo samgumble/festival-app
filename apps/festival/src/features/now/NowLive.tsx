@@ -48,7 +48,7 @@ export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
           ); })}
         </div>
       )}
-      <div className="mt-4 flex items-baseline justify-between px-0.5"><Eyebrow tone="plum">Your next set</Eyebrow><Link to="/plan" className="eyebrow text-fg-soft">My plan →</Link></div>
+      <div className="mt-4 flex items-baseline justify-between px-0.5"><Eyebrow tone="plum">Your next set</Eyebrow><Link to="/plan" className="eyebrow text-fg-soft">My Schedule →</Link></div>
       <div className="mt-1.5">
         {myNext ? (() => { const p = pick(myNext.id); return (
           <Card className="flex items-center gap-3 border-plum">

@@ -28,7 +28,7 @@ Build the official companion app for the 32nd Telluride Blues & Brews Festival (
 
 1. **Now (Home)** — time-aware front page. Before the festival: countdown, headliners, "build your plan" nudge. During: what's on each stage right now / up next, your next favorited set, live alert banner. After: thank-you + "see you in 2027."
 2. **Lineup** — full official lineup by day and stage, two views (list + stage timeline grid), search, headliner tiers, artist detail with set times and one-tap favorite.
-3. **My Plan** — favorites become a personal schedule with conflict detection and resolution, "what should I see next," set reminders (native local notifications; on web a calendar `.ics` fallback), and share-as-text.
+3. **My Schedule** (Plan tab; titled "My Plan" until 2026-09-14) — favorites become a personal schedule with conflict detection and resolution, "what should I see next," set reminders (native local notifications; on web a calendar `.ics` fallback), and share-as-text.
 4. **Alerts** — in-app inbox fed from Firestore (works for everyone, including people who decline push) + push notifications (FCM → APNs/Android; web push on Android Chrome and desktop; iOS web push only when installed to Home Screen). Severity levels: info / important / urgent.
 5. **Offline-first** — bundled content snapshot at build time, Firestore persistent cache, service-worker precache of the app shell and artwork. Airplane-mode launch shows the full lineup, plan, and last-known alerts.
 6. **Info** — festival essentials (dates, gates, venue, official links), notification settings, about/privacy, content version.
@@ -229,7 +229,7 @@ Tab bar (5): **Now · Lineup · Plan · Alerts · Info**. Badge counts: Plan (fa
 
 **Lineup** — Segmented day control (Fri/Sat/Sun) + view toggle (List / Grid). List: grouped by stage, chronological, each row = time, artist, stage chip, heart. Grid: horizontal-scroll stage timeline (hours across, stages down, now-line), pinch-free but with a "Now" jump. Search field filters by artist. Headliners have a sun-rimmed card treatment. Tap → Artist sheet (name, tier, all sets, heart, "Remind me," official links if any).
 
-**Plan** — If empty: rainbow-arch empty state ("Your weekend starts here") with three headliner quick-adds. Otherwise: per-day vertical timeline of favorited sets; overlaps rendered as a braided pair with a "Conflict — you chose {A}" chip and a swap action; "Next up" card pinned to top during the festival; reminder toggle per set; "Export to calendar" + "Share plan as text." Settings sheet: reminder lead time (5/15/30 min), buffer between stages.
+**Plan** — If empty: rainbow-arch empty state (art only, no copy — owner request 2026-09-14) with three headliner quick-adds. Otherwise: per-day vertical timeline of favorited sets; overlaps rendered as a braided pair with a "Conflict — you chose {A}" chip and a swap action; "Next up" card pinned to top during the festival; reminder toggle per set; "Export to calendar" + "Share plan as text." Settings sheet: reminder lead time (5/15/30 min), buffer between stages.
 
 **Alerts** — Reverse-chronological cards, unread dot, severity color bar (sky/sun/ember), expandable body, optional link button. Top card if push not enabled: "Get festival alerts on your lock screen → Enable" (permission prompt only on tap; iOS shows a pre-prompt explaining why). Pull to refresh. Empty state: "All quiet in Town Park."
 

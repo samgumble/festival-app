@@ -91,7 +91,7 @@ export function InfoScreen() {
         </div>
       </Card>
       {licenses && (
-        <Card className="mt-2 text-[14px] leading-5 text-fg-soft">{FONTS.map(([f, l]) => <div key={f}><b className="text-fg">{f}</b> — {l}</div>)}<div className="mt-1">Poster artwork © SBG Productions, used with permission.</div></Card>
+        <Card className="mt-2 text-[14px] leading-5 text-fg-soft">{FONTS.map(([f, l]) => <div key={f}><b className="text-fg">{f}</b> — {l}</div>)}<div className="mt-1">Poster artwork © SBG Productions, used with permission.</div><div className="mt-1">Sierra Nevada® is a registered trademark of Sierra Nevada Brewing Co.</div></Card>
       )}
       <p className="mt-4 text-center eyebrow text-fg-soft">
         Content v{status.contentVersion} · {status.source === "live" ? "live" : status.source === "cache" ? "cached" : "bundled"}
