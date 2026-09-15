@@ -1,6 +1,6 @@
 {
   "meta": {
-    "contentVersion": "2026.09.14.8",
+    "contentVersion": "2026.09.14.9",
     "publishedAt": "2026-09-14T12:00:00-06:00",
     "publishedBy": "seed",
     "sources": [
@@ -746,7 +746,7 @@
       "dayId": "fri",
       "start": "2026-09-18T22:00:00-06:00",
       "end": "2026-09-18T23:55:00-06:00",
-      "note": "Juke Joint · with Terry “Harmonica” Bean",
+      "note": "with Terry “Harmonica” Bean",
       "venue": "Sheridan Opera House"
     },
     {
@@ -756,7 +756,6 @@
       "dayId": "fri",
       "start": "2026-09-18T22:00:00-06:00",
       "end": "2026-09-18T23:55:00-06:00",
-      "note": "Juke Joint",
       "venue": "Elks Lodge"
     },
     {
@@ -766,7 +765,7 @@
       "dayId": "fri",
       "start": "2026-09-18T22:00:00-06:00",
       "end": "2026-09-18T23:55:00-06:00",
-      "note": "Juke Joint · with Ken Valdez",
+      "note": "with Ken Valdez",
       "venue": "Blues Stage"
     },
     {
@@ -776,7 +775,6 @@
       "dayId": "fri",
       "start": "2026-09-18T22:00:00-06:00",
       "end": "2026-09-18T23:55:00-06:00",
-      "note": "Juke Joint",
       "venue": "The Moon at O’Bannon’s"
     },
     {
@@ -786,7 +784,7 @@
       "dayId": "fri",
       "start": "2026-09-18T22:00:00-06:00",
       "end": "2026-09-18T23:55:00-06:00",
-      "note": "Juke Joint · stand-up comedy with Baron Vaughn, Kiran Deol & Hannah Jones",
+      "note": "stand-up comedy with Baron Vaughn, Kiran Deol & Hannah Jones",
       "venue": "Liz"
     },
     {
@@ -796,7 +794,7 @@
       "dayId": "sat",
       "start": "2026-09-19T22:00:00-06:00",
       "end": "2026-09-19T23:55:00-06:00",
-      "note": "Juke Joint · with Nether Hour",
+      "note": "with Nether Hour",
       "venue": "Sheridan Opera House"
     },
     {
@@ -806,7 +804,6 @@
       "dayId": "sat",
       "start": "2026-09-19T22:00:00-06:00",
       "end": "2026-09-19T23:55:00-06:00",
-      "note": "Juke Joint",
       "venue": "The Moon at O’Bannon’s"
     },
     {
@@ -816,7 +813,7 @@
       "dayId": "sat",
       "start": "2026-09-19T22:00:00-06:00",
       "end": "2026-09-19T23:55:00-06:00",
-      "note": "Juke Joint · with The Zac Schulze Gang",
+      "note": "with The Zac Schulze Gang",
       "venue": "Blues Stage"
     },
     {
@@ -826,7 +823,6 @@
       "dayId": "sat",
       "start": "2026-09-19T22:00:00-06:00",
       "end": "2026-09-19T23:55:00-06:00",
-      "note": "Juke Joint",
       "venue": "Elks Lodge"
     },
     {
@@ -836,7 +832,7 @@
       "dayId": "sat",
       "start": "2026-09-19T22:00:00-06:00",
       "end": "2026-09-19T23:55:00-06:00",
-      "note": "Juke Joint · stand-up comedy with Baron Vaughn, Kiran Deol & Hannah Jones",
+      "note": "stand-up comedy with Baron Vaughn, Kiran Deol & Hannah Jones",
       "venue": "Liz"
     },
     {
@@ -857,7 +853,7 @@
       "start": "2026-09-18T11:00:00-06:00",
       "end": "2026-09-18T11:45:00-06:00",
       "venue": "Heritage Plaza – Mountain Village",
-      "note": "Special Event · free"
+      "note": "free"
     },
     {
       "id": "fri-music-maker-foundation-artists-special-1200",
@@ -867,7 +863,7 @@
       "start": "2026-09-18T12:00:00-06:00",
       "end": "2026-09-18T12:45:00-06:00",
       "venue": "Heritage Plaza – Mountain Village",
-      "note": "Special Event · free"
+      "note": "free"
     },
     {
       "id": "sat-blisters-blues-5k-special-0715",
@@ -877,7 +873,7 @@
       "start": "2026-09-19T07:15:00-06:00",
       "end": "2026-09-19T08:50:00-06:00",
       "venue": "Elks Park",
-      "note": "Special Event · registration 7:15 AM · race 8:30 AM"
+      "note": "registration 7:15 AM · race 8:30 AM"
     },
     {
       "id": "sat-ken-valdez-special-0850",
@@ -887,7 +883,7 @@
       "start": "2026-09-19T08:50:00-06:00",
       "end": "2026-09-19T09:30:00-06:00",
       "venue": "Elks Park",
-      "note": "Special Event · Blisters & Blues 5K"
+      "note": "Blisters & Blues 5K"
     },
     {
       "id": "sat-telluride-blues-challenge-special-0900",
@@ -897,7 +893,7 @@
       "start": "2026-09-19T09:00:00-06:00",
       "end": "2026-09-19T12:00:00-06:00",
       "venue": "Elks Lodge",
-      "note": "Special Event · Blues For Breakfast"
+      "note": "Blues For Breakfast"
     },
     {
       "id": "sat-yoga-sessions-special-1000",
@@ -906,8 +902,7 @@
       "dayId": "sat",
       "start": "2026-09-19T10:00:00-06:00",
       "end": "2026-09-19T11:00:00-06:00",
-      "venue": "Elks Park",
-      "note": "Special Event"
+      "venue": "Elks Park"
     },
     {
       "id": "sat-dave-jordan-special-1100",
@@ -917,7 +912,7 @@
       "start": "2026-09-19T11:00:00-06:00",
       "end": "2026-09-19T11:45:00-06:00",
       "venue": "Heritage Plaza – Mountain Village",
-      "note": "Special Event · free"
+      "note": "free"
     },
     {
       "id": "sat-alex-maryol-special-1200",
@@ -927,7 +922,7 @@
       "start": "2026-09-19T12:00:00-06:00",
       "end": "2026-09-19T12:45:00-06:00",
       "venue": "Heritage Plaza – Mountain Village",
-      "note": "Special Event · free"
+      "note": "free"
     },
     {
       "id": "sun-telluride-blues-challenge-runner-up-2026-special-0900",
@@ -937,7 +932,7 @@
       "start": "2026-09-20T09:00:00-06:00",
       "end": "2026-09-20T12:00:00-06:00",
       "venue": "Elks Lodge",
-      "note": "Special Event · Blues For Breakfast · with Alex Maryol"
+      "note": "Blues For Breakfast · with Alex Maryol"
     },
     {
       "id": "sun-music-maker-foundation-artists-special-0900",
@@ -947,7 +942,7 @@
       "start": "2026-09-20T09:00:00-06:00",
       "end": "2026-09-20T10:00:00-06:00",
       "venue": "Hotel Madeline",
-      "note": "Special Event · Blues For Breakfast · reserve your seat"
+      "note": "Blues For Breakfast · reserve your seat"
     },
     {
       "id": "sun-yoga-sessions-special-1000",
@@ -956,8 +951,7 @@
       "dayId": "sun",
       "start": "2026-09-20T10:00:00-06:00",
       "end": "2026-09-20T11:00:00-06:00",
-      "venue": "Elks Park",
-      "note": "Special Event"
+      "venue": "Elks Park"
     },
     {
       "id": "sun-katie-skene-special-1100",
@@ -967,7 +961,7 @@
       "start": "2026-09-20T11:00:00-06:00",
       "end": "2026-09-20T11:45:00-06:00",
       "venue": "Heritage Plaza – Mountain Village",
-      "note": "Special Event · free"
+      "note": "free"
     },
     {
       "id": "sun-david-jacobs-strain-special-1200",
@@ -977,7 +971,7 @@
       "start": "2026-09-20T12:00:00-06:00",
       "end": "2026-09-20T12:45:00-06:00",
       "venue": "Heritage Plaza – Mountain Village",
-      "note": "Special Event · free"
+      "note": "free"
     }
   ]
 }
