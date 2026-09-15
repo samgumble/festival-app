@@ -41,6 +41,9 @@ describe("Lineup list", () => {
     expect(within(blues).getByText("Troy Walker")).toBeInTheDocument();
     expect(within(blues).getByText("Comedy")).toBeInTheDocument();
     expect(screen.queryByTestId("stage-comedy")).not.toBeInTheDocument();
+    // the Juke Joint comedy night at Liz carries the Comedy tag too
+    const juke = screen.getByTestId("stage-juke");
+    expect(within(juke).getAllByText("Comedy").length).toBe(1);
   });
   it("search also matches a comedy act with no sets", async () => {
     renderAt("/lineup");
