@@ -31,8 +31,8 @@ Deleting the app, or clearing the website's data in your browser, erases all of 
 - No location tracking.
 - No cookies used for tracking. The web version uses ordinary browser storage only for the on-device data described above.
 
-## Festival staff console
-A separate, password-protected console lets SBG Productions staff edit the lineup and send alerts. Staff sign in with an email address through Google Firebase Authentication; that email is used only to control access and is not shown to fans.
+## Who manages the schedule
+The schedule and alerts you see are managed by SBG Productions through an administrative tool built on Google Firebase. Only authorized festival staff can make changes, and no fan data is stored there.
 
 ## Children
 This is a general festival guide and is not directed at children under 13. It collects no personal information from anyone.

@@ -51,8 +51,8 @@ export function PrivacyScreen() {
         </ul>
       </Section>
 
-      <Section title="Festival staff console">
-        A separate, password-protected console lets SBG Productions staff edit the lineup and send alerts. Staff sign in with an email address through Google Firebase Authentication; that email is used only to control access and is not shown to fans.
+      <Section title="Who manages the schedule">
+        The schedule and alerts you see are managed by SBG Productions through an administrative tool built on Google Firebase. Only authorized festival staff can make changes, and no fan data is stored there.
       </Section>
 
       <Section title="Children">
