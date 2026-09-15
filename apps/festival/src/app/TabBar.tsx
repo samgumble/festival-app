@@ -1,6 +1,8 @@
 import { NavLink } from "react-router";
 import { Badge, CheckerRibbon } from "@/design";
 import { useAlerts } from "@/data/alerts";
+import { useFestivalClock } from "./clock";
+import { isoMs } from "@/domain/time";
 import { useAlertsStore } from "@/state/alerts";
 import { usePlanStore } from "@/state/plan";
 import { IconAlerts, IconInfo, IconLineup, IconNow, IconPlan } from "./icons";
@@ -16,7 +18,9 @@ const TABS = [
 export function TabBar() {
   const favorites = usePlanStore((s) => s.favorites.length);
   const readIds = useAlertsStore((s) => s.readIds);
-  const unread = useAlerts().filter((a) => !readIds.includes(a.id)).length;
+  const { now } = useFestivalClock();
+  // Scheduled alerts sit in Firestore with a future publishedAt; they don't count until they go out (D-026).
+  const unread = useAlerts().filter((a) => isoMs(a.publishedAt) <= now.getTime() && !readIds.includes(a.id)).length;
   return (
     <nav aria-label="Sections" className="fixed inset-x-0 bottom-0 z-30 mx-auto max-w-[480px]">
       <CheckerRibbon rows={2} />

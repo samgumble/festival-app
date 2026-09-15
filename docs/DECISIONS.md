@@ -120,3 +120,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** Sam's compliance checklists: a posted, accurate policy that names third parties; no personal data exposed by default-public reads; no claims the code can't back; WCAG AA contrast.
 
 **Consequences.** Any new data flow (accounts, push tokens, analytics) must update the policy text and `PRIVACY_EFFECTIVE` in the same commit. `useAlertsStore.pushOptIn` remains in the store unused until push ships.
+
+## D-026 — Scheduled alerts without a server: future `publishedAt`, hidden on phones until then (2026-09-14)
+
+**Decision.** The admin console's Compose gets a "When" control (Send now / Schedule for later, Denver wall-clock picker, ≥ 1 min and ≤ 30 days ahead). A scheduled alert is written to `alerts/{id}` immediately with `publishedAt` set to the chosen instant. Every fan app surface already ignores alerts whose `publishedAt` is in the future (Alerts list, Now screen, urgent banner, and now the unread badge), so the alert appears on each phone when its own clock passes that time. The console lists such alerts as "Scheduled · goes out Fri 11:00 AM" with a Cancel (delete) action; editing remains "cancel and re-create". Expiry presets count from the scheduled time.
+
+**Why.** No Cloud Functions on Spark (D-021) means no server-side timer; Firestore documents with a future timestamp plus client-side gating give the same fan experience with zero infrastructure. Alerts are public festival notices, so a fan who reads Firestore directly seeing one a few hours early is acceptable.
+
+**Consequences.** Delivery time depends on each phone's clock, and phones that are offline at the moment will see it on their next sync (same as any alert). Rules stay unchanged (`publishedAt` must be a string; no time comparison). The Dashboard's "Last alert" shows the last one that has actually gone out.
