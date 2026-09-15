@@ -57,8 +57,8 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 ### Google
 - ☑ `applicationId` set in `android/app/build.gradle`; `versionCode` integer increments every upload; `versionName` "1.0.0".
 - ☑ `targetSdkVersion` / `compileSdkVersion` = **36** (Android 16) — required for new apps since Aug 31 2026. ⚠ Confirm Capacitor 8 template defaults; bump if lower.
-- ☐ Create the **upload keystore** at `~/Keys/bb-upload.jks` (alias `upload`; `keytool -genkeypair -v -keystore ~/Keys/bb-upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000 -dname 'CN=SBG Productions, O=SBG Productions, L=Telluride, ST=Colorado, C=US'`), back it up to the vault with its password. `app/build.gradle` signs release builds from it when `BB_UPLOAD_PASSWORD` is set (`BB_UPLOAD_PASSWORD="$(pbpaste)" npm run cap:bundle:android; pbcopy </dev/null`). Losing it is recoverable via Play App Signing key reset, but avoid it.
-- ☐ Build an **Android App Bundle (.aab)**, not an APK: `npm run cap:bundle:android` (after `npm run cap:sync`) → `android/app/build/outputs/bundle/release/app-release.aab` (git-ignored).
+- ☑ Sep 15: Create the **upload keystore** at `~/Keys/bb-upload.jks` (alias `upload`; `keytool -genkeypair -v -keystore ~/Keys/bb-upload.jks -alias upload -keyalg RSA -keysize 2048 -validity 10000 -dname 'CN=SBG Productions, O=SBG Productions, L=Telluride, ST=Colorado, C=US'`), back it up to the vault with its password. `app/build.gradle` signs release builds from it when `BB_UPLOAD_PASSWORD` is set (`BB_UPLOAD_PASSWORD="$(pbpaste)" npm run cap:bundle:android; pbcopy </dev/null`). Losing it is recoverable via Play App Signing key reset, but avoid it.
+- ☑ Sep 15 (signed, versionCode 1): Build an **Android App Bundle (.aab)**, not an APK: `npm run cap:bundle:android` (after `npm run cap:sync`) → `android/app/build/outputs/bundle/release/app-release.aab` (git-ignored).
 - ☑ Adaptive icon (foreground/background/monochrome), themed-icon check on Android 13+, notification small icon is white-on-transparent (see `ASSET-BRIEF.md §2`).
 - ☐ Edge-to-edge and predictive-back behave on Android 15/16 (required behaviors when targeting 35+).
 - ☐ Play Console → App content → declare the SCHEDULE_EXACT_ALARM use case (set reminders at a user-chosen time); the local-notifications plugin merges the permission unconditionally.
@@ -68,11 +68,11 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 | ☐ | Asset | Spec |
 |---|---|---|
 | ☐ | iOS app icon | 1024×1024 PNG, no alpha, in `Assets.xcassets` (single-size icon is fine on Xcode 26) |
-| ☐ | Android icons | adaptive fg/bg/mono 432×432; Play Store icon **512×512 PNG, 32-bit**, ≤ 1 MB |
-| ☐ | iPhone screenshots | **6.9"** set required: 1320×2868 (or 1290×2796 / 1260×2736), portrait, 1–10 images, PNG/JPG, no alpha, no device-frame transparency. 6.5" set optional (Apple scales the 6.9" set). Suggested six: Now (live state), Lineup grid, Artist sheet, Plan with a resolved conflict, Alerts, Now (countdown/dark mode). |
+| ☑ | Android icons | adaptive fg/bg/mono 432×432; Play Store icon **512×512 PNG, 32-bit**, ≤ 1 MB |
+| ☑ Sep 15 | iPhone screenshots | **6.9"** set required: 1320×2868 (or 1290×2796 / 1260×2736), portrait, 1–10 images, PNG/JPG, no alpha, no device-frame transparency. 6.5" set optional (Apple scales the 6.9" set). Suggested six: Now (live state), Lineup grid, Artist sheet, Plan with a resolved conflict, Alerts, Now (countdown/dark mode). |
 | ☐ | iPad screenshots | not needed while iPhone-only |
-| ☐ | Play phone screenshots | 2–8 images, 9:16 portrait (use 1080×1920) — Play caps the long side at 2× the short side, so 1080×2340 is rejected, PNG/JPG ≤ 8 MB |
-| ☐ | Play feature graphic | 1024×500 PNG/JPG, no transparency, required to be featured/promoted; poster crop + lockup, no extra text |
+| ☑ Sep 15 | Play phone screenshots | 2–8 images, 9:16 portrait (use 1080×1920) — Play caps the long side at 2× the short side, so 1080×2340 is rejected, PNG/JPG ≤ 8 MB |
+| ☑ Sep 15 | Play feature graphic | 1024×500 PNG/JPG, no transparency, required to be featured/promoted; poster crop + lockup, no extra text |
 | ☐ | Play 7"/10" tablet screenshots | optional; skip for v1 |
 | ☐ | App preview video | optional; skip for v1 |
 | ☐ | Splash / launch | iOS launch storyboard uses `paper` + centered lockup; Android 12+ splash uses the adaptive icon |
