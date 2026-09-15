@@ -58,3 +58,12 @@ describe("artists", () => {
     expect(searchArtists(content.artists, "").length).toBe(content.artists.length);
   });
 });
+
+describe("shortVenue", () => {
+  it("trims parentheticals and dash suffixes", async () => {
+    const { shortVenue } = await import("./schedule");
+    expect(shortVenue("Heritage Plaza – Mountain Village")).toBe("Heritage Plaza");
+    expect(shortVenue("Beer Garden (between Main Stage and Blues Stage)")).toBe("Beer Garden");
+    expect(shortVenue("Liz")).toBe("Liz");
+  });
+});

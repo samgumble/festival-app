@@ -52,4 +52,12 @@ describe("Plan", () => {
     expect(screen.getAllByTestId("plan-block").filter((b) => b.dataset.conflict === "true").length).toBe(3);
     expect(screen.getAllByTestId(/^plan-col-/).map((c) => c.dataset.testid)).toEqual(["plan-col-blues", "plan-col-truck", "plan-col-camp"]);
   });
+
+  it("names Juke Joint columns by venue", async () => {
+    usePlanStore.setState({ favorites: ["sat-tab-benoit-juke-2200", "sat-judith-hill-juke-2200"] });
+    renderAt("/plan");
+    await screen.findAllByText(/Tab Benoit/);
+    expect(screen.getAllByTestId(/^plan-col-/).map((c) => c.dataset.testid)).toEqual(["plan-col-juke:Sheridan Opera House", "plan-col-juke:Elks Lodge"]);
+    expect(screen.getByText("Sheridan Opera House")).toBeInTheDocument();
+  });
 });

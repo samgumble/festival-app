@@ -39,11 +39,19 @@ export interface GridLane { key: string; label: string; stage: Stage; sets: Fest
  * Timeline rows: one per stage, except that a stage whose sets happen at several venues that day
  * (Juke Joints, Special Events) gets one row per venue, ordered by each venue's first set, so the
  * grid shows where each show actually is. Sets without a venue keep the stage's own row first.
+ * `venueLanes: "always"` names a lane after its venue even when there is only one.
  */
-export function gridLanes(sets: FestivalSet[], stages: Stage[]): GridLane[] {
+
+/** Column-friendly venue: drops a parenthetical or an " – " suffix ("Heritage Plaza – Mountain Village" → "Heritage Plaza"). */
+export function shortVenue(venue: string): string {
+  return venue.replace(/\s*\(.*\)\s*$/, "").split(" – ")[0]!.trim();
+}
+export function gridLanes(sets: FestivalSet[], stages: Stage[], venueLanes: "when-several" | "always" = "when-several"): GridLane[] {
   return groupByStage(sets, stages).flatMap((g) => {
     const venues = [...new Set(g.sets.map((s) => s.venue).filter((v): v is string => !!v))];
-    if (venues.length < 2) return [{ key: g.stage.id, label: g.stage.shortName, stage: g.stage, sets: g.sets }];
+    // "always": a single venue still gets its own named lane (My Schedule columns read as places)
+    const split = venueLanes === "always" ? venues.length >= 1 : venues.length >= 2;
+    if (!split) return [{ key: g.stage.id, label: g.stage.shortName, stage: g.stage, sets: g.sets }];
     const lanes: GridLane[] = [];
     const bare = g.sets.filter((s) => !s.venue);
     if (bare.length > 0) lanes.push({ key: g.stage.id, label: g.stage.shortName, stage: g.stage, sets: bare });
