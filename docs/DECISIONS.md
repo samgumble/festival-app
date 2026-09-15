@@ -131,7 +131,7 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 
 ## D-027 — Truck Stage carries its sponsor name with the registered mark (2026-09-14)
 
-**Decision.** The stage is named "Truck Stage by Sierra Nevada®" (owner wording; the official schedule page writes "Truck Stage presented by Sierra Nevada"). `shortName` stays "Truck" so grid columns and Now chips keep their width. The ® symbol travels with the name wherever it renders, and the Info → Licenses card carries "Sierra Nevada® is a registered trademark of Sierra Nevada Brewing Co." Content version bumped to 2026.09.14.1; Firestore needs a re-seed to match. Same day, at the owner's request, the Plan screen title became "My Schedule" (tab label stays "Plan") and the empty-state copy was removed, leaving the arch art and headliner quick-adds.
+**Decision.** The stage is named "Truck Stage by Sierra Nevada®" (owner wording; the official schedule page writes "Truck Stage presented by Sierra Nevada"). `shortName` stays "Truck" so grid columns and Now chips keep their width. The ® symbol travels with the name wherever it renders, and the Info → Licenses card carries "Sierra Nevada® is a registered trademark of Sierra Nevada Brewing Co." Content version bumped to 2026.09.14.1; Firestore needs a re-seed to match. Same day, at the owner's request, the Plan screen title became "My Schedule" (tab label followed later that day) and the empty-state copy was removed, leaving the arch art and headliner quick-adds.
 
 **Why.** Sponsor attribution is part of the official stage name; the registered mark is the correct notice for Sierra Nevada Brewing Co.'s mark, and the licenses card already holds third-party attributions.
 

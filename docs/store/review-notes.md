@@ -13,7 +13,7 @@ No sign-in is required. There are no demo credentials to provide.
 
 This is more than a website wrapper:
 - The full festival schedule, your personal plan, and your last-known alerts all render from data bundled at build time and cached on-device — the app is fully usable in Airplane Mode from a cold launch, including immediately after install.
-- "My Schedule" (the Plan tab) runs an on-device conflict engine: favoriting overlapping sets on different stages surfaces a conflict with a one-tap resolution, and a "what should I see next" recommendation, entirely client-side.
+- "My Schedule" (the Schedule tab) runs an on-device conflict engine: favoriting overlapping sets on different stages surfaces a conflict with a one-tap resolution, and a "what should I see next" recommendation, entirely client-side.
 - Set reminders use native local notifications (not push) scheduled directly on the device when the user turns on "Remind me before my sets."
 - The app uses native tab-bar navigation, sheet presentations with grabbers, and haptics (via Capacitor plugins), matching iOS conventions rather than presenting a single scrollable web page.
 - All lineup, schedule, and alert content is authored and published by the festival organizer (SBG Productions) through a password-protected admin console, not generated or scraped by this app.

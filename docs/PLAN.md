@@ -28,7 +28,7 @@ Build the official companion app for the 32nd Telluride Blues & Brews Festival (
 
 1. **Now (Home)** — time-aware front page. Before the festival: countdown, headliners, "build your plan" nudge. During: what's on each stage right now / up next, your next favorited set, live alert banner. After: thank-you + "see you in 2027."
 2. **Lineup** — full official lineup by day and stage, two views (list + stage timeline grid), search, headliner tiers, artist detail with set times and one-tap favorite.
-3. **My Schedule** (Plan tab; titled "My Plan" until 2026-09-14) — favorites become a personal schedule with conflict detection and resolution, "what should I see next," set reminders (native local notifications; on web a calendar `.ics` fallback), and share-as-text.
+3. **My Schedule** (Schedule tab; titled "My Plan" until 2026-09-14) — favorites become a personal schedule with conflict detection and resolution, "what should I see next," set reminders (native local notifications; on web a calendar `.ics` fallback), and share-as-text.
 4. **Alerts** — in-app inbox fed from Firestore (works for everyone, including people who decline push) + push notifications (FCM → APNs/Android; web push on Android Chrome and desktop; iOS web push only when installed to Home Screen). Severity levels: info / important / urgent.
 5. **Offline-first** — bundled content snapshot at build time, Firestore persistent cache, service-worker precache of the app shell and artwork. Airplane-mode launch shows the full lineup, plan, and last-known alerts.
 6. **Info** — festival essentials (dates, gates, venue, official links), notification settings, about/privacy, content version.
