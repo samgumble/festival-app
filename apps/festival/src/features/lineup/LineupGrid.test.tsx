@@ -37,7 +37,8 @@ describe("LineupGrid", () => {
   it("renders a lane per stage, a now line, and favorited blocks", async () => {
     renderAt("/lineup");
     expect(await screen.findByTestId("now-line")).toBeInTheDocument();
-    expect(screen.getAllByTestId(/^lane-/).length).toBe(14); // 6 stage rows + 5 juke venues + 3 special-event venues
+    expect(screen.getAllByTestId(/^lane-(?!label)/).length).toBe(12); // 5 stage rows (Saturday comedy sits in the Blues row) + 4 juke venues + 3 special-event venues
+    expect(screen.queryByTestId("lane-juke:Blues Stage")).not.toBeInTheDocument(); // the late Blues Stage show lives in the Blues row
     expect(screen.getByTestId("lane-juke:Liz")).toBeInTheDocument();
     expect(screen.getByTestId("lane-special:Elks Park")).toBeInTheDocument();
     expect(screen.getByTestId("lane-label-camp").textContent).toBe("Camp\nground\nSessions"); // grid label, three rows

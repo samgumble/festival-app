@@ -82,6 +82,7 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
               <div key={grp.key} data-testid={`lane-${grp.key}`} className="relative h-[72px] border-b border-hair last:border-b-0">
                 {grp.sets.map((s) => {
                   const artist = idx.artistsById.get(s.artistId)!;
+                  const own = idx.stagesById.get(s.stageId) ?? grp.stage;
                   const fav = favorites.includes(s.id);
                   const time = formatTime(parseIso(s.start));
                   const width = g.width(s);
@@ -89,7 +90,7 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
                     <button key={s.id} type="button" data-favorite={fav} onClick={() => navigate(`/lineup/artist/${artist.id}`)}
                       aria-label={`${artist.name}, ${time}, ${placeOf(s, grp.stage)}`}
                       style={{ left: g.left(s), width }}
-                      className={`absolute top-2 h-14 rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] ${STAGE_BG[grp.stage.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-85" : ""} ${width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : ""}`}>
+                      className={`absolute top-2 h-14 rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] ${STAGE_BG[own.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-85" : ""} ${width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : ""}`}>
                       <span className="block h-full overflow-hidden">
                         <span className="line-clamp-2 break-words">{artist.name}</span>
                         <span className="block text-[10px] font-normal opacity-85 tabular-nums">{time}{fav ? " ♥" : ""}</span>

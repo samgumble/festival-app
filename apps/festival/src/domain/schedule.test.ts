@@ -67,3 +67,17 @@ describe("shortVenue", () => {
     expect(shortVenue("Liz")).toBe("Liz");
   });
 });
+
+describe("gridLanes", () => {
+  it("hosts sets whose venue is a stage in that stage's row", async () => {
+    const { gridLanes } = await import("./schedule");
+    const sun = setsForDay(content.sets, "sun");
+    const lanes = gridLanes(sun, content.stages);
+    const blues = lanes.find((l) => l.key === "blues")!;
+    const camp = lanes.find((l) => l.key === "camp")!;
+    expect(blues.sets.map((s) => s.id)).toContain("sun-troy-walker-blues-1600");
+    expect(camp.sets.map((s) => s.id)).toContain("sun-troy-walker-camp-1230");
+    expect(lanes.find((l) => l.key === "comedy")).toBeUndefined();
+    expect(camp.label).toBe("Camp\nground\nSessions");
+  });
+});

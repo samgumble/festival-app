@@ -47,17 +47,26 @@ export function shortVenue(venue: string): string {
   return venue.replace(/\s*\(.*\)\s*$/, "").split(" – ")[0]!.trim();
 }
 export function gridLanes(sets: FestivalSet[], stages: Stage[], venueLanes: "when-several" | "always" = "when-several"): GridLane[] {
-  return groupByStage(sets, stages).flatMap((g) => {
-    const venues = [...new Set(g.sets.map((s) => s.venue).filter((v): v is string => !!v))];
-    // "always": a single venue still gets its own named lane (My Schedule columns read as places)
-    const split = venueLanes === "always" ? venues.length >= 1 : venues.length >= 2;
-    if (!split) return [{ key: g.stage.id, label: g.stage.gridLabel ?? g.stage.shortName, stage: g.stage, sets: g.sets }];
-    const lanes: GridLane[] = [];
-    const bare = g.sets.filter((s) => !s.venue);
-    if (bare.length > 0) lanes.push({ key: g.stage.id, label: g.stage.gridLabel ?? g.stage.shortName, stage: g.stage, sets: bare });
-    for (const venue of venues) lanes.push({ key: `${g.stage.id}:${venue}`, label: venue, stage: g.stage, sets: g.sets.filter((s) => s.venue === venue) });
-    return lanes;
-  });
+  // A set whose venue is itself a stage (a Juke Joint or comedy set "at Blues Stage", comedy at the
+  // Campground) lives in that stage's row; its block keeps its own stage colour.
+  const stageByName = new Map(stages.map((st) => [st.name, st]));
+  const hostOf = (s: FestivalSet): string => (s.venue && stageByName.get(s.venue)?.id) || s.stageId;
+  return [...stages]
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .flatMap((stage) => {
+      const mine = sets.filter((s) => hostOf(s) === stage.id).sort(byStart);
+      if (mine.length === 0) return [];
+      const label = stage.gridLabel ?? stage.shortName;
+      const own = mine.filter((s) => hostOf(s) !== s.stageId || !s.venue); // hosted here, or no venue of its own
+      const roaming = mine.filter((s) => s.venue && hostOf(s) === s.stageId); // venue is not a stage
+      const venues = [...new Set(roaming.map((s) => s.venue as string))];
+      const split = venueLanes === "always" ? venues.length >= 1 : venues.length >= 2;
+      if (!split) return [{ key: stage.id, label, stage, sets: mine }];
+      const lanes: GridLane[] = [];
+      if (own.length > 0) lanes.push({ key: stage.id, label, stage, sets: own });
+      for (const venue of venues) lanes.push({ key: `${stage.id}:${venue}`, label: venue, stage, sets: roaming.filter((s) => s.venue === venue) });
+      return lanes;
+    });
 }
 
 export function nowPlaying(sets: FestivalSet[], now: Date): FestivalSet[] {

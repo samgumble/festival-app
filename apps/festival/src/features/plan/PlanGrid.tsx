@@ -49,13 +49,14 @@ export function PlanGrid({ sets, now }: { sets: FestivalSet[]; now: Date }) {
               <div className="relative" style={{ height: bodyH, ...hourLines }}>
                 {col.sets.map((s) => {
                   const artist = idx.artistsById.get(s.artistId)!;
+                  const own = idx.stagesById.get(s.stageId) ?? col.stage;
                   const conflict = conflictOf(s.id);
                   const other = conflict ? (conflict.a.id === s.id ? conflict.b : conflict.a) : undefined;
                   const otherName = other ? idx.artistsById.get(other.artistId)?.name : undefined;
                   const top = g.left(s), height = Math.max(24, g.width(s));
                   return (
                     <Link key={s.id} to={`/lineup/artist/${artist.id}`} data-testid="plan-block" data-conflict={conflict ? "true" : undefined} style={{ top, height }}
-                      className={`absolute inset-x-1 block overflow-hidden rounded-[10px] px-1.5 py-1 text-left ${STAGE_BG[col.stage.color]} ${conflict ? "outline outline-2 -outline-offset-2 outline-ember" : ""} ${isEnded(s, now) ? "opacity-85" : ""}`}>
+                      className={`absolute inset-x-1 block overflow-hidden rounded-[10px] px-1.5 py-1 text-left ${STAGE_BG[own.color]} ${conflict ? "outline outline-2 -outline-offset-2 outline-ember" : ""} ${isEnded(s, now) ? "opacity-85" : ""}`}>
                       <span className={`line-clamp-2 text-[12px] leading-[14px] ${artist.tier === "headliner" ? "font-display" : "font-semibold"}`}>{conflict ? "⚠ " : ""}{artist.name}</span>
                       <span className="block text-[10px] leading-3 opacity-85 tabular-nums">{formatRange(parseIso(s.start), parseIso(s.end))}</span>
                       {s.venue && col.key === col.stage.id && <span className="block truncate text-[10px] leading-3 opacity-85">{placeOf(s, col.stage)}</span>}
