@@ -18,7 +18,7 @@ export function NowPost() {
       <Card className="mt-3 text-center">
         <Eyebrow tone="structure">That's a wrap</Eyebrow>
         <div className="font-display text-[32px] leading-9 text-structure">Thank you, Telluride</div>
-        <div className="mt-1 font-shade text-[28px] leading-none text-structure">See you in {festival.year + 1}</div>
+        <div className="mt-1 font-display text-[28px] leading-none text-structure">See you in {festival.year + 1}</div>
       </Card>
       <Card className="mt-4 flex items-center gap-3">
         <div className="flex-1 text-[15px] text-fg-soft">Three days, four stages, one Town Park.</div>
