@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Link } from "react-router";
 import { asset } from "@/app/assets";
 import type { ReactNode } from "react";
-import { Button, Card, Eyebrow, SegmentedControl } from "@/design";
+import { Button, Card, Eyebrow, SegmentedControl, Toggle } from "@/design";
 import { useContent, useContentStatus } from "@/data/content";
 import { formatTime, fromDenver, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
@@ -11,6 +11,7 @@ import { InstallSheet } from "./InstallSheet";
 import { useInstall } from "@/platform/install";
 import { useUpdateStore } from "@/state/updates";
 import { runtime } from "@/platform/runtime";
+import { useReminderToggle } from "@/features/plan/useReminderToggle";
 
 // Inline text buttons in an 18 px line: extend the hit area invisibly to the 44 px floor (18 + 13 + 13).
 const INLINE_LINK = "relative inline-block underline before:absolute before:inset-x-0 before:-inset-y-[13px] before:content-['']";
@@ -30,6 +31,7 @@ function Row({ label, children, href }: { label: string; children?: ReactNode; h
 }
 
 export function InfoScreen() {
+  const reminders = useReminderToggle();
   const { festival, meta } = useContent();
   const status = useContentStatus();
   const theme = useUiStore((s) => s.theme);
@@ -78,7 +80,13 @@ export function InfoScreen() {
 
       <Eyebrow tone="structure" className="mt-4 block px-0.5">Settings</Eyebrow>
       <Card padded={false} className="mt-1.5 px-4 py-1">
-        <Row label="Set reminders"><SegmentedControl label="Reminder lead time" value={String(settings.leadMinutes)} onChange={(v) => setSettings({ leadMinutes: Number(v) as 5 | 15 | 30 })} options={[{ value: "5", label: "5" }, { value: "15", label: "15" }, { value: "30", label: "30" }]} /></Row>
+        {reminders.supported && (
+          <>
+            <Row label="Remind me before my sets"><Toggle on={reminders.remindersOn} onChange={(v) => void reminders.toggle(v)} label="Remind me before my sets" /></Row>
+            {reminders.showDenied && <p className="pb-2 text-[13px] text-ember">Notifications are off for this app in Settings.</p>}
+          </>
+        )}
+        <Row label="Lead time"><SegmentedControl label="Reminder lead time" value={String(settings.leadMinutes)} onChange={(v) => setSettings({ leadMinutes: Number(v) as 5 | 15 | 30 })} options={[{ value: "5", label: "5" }, { value: "15", label: "15" }, { value: "30", label: "30" }]} /></Row>
         <Row label="Appearance"><SegmentedControl label="Appearance" value={theme} onChange={setTheme} options={[{ value: "system", label: "Auto" }, { value: "light", label: "Light" }, { value: "dark", label: "Dark" }]} /></Row>
       </Card>
 

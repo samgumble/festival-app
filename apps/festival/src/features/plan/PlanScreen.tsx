@@ -13,6 +13,7 @@ import { share } from "@/platform/share";
 import { PlanEmpty } from "./PlanEmpty";
 import { PlanSettings } from "./PlanSettings";
 import { PlanGrid } from "./PlanGrid";
+import { ReminderPrompt } from "./ReminderPrompt";
 import { placeOf } from "@/domain/place";
 
 export function PlanScreen() {
@@ -50,6 +51,7 @@ export function PlanScreen() {
         <div className="flex-1" />
         {conflicts.length > 0 && <Chip tone="ember">{conflicts.length} conflict{conflicts.length > 1 ? "s" : ""}</Chip>}
       </div>
+      <ReminderPrompt count={mine.length} />
       {next && (
         <Card className="mt-3 border-plum bg-gradient-to-br from-surface to-violet/15">
           <Eyebrow tone="plum">Next up · {formatDuration(minutesBetween(now, parseIso(next.start)))}</Eyebrow>

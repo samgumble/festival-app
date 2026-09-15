@@ -1,47 +1,13 @@
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { Eyebrow, SegmentedControl, Sheet, Toggle } from "@/design";
 import { notifications } from "@/platform/notifications";
 import { usePlanStore } from "@/state/plan";
+import { useReminderToggle } from "./useReminderToggle";
 
 export function PlanSettings({ onClose }: { onClose: () => void }) {
-  const { settings, setSettings, remindersOn, setRemindersOn, remindersRevoked, setRemindersRevoked } = usePlanStore();
-  const [denied, setDenied] = useState(false);
-  // Android's checkPermissions() reports "prompt", not "denied", right after the fan revokes
-  // notifications in system Settings (shouldShowRequestPermissionRationale resets), so the
-  // literal `denied` check below misses that case entirely — `remindersRevoked` is the
-  // reliable signal useReminderSync leaves behind when it force-disables the switch for that reason.
-  const showDenied = denied || remindersRevoked;
-  const [inexact, setInexact] = useState(false);
+  const { settings, setSettings } = usePlanStore();
+  const { supported, remindersOn, showDenied, inexact, toggle: onToggle, requestExact } = useReminderToggle();
   const [pendingCount, setPendingCount] = useState<number | null>(null);
-  const supported = notifications.isSupported();
-  const busy = useRef(false);
-
-  // The fan may have revoked notifications in Settings since this sheet was last open.
-  useEffect(() => {
-    if (!supported) return;
-    void notifications.permission().then((p) => { if (p === "denied") setDenied(true); });
-  }, [supported]);
-
-  const onToggle = async (v: boolean) => {
-    if (busy.current) return;
-    if (!v) { setRemindersOn(false); setDenied(false); setRemindersRevoked(false); return; }
-    busy.current = true;
-    try {
-      const perm = await notifications.request();
-      if (perm !== "granted") { setDenied(true); setRemindersOn(false); setRemindersRevoked(false); return; }
-      setDenied(false);
-      setRemindersRevoked(false);
-      setRemindersOn(true);
-      const exact = await notifications.exactAllowed();
-      setInexact(!exact);
-    } catch {
-      setDenied(true);
-      setRemindersOn(false);
-      setRemindersRevoked(false);
-    } finally {
-      busy.current = false;
-    }
-  };
 
   return (
     <Sheet onClose={onClose} title="Schedule settings">
@@ -60,7 +26,7 @@ export function PlanSettings({ onClose }: { onClose: () => void }) {
             {showDenied && <p className="mt-1.5 text-[13px] text-ember">Notifications are off for this app in Settings.</p>}
             {inexact && (
               <p className="mt-1.5 text-[13px] text-fg-soft">
-                Reminders may arrive a few minutes late. <button type="button" className="underline" onClick={() => void notifications.requestExact().then((ok) => setInexact(!ok))}>Allow exact timing in Settings</button>
+                Reminders may arrive a few minutes late. <button type="button" className="underline" onClick={requestExact}>Allow exact timing in Settings</button>
               </p>
             )}
             {import.meta.env.DEV && (
