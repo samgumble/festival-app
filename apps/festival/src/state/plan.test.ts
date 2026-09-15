@@ -35,3 +35,11 @@ describe("reminders switch", () => {
     expect(s.remindersOn).toBe(false);
   });
 });
+
+describe("persist migration v2", () => {
+  it("resets the old default 10-minute buffer to none, keeps a deliberate 20", () => {
+    const opts = (usePlanStore as unknown as { persist: { getOptions: () => { migrate: (p: unknown, v: number) => { settings: { bufferMinutes: number; leadMinutes: number } } } } }).persist.getOptions();
+    expect(opts.migrate({ favorites: [], settings: { leadMinutes: 5, bufferMinutes: 10 } }, 1).settings).toEqual({ leadMinutes: 5, bufferMinutes: 0 });
+    expect(opts.migrate({ favorites: [], settings: { leadMinutes: 15, bufferMinutes: 20 } }, 1).settings).toEqual({ leadMinutes: 15, bufferMinutes: 20 });
+  });
+});

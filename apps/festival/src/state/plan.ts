@@ -33,7 +33,7 @@ export const usePlanStore = create<PlanState>()(
     (set) => ({
       favorites: [],
       resolutions: {},
-      settings: { leadMinutes: 15, bufferMinutes: 10 },
+      settings: { leadMinutes: 15, bufferMinutes: 0 }, // back-to-back sets are not a conflict unless the fan asks for a buffer
       remindersOn: false,
       remindersRevoked: false,
       toggleFavorite: (id) => set((s) => ({ favorites: toggle(s.favorites, id) })),
@@ -45,11 +45,14 @@ export const usePlanStore = create<PlanState>()(
     }),
     {
       name: "bb-plan",
-      version: 1,
+      version: 2,
       // v0 carried a per-set `reminders: string[]` (toggles removed in the design pass); drop it.
-      migrate: (persisted) => {
-        const { reminders: _dropped, ...rest } = (persisted ?? {}) as Record<string, unknown> & { reminders?: unknown };
-        return { remindersOn: false, ...rest } as unknown as PlanState;
+      // v1 defaulted the stage buffer to 10 min, which flagged back-to-back sets (12–1 then 1–2) as
+      // conflicts (owner, 2026-09-14); v2 resets a buffer that is still at that old default to 0.
+      migrate: (persisted, version) => {
+        const { reminders: _dropped, ...rest } = (persisted ?? {}) as Record<string, unknown> & { reminders?: unknown; settings?: { leadMinutes?: number; bufferMinutes?: number } };
+        const settings = { leadMinutes: rest.settings?.leadMinutes ?? 15, bufferMinutes: version < 2 && (rest.settings?.bufferMinutes ?? 10) === 10 ? 0 : rest.settings?.bufferMinutes ?? 0 };
+        return { remindersOn: false, ...rest, settings } as unknown as PlanState;
       },
     },
   ),
