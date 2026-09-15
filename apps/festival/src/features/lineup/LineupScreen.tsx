@@ -23,8 +23,14 @@ export function LineupScreen() {
         <div className="flex-1" />
         <SegmentedControl label="View" value={view} onChange={setView} options={[{ value: "list", label: "List" }, { value: "grid", label: "Grid" }]} />
       </div>
-      <input type="search" role="searchbox" aria-label="Search artists" placeholder="Search artists" value={query} onChange={(e) => setQuery(e.target.value)}
-        className="mt-2.5 h-11 w-full rounded-ctl border border-hair bg-surface px-3 text-[15px] placeholder:text-fg-soft" />
+      <div className="relative mt-2.5">
+        <input type="search" role="searchbox" aria-label="Search artists" placeholder="Search artists" value={query} onChange={(e) => setQuery(e.target.value)}
+          className="h-11 w-full rounded-ctl border border-hair bg-surface pl-3 pr-11 text-[15px] placeholder:text-fg-soft [&::-webkit-search-cancel-button]:appearance-none" />
+        {searching && (
+          <button type="button" aria-label="Clear search" onClick={() => setQuery("")}
+            className="absolute right-2 top-1/2 grid h-7 w-7 -translate-y-1/2 place-items-center rounded-chip bg-surface-2 text-[15px] leading-none text-fg">×</button>
+        )}
+      </div>
       {searching ? (
         <div className="mt-2">
           {hits.length === 0 && <p className="py-6 text-center text-fg-soft">No artists match “{query}”.</p>}

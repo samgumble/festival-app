@@ -45,3 +45,16 @@ describe("Lineup list", () => {
     expect(screen.getByText("Baron Vaughn")).toBeInTheDocument();
   });
 });
+
+describe("search clear button", () => {
+  it("appears once there is a query and empties it", async () => {
+    renderAt("/lineup");
+    const box = await screen.findByRole("searchbox", { name: /search artists/i });
+    expect(screen.queryByRole("button", { name: /clear search/i })).not.toBeInTheDocument();
+    fireEvent.change(box, { target: { value: "taj" } });
+    expect(screen.getAllByText(/Taj Mahal/).length).toBeGreaterThan(0);
+    fireEvent.click(screen.getByRole("button", { name: /clear search/i }));
+    expect((box as HTMLInputElement).value).toBe("");
+    expect(screen.queryByRole("button", { name: /clear search/i })).not.toBeInTheDocument();
+  });
+});
