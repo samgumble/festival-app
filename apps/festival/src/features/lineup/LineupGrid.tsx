@@ -71,7 +71,7 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
       <div className="flex overflow-hidden rounded-card border border-hair bg-surface">
         <div className="shrink-0" style={{ width: labelW }}>
           <div className="h-7 border-b border-hair" />
-          {lanes.map((lane) => <div key={lane.key} className="micro flex h-[72px] items-start border-b border-r border-hair px-1.5 pt-2 text-fg-soft last:border-b-0">{lane.label}</div>)}
+          {lanes.map((lane) => <div key={lane.key} data-testid={`lane-label-${lane.key}`} className="micro flex h-[72px] items-start whitespace-pre-line border-b border-r border-hair px-1.5 pt-2 text-fg-soft last:border-b-0">{lane.label}</div>)}
         </div>
         <div ref={scroller} className="relative flex-1 overflow-x-auto">
           <div className="relative" style={{ width: g.hours.length * pxPerHour }}>

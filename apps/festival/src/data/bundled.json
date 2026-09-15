@@ -1,6 +1,6 @@
 {
   "meta": {
-    "contentVersion": "2026.09.14.7",
+    "contentVersion": "2026.09.14.8",
     "publishedAt": "2026-09-14T12:00:00-06:00",
     "publishedBy": "seed",
     "sources": [
@@ -72,7 +72,7 @@
       "id": "camp",
       "name": "Campground Sessions",
       "shortName": "Camp",
-      "gridLabel": "Campground Sessions",
+      "gridLabel": "Camp\nground\nSessions",
       "color": "violet",
       "sortOrder": 4
     },
