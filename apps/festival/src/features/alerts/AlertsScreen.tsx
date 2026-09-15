@@ -74,7 +74,6 @@ export function AlertsScreen() {
           </div>
         </section>
       ))}
-      <p className="mt-6 text-center text-[12px] text-fg-soft">Updates from the festival organizer appear here.</p>
     </div>
   );
 }
