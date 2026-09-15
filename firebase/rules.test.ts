@@ -93,3 +93,27 @@ describe("writes", () => {
     await assertFails(getDoc(doc(admin(), "admins", STRANGER)));
   });
 });
+
+describe("cross-user isolation (admins/{uid} is the only per-user record)", () => {
+  it("a signed-in user cannot read another user's admin record", async () => {
+    await assertFails(getDoc(doc(stranger(), "admins", ADMIN)));
+    await assertFails(getDoc(doc(admin(), "admins", STRANGER)));
+  });
+  it("nobody can list the admins collection, not even an admin", async () => {
+    await assertFails(getDocs(collection(anon(), "admins")));
+    await assertFails(getDocs(collection(stranger(), "admins")));
+    await assertFails(getDocs(collection(admin(), "admins")));
+  });
+  it("no per-user data can be created or read under any other path (default deny)", async () => {
+    await assertFails(setDoc(doc(stranger(), "users", STRANGER), { favorites: ["x"] }));
+    await assertFails(getDoc(doc(stranger(), "users", ADMIN)));
+    await assertFails(setDoc(doc(admin(), "users", ADMIN), { favorites: ["x"] }));
+    await assertFails(getDocs(collection(admin(), "users")));
+  });
+  it("a signed-in user who is not an admin has exactly the same rights as an anonymous fan", async () => {
+    await assertSucceeds(getDoc(doc(stranger(), "content", "published")));
+    await assertSucceeds(getDocs(collection(stranger(), "alerts")));
+    await assertFails(getDoc(doc(stranger(), "content", "draft")));
+    await assertFails(setDoc(doc(stranger(), "alerts", "mine"), alert));
+  });
+});
