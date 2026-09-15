@@ -20,6 +20,7 @@ function SetCardRow({ set, lost, conflict, now, onSwap }: { set: FestivalSet; lo
         <Link to={`/lineup/artist/${artist.id}`} className="min-w-0 flex-1">
           <span className={`block truncate ${artist.tier === "headliner" ? "font-display text-[17px] leading-5" : "text-[16px] font-semibold leading-5"}`}>{artist.name}</span>
           <span className="block text-[13px] text-fg-soft tabular-nums">{stage.name} · {formatRange(parseIso(set.start), parseIso(set.end))}{ended ? " · ended" : ""}</span>
+          {set.note && <span className="block text-[13px] text-fg-soft">{set.note}</span>}
         </Link>
         {/* reminders arrive with the native build (Day 4); until then the row is favorite-only */}
         {lost && <Button size="sm" onClick={onSwap}>Swap</Button>}

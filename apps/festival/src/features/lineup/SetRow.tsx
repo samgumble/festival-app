@@ -23,6 +23,7 @@ export function SetRow({ set, artist, stage, now, showStage = false, dayLabel }:
         <span className="min-w-0 flex-1">
           <span className={`block truncate ${isHeadliner ? "font-display text-[17px] leading-5" : "text-[16px] font-semibold leading-5"}`}>{artist.name}</span>
           {sub && <span className="block text-[13px] text-fg-soft">{sub}</span>}
+          {set.note && <span className="block text-[13px] text-fg-soft">{set.note}</span>}
         </span>
         {showStage && <Chip tone={stage.color}>{stage.shortName}</Chip>}
       </button>

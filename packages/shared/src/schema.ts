@@ -8,7 +8,7 @@ export const IsoWithOffset = z
 
 export const DayId = z.enum(["fri", "sat", "sun"]);
 export const Tier = z.enum(["headliner", "featured", "lineup", "comedy", "musicmaker"]);
-export const StageColor = z.enum(["sky", "plum", "pine", "violet"]);
+export const StageColor = z.enum(["sky", "plum", "pine", "violet", "amber", "bloom", "leaf"]);
 export const Severity = z.enum(["info", "important", "urgent"]);
 
 export const FestivalDay = z.object({

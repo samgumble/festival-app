@@ -17,7 +17,7 @@ describe("gridLayout", () => {
     const mussel = sat.find((s) => s.id === "sat-charlie-musselwhite-ga20-main-1630")!;
     expect(g.left(mussel)).toBe(4.5 * 72);
     expect(g.width(mussel)).toBeCloseTo((70 / 60) * 72 - 4, 5);
-    expect(g.hours.length).toBe(10); // 12 PM … 9 PM
+    expect(g.hours.length).toBe(12); // 12 PM … 11 PM (juke joints run to 11:55 PM)
   });
 });
 
@@ -37,7 +37,7 @@ describe("LineupGrid", () => {
   it("renders a lane per stage, a now line, and favorited blocks", async () => {
     renderAt("/lineup");
     expect(await screen.findByTestId("now-line")).toBeInTheDocument();
-    expect(screen.getAllByTestId(/^lane-/).length).toBe(4);
+    expect(screen.getAllByTestId(/^lane-/).length).toBe(7);
     const block = screen.getByRole("button", { name: /Charlie Musselwhite & GA-20/ });
     expect(block).toHaveAttribute("data-favorite", "true");
     fireEvent.click(block);

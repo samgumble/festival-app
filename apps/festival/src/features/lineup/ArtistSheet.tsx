@@ -44,7 +44,7 @@ export function ArtistSheet() {
           return (
             <div key={s.id} className="flex items-center gap-3 border-b border-hair py-2.5 last:border-b-0">
               <span className="w-16 shrink-0 text-[14px] font-semibold text-fg-soft tabular-nums">{dayLabel(s.dayId)} {formatRange(start, parseIso(s.end)).split(" – ")[0]}</span>
-              <span className="min-w-0 flex-1 text-[15px] font-semibold">{stage.name}<span className="block text-[13px] font-normal text-fg-soft tabular-nums">{formatRange(start, parseIso(s.end))}</span></span>
+              <span className="min-w-0 flex-1 text-[15px] font-semibold">{stage.name}<span className="block text-[13px] font-normal text-fg-soft tabular-nums">{formatRange(start, parseIso(s.end))}</span>{s.note && <span className="block text-[13px] font-normal text-fg-soft">{s.note}</span>}</span>
               <Chip tone={stage.color}>{stage.shortName}</Chip>
               <Heart on={favorites.includes(s.id)} onToggle={() => toggleFavorite(s.id)} label={`Favorite ${artist.name}, ${dayLabel(s.dayId)} ${formatRange(start, parseIso(s.end))}, ${stage.name}`} />
             </div>

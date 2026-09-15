@@ -30,4 +30,7 @@ export const STAGE_COLOR_HEX: Record<StageColor, string> = {
   plum: PALETTE.plum,
   pine: PALETTE.pine,
   violet: PALETTE.violet,
+  amber: PALETTE.amber,
+  bloom: PALETTE.bloom,
+  leaf: PALETTE.leaf,
 };

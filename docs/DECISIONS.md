@@ -160,3 +160,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** Owner request 2026-09-14. The lockup reads better on a flat ground than over the busy poster, and the poster deserves an unobstructed tile.
 
 **Consequences.** `Hero` has no children/chip props. The live-day hero is the same layout with a 200 px poster tile.
+
+## D-031 — Beer tastings, Juke Joints, and comedy appear as stages; set notes are shown (2026-09-14)
+
+**Decision.** Three more stages (`StageColor` gains `amber`, `bloom`, `leaf`; ink text on those fills): **Beer Tasting Sessions** (`tasting`, amber; four sessions from the owner, matching the official schedule; note carries "Beer Garden, between Main Stage and Blues Stage · 21+ · separate ticket"), **Stand-Up Comedy** (`comedy`, leaf; the four festival-grounds comedy sets moved here from Blues/Campground with the venue in the note), and **Juke Joints** (`juke`, bloom; Fri/Sat 10 PM shows at five venues, one set per show under the first-named artist with co-bill and venue in the note, plus Sunday's Fais Do-Do closing show). The Liz comedy shows on Fri/Sat nights live under Juke Joints (they are Juke Joint programming) with the comedy credit in the note. Juke Joint end times are not published; sets end at 11:55 PM so they never cross midnight. Thursday's Bal de Maison is outside the three festival days and is not included. `FestivalSet.note` now renders in list rows, artist sheets, the schedule timeline, and Now cards. Content v2026.09.14.3 (38 artists, 61 sets, 7 stages); source quotes in `.superpowers/sdd/content-research-2026-09-14.md`.
+
+**Why.** Owner request 2026-09-14 ("like another stage/artist/event"). Notes were already in the schema but never displayed, which hid the comedy credits.
+
+**Consequences.** The grid shows seven lanes on Fri/Sat. Conflict detection treats a Juke Joint and a comedy set at the same time as a real conflict, which is correct. The admin console needs the shared-schema subtree pull for the new colors. The site's own copy disagrees with itself on Juke Joint price ($30 vs $35) and brewery counts; the app quotes neither.

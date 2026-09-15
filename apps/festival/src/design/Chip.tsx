@@ -1,8 +1,8 @@
 import type { ReactNode } from "react";
 
-export type ChipTone = "sky" | "plum" | "pine" | "violet" | "sun" | "ember" | "paper";
+export type ChipTone = "sky" | "plum" | "pine" | "violet" | "amber" | "bloom" | "leaf" | "sun" | "ember" | "paper";
 const TONE: Record<ChipTone, string> = {
-  sky: "bg-sky text-ink", plum: "bg-plum text-white", pine: "bg-pine text-white", violet: "bg-violet text-white",
+  sky: "bg-sky text-ink", plum: "bg-plum text-white", pine: "bg-pine text-white", violet: "bg-violet text-white", amber: "bg-amber text-ink", bloom: "bg-bloom text-ink", leaf: "bg-leaf text-ink",
   sun: "bg-sun text-ink", ember: "bg-ember-deep text-white", paper: "bg-surface-2 text-fg",
 };
 

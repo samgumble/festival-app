@@ -22,10 +22,10 @@ describe("festivalState", () => {
 describe("day + stage grouping", () => {
   it("returns Saturday's sets in chronological order, grouped by stage sortOrder", () => {
     const sat = setsForDay(content.sets, "sat");
-    expect(sat.length).toBe(17);
+    expect(sat.length).toBe(24); // 17 stage sets + 2 tasting sessions + 5 juke joints
     expect(sat[0]?.id).toBe("sat-j-causeways-main-1200");
     const groups = groupByStage(sat, content.stages);
-    expect(groups.map((g) => g.stage.id)).toEqual(["main", "blues", "truck", "camp"]);
+    expect(groups.map((g) => g.stage.id)).toEqual(["main", "blues", "truck", "camp", "tasting", "comedy", "juke"]);
     expect(groups[0]?.sets.map((s) => s.artistId)).toEqual([
       "j-causeways", "judith-hill", "telluride-blues-challenge-winner-2026", "nether-hour", "charlie-musselwhite-ga20", "record-company", "taj-mahal-keb-mo",
     ]);
