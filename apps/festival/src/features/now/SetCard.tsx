@@ -3,6 +3,7 @@ import { Link } from "react-router";
 import { Card, Chip, Eyebrow, ProgressBar } from "@/design";
 import { minutesLeft, progress } from "@/domain/schedule";
 import { formatRange, formatTime, minutesBetween, parseIso } from "@/domain/time";
+import { placeOf } from "@/domain/place";
 
 export function SetCard({ set, artist, stage, now, emphasis = "plain" }: {
   set: FestivalSet; artist: Artist; stage: Stage; now: Date; emphasis?: "now" | "next" | "plain";
@@ -23,7 +24,7 @@ export function SetCard({ set, artist, stage, now, emphasis = "plain" }: {
         {emphasis === "now" ? (
           <div className="mt-2.5"><ProgressBar value={progress(set, now)} label={`${artist.name} set progress`} /></div>
         ) : (
-          <Eyebrow className="mt-1 normal-case tracking-normal font-sans text-[13px]">{formatRange(start, end)} · {stage.name}{set.note ? ` · ${set.note}` : ""}</Eyebrow>
+          <Eyebrow className="mt-1 normal-case tracking-normal font-sans text-[13px]">{formatRange(start, end)} · {placeOf(set, stage)}{set.note ? ` · ${set.note}` : ""}</Eyebrow>
         )}
       </Card>
     </Link>

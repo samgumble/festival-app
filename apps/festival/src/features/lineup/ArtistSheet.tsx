@@ -5,6 +5,7 @@ import { useFestivalClock } from "@/app/clock";
 import { useContent, useContentIndex } from "@/data/content";
 import { formatRange, formatTime, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
+import { placeOf } from "@/domain/place";
 
 const TIER_LABEL = { headliner: "Headliner", featured: "Featured", lineup: "Lineup", comedy: "Comedy", musicmaker: "Music Maker Foundation" } as const;
 
@@ -23,7 +24,7 @@ export function ArtistSheet() {
   const inPlan = single ? favorites.includes(single.id) : false;
   const dayLabel = (dayId: string) => content.festival.days.find((d) => d.id === dayId)?.label.slice(0, 3) ?? dayId;
   const share = async () => {
-    const lines = sets.map((s) => `${dayLabel(s.dayId)} ${formatRange(parseIso(s.start), parseIso(s.end))} · ${idx.stagesById.get(s.stageId)?.name}`);
+    const lines = sets.map((s) => `${dayLabel(s.dayId)} ${formatRange(parseIso(s.start), parseIso(s.end))} · ${placeOf(s, idx.stagesById.get(s.stageId))}`);
     const text = `${artist.name} — ${content.festival.name}\n${lines.join("\n")}\n${content.festival.links.lineup}`;
     try {
       if (navigator.share) await navigator.share({ text }); else await navigator.clipboard?.writeText(text);
@@ -44,9 +45,9 @@ export function ArtistSheet() {
           return (
             <div key={s.id} className="flex items-center gap-3 border-b border-hair py-2.5 last:border-b-0">
               <span className="w-16 shrink-0 text-[14px] font-semibold text-fg-soft tabular-nums">{dayLabel(s.dayId)} {formatRange(start, parseIso(s.end)).split(" – ")[0]}</span>
-              <span className="min-w-0 flex-1 text-[15px] font-semibold">{stage.name}<span className="block text-[13px] font-normal text-fg-soft tabular-nums">{formatRange(start, parseIso(s.end))}</span>{s.note && <span className="block text-[13px] font-normal text-fg-soft">{s.note}</span>}</span>
+              <span className="min-w-0 flex-1 text-[15px] font-semibold">{placeOf(s, stage)}<span className="block text-[13px] font-normal text-fg-soft tabular-nums">{formatRange(start, parseIso(s.end))}</span>{s.note && <span className="block text-[13px] font-normal text-fg-soft">{s.note}</span>}</span>
               <Chip tone={stage.color}>{stage.shortName}</Chip>
-              <Heart on={favorites.includes(s.id)} onToggle={() => toggleFavorite(s.id)} label={`Favorite ${artist.name}, ${dayLabel(s.dayId)} ${formatRange(start, parseIso(s.end))}, ${stage.name}`} />
+              <Heart on={favorites.includes(s.id)} onToggle={() => toggleFavorite(s.id)} label={`Favorite ${artist.name}, ${dayLabel(s.dayId)} ${formatRange(start, parseIso(s.end))}, ${placeOf(s, stage)}`} />
             </div>
           );
         })}

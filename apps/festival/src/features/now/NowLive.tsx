@@ -9,6 +9,7 @@ import { usePlanStore } from "@/state/plan";
 import type { DayId } from "@bb/shared";
 import { Hero } from "./Hero";
 import { SetCard } from "./SetCard";
+import { placeOf } from "@/domain/place";
 
 export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
   const content = useContent();
@@ -54,7 +55,7 @@ export function NowLive({ now, dayId }: { now: Date; dayId: DayId | null }) {
           <Card className="flex items-center gap-3 border-plum">
             <Link to={`/lineup/artist/${p.artist.id}`} className="min-w-0 flex-1">
               <div className="text-[16px] font-semibold leading-5">{p.artist.name}</div>
-              <div className="text-[13px] text-fg-soft tabular-nums">{formatDuration(minutesBetween(now, parseIso(myNext.start)))} · {formatRange(parseIso(myNext.start), parseIso(myNext.end))} · {p.stage.name}</div>
+              <div className="text-[13px] text-fg-soft tabular-nums">{formatDuration(minutesBetween(now, parseIso(myNext.start)))} · {formatRange(parseIso(myNext.start), parseIso(myNext.end))} · {placeOf(myNext, p.stage)}</div>
             </Link>
             <Link to="/plan" className={buttonClasses({ size: "sm" })}>Schedule</Link>
           </Card>

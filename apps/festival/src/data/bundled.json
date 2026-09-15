@@ -1,6 +1,6 @@
 {
   "meta": {
-    "contentVersion": "2026.09.14.3",
+    "contentVersion": "2026.09.14.4",
     "publishedAt": "2026-09-14T12:00:00-06:00",
     "publishedBy": "seed",
     "sources": [
@@ -633,7 +633,8 @@
       "dayId": "sat",
       "start": "2026-09-19T15:30:00-06:00",
       "end": "2026-09-19T16:30:00-06:00",
-      "note": "with Baron Vaughn, Kiran Deol & Hannah Jones · Campground Sessions (campers)"
+      "note": "with Baron Vaughn, Kiran Deol & Hannah Jones · campers only",
+      "venue": "Campground Sessions"
     },
     {
       "id": "sat-troy-walker-blues-1600",
@@ -642,7 +643,8 @@
       "dayId": "sat",
       "start": "2026-09-19T16:00:00-06:00",
       "end": "2026-09-19T17:00:00-06:00",
-      "note": "with Baron Vaughn, Kiran Deol & Hannah Jones · Blues Stage"
+      "note": "with Baron Vaughn, Kiran Deol & Hannah Jones",
+      "venue": "Blues Stage"
     },
     {
       "id": "sun-troy-walker-camp-1230",
@@ -651,7 +653,8 @@
       "dayId": "sun",
       "start": "2026-09-20T12:30:00-06:00",
       "end": "2026-09-20T13:30:00-06:00",
-      "note": "with Baron Vaughn, Kiran Deol & Hannah Jones · Campground Sessions (campers)"
+      "note": "with Baron Vaughn, Kiran Deol & Hannah Jones · campers only",
+      "venue": "Campground Sessions"
     },
     {
       "id": "sun-troy-walker-blues-1600",
@@ -660,7 +663,8 @@
       "dayId": "sun",
       "start": "2026-09-20T16:00:00-06:00",
       "end": "2026-09-20T17:00:00-06:00",
-      "note": "with Baron Vaughn, Kiran Deol & Hannah Jones · Blues Stage"
+      "note": "with Baron Vaughn, Kiran Deol & Hannah Jones",
+      "venue": "Blues Stage"
     },
     {
       "id": "fri-tasting-session-1-tasting-1300",
@@ -669,7 +673,8 @@
       "dayId": "fri",
       "start": "2026-09-18T13:00:00-06:00",
       "end": "2026-09-18T15:00:00-06:00",
-      "note": "Beer Garden, between Main Stage and Blues Stage · 21+ · separate ticket"
+      "note": "21+ · separate ticket",
+      "venue": "Beer Garden (between Main Stage and Blues Stage)"
     },
     {
       "id": "fri-tasting-session-2-tasting-1600",
@@ -678,7 +683,8 @@
       "dayId": "fri",
       "start": "2026-09-18T16:00:00-06:00",
       "end": "2026-09-18T18:00:00-06:00",
-      "note": "Beer Garden, between Main Stage and Blues Stage · 21+ · separate ticket"
+      "note": "21+ · separate ticket",
+      "venue": "Beer Garden (between Main Stage and Blues Stage)"
     },
     {
       "id": "sat-tasting-session-1-tasting-1300",
@@ -687,7 +693,8 @@
       "dayId": "sat",
       "start": "2026-09-19T13:00:00-06:00",
       "end": "2026-09-19T15:00:00-06:00",
-      "note": "Beer Garden, between Main Stage and Blues Stage · 21+ · separate ticket"
+      "note": "21+ · separate ticket",
+      "venue": "Beer Garden (between Main Stage and Blues Stage)"
     },
     {
       "id": "sat-tasting-session-2-high-abv-tasting-1600",
@@ -696,7 +703,8 @@
       "dayId": "sat",
       "start": "2026-09-19T16:00:00-06:00",
       "end": "2026-09-19T18:00:00-06:00",
-      "note": "Beer Garden, between Main Stage and Blues Stage · 21+ · separate ticket"
+      "note": "21+ · separate ticket",
+      "venue": "Beer Garden (between Main Stage and Blues Stage)"
     },
     {
       "id": "fri-eggy-juke-2200",
@@ -705,7 +713,8 @@
       "dayId": "fri",
       "start": "2026-09-18T22:00:00-06:00",
       "end": "2026-09-18T23:55:00-06:00",
-      "note": "with Terry “Harmonica” Bean · Sheridan Opera House · separate ticket · doors 9:45 PM (VIP 9:30)"
+      "note": "with Terry “Harmonica” Bean · Juke Joint · separate ticket · doors 9:45 PM (VIP 9:30)",
+      "venue": "Sheridan Opera House"
     },
     {
       "id": "fri-myron-elkins-juke-2200",
@@ -714,7 +723,8 @@
       "dayId": "fri",
       "start": "2026-09-18T22:00:00-06:00",
       "end": "2026-09-18T23:55:00-06:00",
-      "note": "The Elks · separate ticket · doors 9:45 PM (VIP 9:30)"
+      "note": "Juke Joint · separate ticket · doors 9:45 PM (VIP 9:30)",
+      "venue": "Elks Lodge"
     },
     {
       "id": "fri-record-company-juke-2200",
@@ -723,7 +733,8 @@
       "dayId": "fri",
       "start": "2026-09-18T22:00:00-06:00",
       "end": "2026-09-18T23:55:00-06:00",
-      "note": "with Ken Valdez · Blues Stage · separate ticket · doors 9:45 PM (VIP 9:30)"
+      "note": "with Ken Valdez · Juke Joint · separate ticket · doors 9:45 PM (VIP 9:30)",
+      "venue": "Blues Stage"
     },
     {
       "id": "fri-greyhounds-juke-2200",
@@ -732,7 +743,8 @@
       "dayId": "fri",
       "start": "2026-09-18T22:00:00-06:00",
       "end": "2026-09-18T23:55:00-06:00",
-      "note": "The Moon at O’Bannon’s · separate ticket · doors 9:45 PM (VIP 9:30)"
+      "note": "Juke Joint · separate ticket · doors 9:45 PM (VIP 9:30)",
+      "venue": "The Moon at O’Bannon’s"
     },
     {
       "id": "fri-troy-walker-juke-2200",
@@ -741,7 +753,8 @@
       "dayId": "fri",
       "start": "2026-09-18T22:00:00-06:00",
       "end": "2026-09-18T23:55:00-06:00",
-      "note": "Stand-up comedy with Baron Vaughn, Kiran Deol & Hannah Jones · Liz · separate ticket · doors 9:45 PM (VIP 9:30)"
+      "note": "Stand-up comedy with Baron Vaughn, Kiran Deol & Hannah Jones · Juke Joint · separate ticket · doors 9:45 PM (VIP 9:30)",
+      "venue": "Liz"
     },
     {
       "id": "sat-tab-benoit-juke-2200",
@@ -750,7 +763,8 @@
       "dayId": "sat",
       "start": "2026-09-19T22:00:00-06:00",
       "end": "2026-09-19T23:55:00-06:00",
-      "note": "with Nether Hour · Sheridan Opera House · separate ticket · doors 9:45 PM (VIP 9:30)"
+      "note": "with Nether Hour · Juke Joint · separate ticket · doors 9:45 PM (VIP 9:30)",
+      "venue": "Sheridan Opera House"
     },
     {
       "id": "sat-j-causeways-juke-2200",
@@ -759,7 +773,8 @@
       "dayId": "sat",
       "start": "2026-09-19T22:00:00-06:00",
       "end": "2026-09-19T23:55:00-06:00",
-      "note": "The Moon at O’Bannon’s · separate ticket · doors 9:45 PM (VIP 9:30)"
+      "note": "Juke Joint · separate ticket · doors 9:45 PM (VIP 9:30)",
+      "venue": "The Moon at O’Bannon’s"
     },
     {
       "id": "sat-samantha-fish-juke-2200",
@@ -768,7 +783,8 @@
       "dayId": "sat",
       "start": "2026-09-19T22:00:00-06:00",
       "end": "2026-09-19T23:55:00-06:00",
-      "note": "with The Zac Schulze Gang · Blues Stage · separate ticket · doors 9:45 PM (VIP 9:30)"
+      "note": "with The Zac Schulze Gang · Juke Joint · separate ticket · doors 9:45 PM (VIP 9:30)",
+      "venue": "Blues Stage"
     },
     {
       "id": "sat-judith-hill-juke-2200",
@@ -777,7 +793,8 @@
       "dayId": "sat",
       "start": "2026-09-19T22:00:00-06:00",
       "end": "2026-09-19T23:55:00-06:00",
-      "note": "Elks Lodge · separate ticket · doors 9:45 PM (VIP 9:30)"
+      "note": "Juke Joint · separate ticket · doors 9:45 PM (VIP 9:30)",
+      "venue": "Elks Lodge"
     },
     {
       "id": "sat-troy-walker-juke-2200",
@@ -786,7 +803,8 @@
       "dayId": "sat",
       "start": "2026-09-19T22:00:00-06:00",
       "end": "2026-09-19T23:55:00-06:00",
-      "note": "Stand-up comedy with Baron Vaughn, Kiran Deol & Hannah Jones · Liz · separate ticket · doors 9:45 PM (VIP 9:30)"
+      "note": "Stand-up comedy with Baron Vaughn, Kiran Deol & Hannah Jones · Juke Joint · separate ticket · doors 9:45 PM (VIP 9:30)",
+      "venue": "Liz"
     },
     {
       "id": "sun-eddie-9v-juke-2200",
@@ -795,7 +813,8 @@
       "dayId": "sun",
       "start": "2026-09-20T22:00:00-06:00",
       "end": "2026-09-20T23:55:00-06:00",
-      "note": "Fais Do-Do closing show · Sheridan Opera House · separate ticket · doors 9:30 PM"
+      "note": "Fais Do-Do closing show · separate ticket · doors 9:30 PM",
+      "venue": "Sheridan Opera House"
     }
   ]
 }

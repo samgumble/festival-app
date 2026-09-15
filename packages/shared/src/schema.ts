@@ -66,6 +66,8 @@ export const FestivalSet = z
     start: IsoWithOffset,
     end: IsoWithOffset,
     note: z.string().optional(),
+    /** Where the set actually happens when that is not the stage itself (Juke Joint venues, the Beer Garden). */
+    venue: z.string().optional(),
   })
   .refine((s) => Date.parse(s.end) > Date.parse(s.start), { message: "end must be after start", path: ["end"] });
 

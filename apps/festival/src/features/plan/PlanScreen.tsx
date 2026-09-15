@@ -13,6 +13,7 @@ import { share } from "@/platform/share";
 import { PlanEmpty } from "./PlanEmpty";
 import { PlanSettings } from "./PlanSettings";
 import { PlanTimeline } from "./PlanTimeline";
+import { placeOf } from "@/domain/place";
 
 export function PlanScreen() {
   const { now, state, dayId } = useFestivalClock();
@@ -53,7 +54,7 @@ export function PlanScreen() {
         <Card className="mt-3 border-plum bg-gradient-to-br from-surface to-violet/15">
           <Eyebrow tone="plum">Next up · {formatDuration(minutesBetween(now, parseIso(next.start)))}</Eyebrow>
           <Link to={`/lineup/artist/${next.artistId}`} className="mt-1 block font-display text-[20px] leading-6">{idx.artistsById.get(next.artistId)?.name}</Link>
-          <div className="text-[13px] text-fg-soft tabular-nums">{formatRange(parseIso(next.start), parseIso(next.end))} · {idx.stagesById.get(next.stageId)?.name}{settings.bufferMinutes > 0 ? ` · leave by ${formatTime(leaveBy(next, settings.bufferMinutes))}` : ""}</div>
+          <div className="text-[13px] text-fg-soft tabular-nums">{formatRange(parseIso(next.start), parseIso(next.end))} · {placeOf(next, idx.stagesById.get(next.stageId))}{settings.bufferMinutes > 0 ? ` · leave by ${formatTime(leaveBy(next, settings.bufferMinutes))}` : ""}</div>
         </Card>
       )}
       {daySets.length === 0 ? <p className="mt-6 text-center text-fg-soft">Nothing planned for this day yet.</p> : <PlanTimeline sets={daySets} now={now} />}

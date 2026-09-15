@@ -6,6 +6,7 @@ import { detectConflicts, lostSetIds, type Conflict } from "@/domain/conflicts";
 import { isEnded } from "@/domain/schedule";
 import { formatRange, formatTime, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
+import { placeOf } from "@/domain/place";
 
 function SetCardRow({ set, lost, conflict, now, onSwap }: { set: FestivalSet; lost: boolean; conflict?: Conflict; now: Date; onSwap?: () => void }) {
   const idx = useContentIndex();
@@ -19,7 +20,7 @@ function SetCardRow({ set, lost, conflict, now, onSwap }: { set: FestivalSet; lo
       <div className="flex items-center gap-2">
         <Link to={`/lineup/artist/${artist.id}`} className="min-w-0 flex-1">
           <span className={`block truncate ${artist.tier === "headliner" ? "font-display text-[17px] leading-5" : "text-[16px] font-semibold leading-5"}`}>{artist.name}</span>
-          <span className="block text-[13px] text-fg-soft tabular-nums">{stage.name} · {formatRange(parseIso(set.start), parseIso(set.end))}{ended ? " · ended" : ""}</span>
+          <span className="block text-[13px] text-fg-soft tabular-nums">{placeOf(set, stage)} · {formatRange(parseIso(set.start), parseIso(set.end))}{ended ? " · ended" : ""}</span>
           {set.note && <span className="block text-[13px] text-fg-soft">{set.note}</span>}
         </Link>
         {/* reminders arrive with the native build (Day 4); until then the row is favorite-only */}

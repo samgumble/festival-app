@@ -9,7 +9,7 @@ export function planToIcs(sets: FestivalSet[], artistsById: Map<string, Artist>,
   const stamp = utcStamp(new Date());
   for (const s of [...sets].sort((a, b) => isoMs(a.start) - isoMs(b.start))) {
     const artist = artistsById.get(s.artistId)?.name ?? s.artistId;
-    const stage = stagesById.get(s.stageId)?.name ?? s.stageId;
+    const stage = s.venue ?? stagesById.get(s.stageId)?.name ?? s.stageId;
     lines.push(
       "BEGIN:VEVENT",
       `UID:${s.id}@bluesandbrews`,
@@ -34,7 +34,7 @@ export function planToText(sets: FestivalSet[], artistsById: Map<string, Artist>
     out.push("", day.label);
     for (const s of daySets) {
       const artist = artistsById.get(s.artistId)?.name ?? s.artistId;
-      const stage = stagesById.get(s.stageId)?.name ?? s.stageId;
+      const stage = s.venue ?? stagesById.get(s.stageId)?.name ?? s.stageId;
       out.push(`${formatRange(parseIso(s.start), parseIso(s.end))} · ${artist} · ${stage}`);
     }
   }

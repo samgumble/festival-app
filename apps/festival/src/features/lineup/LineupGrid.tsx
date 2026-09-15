@@ -6,6 +6,7 @@ import { useContent, useContentIndex } from "@/data/content";
 import { groupByStage, isEnded } from "@/domain/schedule";
 import { formatTime, isoMs, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
+import { placeOf } from "@/domain/place";
 
 const HOUR = 3_600_000;
 const LABEL_W = 70;
@@ -69,7 +70,7 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
                   const width = g.width(s);
                   return (
                     <button key={s.id} type="button" data-favorite={fav} onClick={() => navigate(`/lineup/artist/${artist.id}`)}
-                      aria-label={`${artist.name}, ${time}, ${grp.stage.name}`}
+                      aria-label={`${artist.name}, ${time}, ${placeOf(s, grp.stage)}`}
                       style={{ left: g.left(s), width }}
                       className={`absolute top-2 h-14 rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] ${STAGE_BG[grp.stage.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-85" : ""} ${width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : ""}`}>
                       <span className="block h-full overflow-hidden">
