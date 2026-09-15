@@ -34,11 +34,14 @@ describe("Lineup list", () => {
     expect(screen.queryByText("Nether Hour")).toBeNull();
   });
 
-  it("lists comedy acts without times", async () => {
+  it("lists the Blues Stage comedy set inside the Blues Stage section with a Comedy tag", async () => {
+    useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00" });
     renderAt("/lineup");
-    expect(await screen.findByText("Baron Vaughn")).toBeInTheDocument();
+    const blues = await screen.findByTestId("stage-blues");
+    expect(within(blues).getByText("Troy Walker")).toBeInTheDocument();
+    expect(within(blues).getByText("Comedy")).toBeInTheDocument();
+    expect(screen.queryByTestId("stage-comedy")).not.toBeInTheDocument();
   });
-
   it("search also matches a comedy act with no sets", async () => {
     renderAt("/lineup");
     fireEvent.change(await screen.findByRole("searchbox"), { target: { value: "baron" } });

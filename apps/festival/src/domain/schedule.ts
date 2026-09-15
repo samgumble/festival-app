@@ -26,6 +26,20 @@ export function setsForDay(sets: FestivalSet[], dayId: DayId): FestivalSet[] {
 
 export interface StageGroup { stage: Stage; sets: FestivalSet[] }
 
+/** The stage whose row/section a set belongs in: its venue when that venue is itself a stage (comedy "at Blues Stage", a Juke Joint at the Blues Stage), else its own stage. */
+export function hostStageId(set: FestivalSet, stages: Stage[]): string {
+  const host = set.venue ? stages.find((st) => st.name === set.venue) : undefined;
+  return host?.id ?? set.stageId;
+}
+
+/** Like groupByStage, but sets held at another stage's venue join that stage's group (their own stage colour still tags them). */
+export function groupByHostStage(sets: FestivalSet[], stages: Stage[]): StageGroup[] {
+  return [...stages]
+    .sort((a, b) => a.sortOrder - b.sortOrder)
+    .map((stage) => ({ stage, sets: sets.filter((s) => hostStageId(s, stages) === stage.id).sort(byStart) }))
+    .filter((g) => g.sets.length > 0);
+}
+
 export function groupByStage(sets: FestivalSet[], stages: Stage[]): StageGroup[] {
   return [...stages]
     .sort((a, b) => a.sortOrder - b.sortOrder)
@@ -49,8 +63,7 @@ export function shortVenue(venue: string): string {
 export function gridLanes(sets: FestivalSet[], stages: Stage[], venueLanes: "when-several" | "always" = "when-several"): GridLane[] {
   // A set whose venue is itself a stage (a Juke Joint or comedy set "at Blues Stage", comedy at the
   // Campground) lives in that stage's row; its block keeps its own stage colour.
-  const stageByName = new Map(stages.map((st) => [st.name, st]));
-  const hostOf = (s: FestivalSet): string => (s.venue && stageByName.get(s.venue)?.id) || s.stageId;
+  const hostOf = (s: FestivalSet): string => hostStageId(s, stages);
   return [...stages]
     .sort((a, b) => a.sortOrder - b.sortOrder)
     .flatMap((stage) => {

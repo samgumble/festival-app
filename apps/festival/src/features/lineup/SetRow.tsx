@@ -6,8 +6,10 @@ import { formatTime, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
 import { placeOf } from "@/domain/place";
 
-export function SetRow({ set, artist, stage, now, showStage = false, dayLabel }: {
+export function SetRow({ set, artist, stage, now, showStage = false, dayLabel, tag }: {
   set: FestivalSet; artist: Artist; stage: Stage; now: Date; showStage?: boolean; dayLabel?: string;
+  /** A set listed under a host stage (comedy at the Blues Stage) shows its own stage as a small tag. */
+  tag?: Stage;
 }) {
   const navigate = useNavigate();
   const on = usePlanStore((s) => s.favorites.includes(set.id));
@@ -27,6 +29,7 @@ export function SetRow({ set, artist, stage, now, showStage = false, dayLabel }:
           {set.note && <span className="block text-[13px] text-fg-soft">{set.note}</span>}
         </span>
         {showStage && <Chip tone={stage.color}>{stage.shortName}</Chip>}
+        {tag && !showStage && <Chip tone={tag.color}>{tag.shortName}</Chip>}
       </button>
       <Heart on={on} onToggle={() => toggle(set.id)} label={`Favorite ${artist.name}, ${formatTime(start)}, ${placeOf(set, stage)}`} />
     </div>
