@@ -40,6 +40,7 @@ describe("Lineup list", () => {
     const blues = await screen.findByTestId("stage-blues");
     expect(within(blues).getByText("Troy Walker")).toBeInTheDocument();
     expect(within(blues).getByText("Comedy")).toBeInTheDocument();
+    expect(within(blues).getAllByText("Blues Stage").length).toBe(1); // the section chip only, not repeated under the hosted set
     expect(screen.queryByTestId("stage-comedy")).not.toBeInTheDocument();
     // the Juke Joint comedy night at Liz carries the Comedy tag too
     const juke = screen.getByTestId("stage-juke");

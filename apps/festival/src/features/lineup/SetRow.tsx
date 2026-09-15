@@ -18,7 +18,7 @@ export function SetRow({ set, artist, stage, now, showStage = false, dayLabel, t
   const live = nowPlaying([set], now).length > 0;
   const ended = isEnded(set, now);
   const isHeadliner = artist.tier === "headliner";
-  const sub = live ? `On now · ${minutesLeft(set, now)} min left` : ended ? "Ended" : artist.tier === "musicmaker" ? "Music Maker Foundation" : isHeadliner ? "Headliner" : showStage || set.venue ? placeOf(set, stage) : undefined;
+  const sub = live ? `On now · ${minutesLeft(set, now)} min left` : ended ? "Ended" : artist.tier === "musicmaker" ? "Music Maker Foundation" : isHeadliner ? "Headliner" : showStage || (set.venue && set.venue !== stage.name) ? placeOf(set, stage) : undefined; // no venue line when it just repeats the section
   return (
     <div className={`-mx-4 flex items-center gap-3 border-b border-hair px-4 py-2.5 ${live || isHeadliner ? "bg-gradient-to-r from-sun/20 to-transparent" : ""} ${ended ? "opacity-85" : ""}`}>
       <button type="button" onClick={() => navigate(`/lineup/artist/${artist.id}`)} className="flex min-w-0 flex-1 items-center gap-3 text-left">
