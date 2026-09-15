@@ -1,6 +1,5 @@
 import type { FestivalSet } from "@bb/shared";
 import { Link } from "react-router";
-import { Chip } from "@/design";
 import { useContent, useContentIndex } from "@/data/content";
 import { detectConflicts, type Conflict } from "@/domain/conflicts";
 import { placeOf } from "@/domain/place";
@@ -46,7 +45,7 @@ export function PlanGrid({ sets, now }: { sets: FestivalSet[]; now: Date }) {
         <div className="grid min-w-0 flex-1" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}>
           {columns.map((col) => (
             <div key={col.stage.id} data-testid={`plan-col-${col.stage.id}`} className="min-w-0 border-l border-hair first:border-l-0">
-              <div style={{ height: HEADER_H }} className="flex items-center justify-center border-b border-hair px-1"><Chip tone={col.stage.color}>{col.stage.shortName}</Chip></div>
+              <div style={{ height: HEADER_H }} className={`micro flex items-center justify-center border-b border-hair px-1 text-center ${STAGE_BG[col.stage.color]}`}>{col.stage.shortName}</div>
               <div className="relative" style={{ height: bodyH, ...hourLines }}>
                 {col.sets.map((s) => {
                   const artist = idx.artistsById.get(s.artistId)!;
