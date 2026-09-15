@@ -44,7 +44,7 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
   const navigate = useNavigate();
   const favorites = usePlanStore((s) => s.favorites);
   const scroller = useRef<HTMLDivElement>(null);
-  const pxPerHour = 72;
+  const pxPerHour = 100; // wider hours so more of each name fits (was 72)
   const sets = idx.setsByDay[dayId];
   const g = gridLayout(sets, pxPerHour);
   const lanes = gridLanes(sets, content.stages);
@@ -93,7 +93,7 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
                       className={`absolute top-2 h-14 rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] ${STAGE_BG[own.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-85" : ""} ${width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : ""}`}>
                       <span className="block h-full overflow-hidden">
                         <span className="line-clamp-2 break-words">{artist.name}</span>
-                        <span className="block text-[10px] font-normal opacity-85 tabular-nums">{time}{fav ? " ♥" : ""}</span>
+                        <span className="block whitespace-nowrap text-[10px] font-normal opacity-85 tabular-nums">{time}{fav ? " ♥" : ""}</span>
                       </span>
                     </button>
                   );
