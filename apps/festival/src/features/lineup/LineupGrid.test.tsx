@@ -40,6 +40,7 @@ describe("LineupGrid", () => {
     expect(screen.getAllByTestId(/^lane-/).length).toBe(14); // 6 stage rows + 5 juke venues + 3 special-event venues
     expect(screen.getByTestId("lane-juke:Liz")).toBeInTheDocument();
     expect(screen.getByTestId("lane-special:Elks Park")).toBeInTheDocument();
+    expect(screen.getByText("Campground Sessions")).toBeInTheDocument(); // camp row uses its grid label
     const block = screen.getByRole("button", { name: /Charlie Musselwhite & GA-20/ });
     expect(block).toHaveAttribute("data-favorite", "true");
     fireEvent.click(block);

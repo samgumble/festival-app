@@ -51,10 +51,10 @@ export function gridLanes(sets: FestivalSet[], stages: Stage[], venueLanes: "whe
     const venues = [...new Set(g.sets.map((s) => s.venue).filter((v): v is string => !!v))];
     // "always": a single venue still gets its own named lane (My Schedule columns read as places)
     const split = venueLanes === "always" ? venues.length >= 1 : venues.length >= 2;
-    if (!split) return [{ key: g.stage.id, label: g.stage.shortName, stage: g.stage, sets: g.sets }];
+    if (!split) return [{ key: g.stage.id, label: g.stage.gridLabel ?? g.stage.shortName, stage: g.stage, sets: g.sets }];
     const lanes: GridLane[] = [];
     const bare = g.sets.filter((s) => !s.venue);
-    if (bare.length > 0) lanes.push({ key: g.stage.id, label: g.stage.shortName, stage: g.stage, sets: bare });
+    if (bare.length > 0) lanes.push({ key: g.stage.id, label: g.stage.gridLabel ?? g.stage.shortName, stage: g.stage, sets: bare });
     for (const venue of venues) lanes.push({ key: `${g.stage.id}:${venue}`, label: venue, stage: g.stage, sets: g.sets.filter((s) => s.venue === venue) });
     return lanes;
   });

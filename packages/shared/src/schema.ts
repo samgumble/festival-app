@@ -44,6 +44,8 @@ export const Stage = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   shortName: z.string().min(1),
+  /** Longer label for the lineup grid's row (wraps); defaults to shortName. */
+  gridLabel: z.string().min(1).optional(),
   color: StageColor,
   sortOrder: z.number().int(),
 });
