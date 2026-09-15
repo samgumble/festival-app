@@ -51,12 +51,12 @@ describe("LineupGrid", () => {
   it("only sets narrower than a finger get the invisible hit-area extension", async () => {
     useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00", lineupView: "grid" });
     renderAt("/lineup");
-    // at 100px per hour a 30-minute set is already 46px wide, so it needs no extension
+    // at 86px per hour a 30-minute set is 39px wide, so it still gets the extension
     const half = await screen.findByRole("button", { name: /Derrick Dove & The Peacekeepers, 5:40 PM/ });
-    expect(half.className).not.toMatch(/before:-inset-x/);
+    expect(half.className).toMatch(/before:-inset-x-1\.5\b/);
     expect(half.className).not.toMatch(/\boverflow-hidden\b/);
-    // a 20-minute set would be 29px and does get one
-    const tiny = { id: "x", artistId: "a", stageId: "main", dayId: "sat" as const, start: "2026-09-19T12:00:00-06:00", end: "2026-09-19T12:20:00-06:00" };
-    expect(gridLayout([tiny], 100).width(tiny)).toBeLessThan(44);
+    // a 70-minute set is wide enough and gets none
+    const long = screen.getByRole("button", { name: /Charlie Musselwhite & GA-20/ });
+    expect(long.className).not.toMatch(/before:-inset-x/);
   });
 });

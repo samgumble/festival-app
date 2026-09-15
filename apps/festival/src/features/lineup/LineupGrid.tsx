@@ -44,7 +44,7 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
   const navigate = useNavigate();
   const favorites = usePlanStore((s) => s.favorites);
   const scroller = useRef<HTMLDivElement>(null);
-  const pxPerHour = 100; // wider hours so more of each name fits (was 72)
+  const pxPerHour = 86; // hour width: halfway between the original 72 and the 100 tried on 2026-09-15
   const sets = idx.setsByDay[dayId];
   const g = gridLayout(sets, pxPerHour);
   const lanes = gridLanes(sets, content.stages);
