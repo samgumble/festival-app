@@ -188,3 +188,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** Owner request 2026-09-14: see conflicts at a glance with accurate durations, only the stages that matter, in the same order as the grid; the swap button was more control than fans need.
 
 **Consequences.** The plan settings sheet still carries the buffer setting, which now only affects which overlaps get flagged and Next Up. Tapping a block opens the artist sheet.
+
+## D-034 — Store contact, Play category, content-rating stance (2026-09-15)
+
+**Decision.** Both store listings direct all support and contact to the festival website: support email `info@tellurideblues.com` (the public general-inquiries address on tellurideblues.com/contact), support URL `https://www.tellurideblues.com/contact`, marketing URL `https://www.tellurideblues.com`. No app-specific mailbox. Play category is **Events**. The content-rating questionnaires answer alcohol references truthfully (breweries, tastings, beer imagery) and accept whatever tier that yields.
+
+**Why.** Owner decisions 2026-09-15. The app is SBG's official companion, so questions belong with the festival's existing contact channel; the in-app privacy policy already routes there. Events matches what the app does (schedule, plan, alerts for one real-world event); the app has no audio playback. Honest rating answers avoid a metadata-mismatch rejection.
+
+**Consequences.** `docs/store/listing.md`, `docs/STORE-CHECKLIST.md` §0/§4 and `docs/store/review-notes.md` updated. No code change: the in-app policy and Info screen already link tellurideblues.com. If SBG later wants a dedicated app mailbox, only the console fields change.

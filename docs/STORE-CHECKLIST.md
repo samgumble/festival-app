@@ -16,9 +16,9 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 | ☐ | Third-party authorization | If the accounts are Sam's, obtain a signed letter from SBG Productions authorizing Sam to publish the app, use the "Telluride Blues & Brews" name, and the 2026 artwork (Apple guideline 5.2.1 "Intellectual Property"). Keep a PDF in 1Password and be ready to attach it in review notes. |
 | ☑ | App display name | *"Telluride Blues & Brews"* (App Store name ≤ 30 chars; Play title ≤ 30) — locked in `capacitor.config.ts` `appName` |
 | ☑ | Bundle ID / application ID | *`com.sbgproductions.bluesandbrews`* — identical on both platforms; cannot change after first upload — locked in `capacitor.config.ts` `appId`, iOS `Info.plist`, and Android `build.gradle` `applicationId` |
-| ☐ | Support email + support URL | *e.g. app-support@… / tellurideblues.com/app* (required on both stores) |
+| ☑ Sep 15 | Support email + support URL | `info@tellurideblues.com` / `https://www.tellurideblues.com/contact` — Sam: direct all app contact to the festival website (the public general-inquiries address and contact page listed there) |
 | ☑ | Privacy policy URL | `https://samgumble.github.io/festival-app/privacy/` — live (the app serves its own policy at `/privacy`, D-025); swap to a tellurideblues.com URL later if SBG prefers |
-| ☐ | Marketing URL | *https://www.tellurideblues.com* |
+| ☑ Sep 15 | Marketing URL | `https://www.tellurideblues.com` |
 | ☐ | Copyright line | *© 2026 SBG Productions* |
 | ☑ | iPhone-only for v1 | Set `TARGETED_DEVICE_FAMILY = 1` (iPhone) in Xcode so iPad screenshots are not required; iPad users still install in compatibility mode. Revisit in v1.1. |
 | ☐ | Release control | Choose **manual release** on both stores so go-live is a deliberate moment |
@@ -99,10 +99,10 @@ Drafts are written: listing copy in `docs/store/listing.md`, App Privacy / Data 
 
 ### Play Console → Dashboard "Set up your app" tasks
 - ☐ App name · ☐ Default language en-US · ☐ App or game: App · ☐ Free
-- ☐ Store listing: short description (≤ 80), full description (≤ 4000) — drafted in `docs/store/listing.md` · icon 512, feature graphic, phone screenshots — see `docs/store/screenshots.md` · category **Music & Audio** (or **Events**, recommended in `docs/store/listing.md` with reasoning — not yet decided) · contact email (required), website, privacy policy URL
+- ☐ Store listing: short description (≤ 80), full description (≤ 4000) — drafted in `docs/store/listing.md` · icon 512, feature graphic, phone screenshots — see `docs/store/screenshots.md` · category **Events** (decided by Sam Sep 15, reasoning in `docs/store/listing.md`) · contact email `info@tellurideblues.com`, website `https://www.tellurideblues.com`, privacy policy URL
 - ☐ **App access**: "All functionality is available without special access" (no login) — review text drafted in `docs/store/review-notes.md`
 - ☐ **Ads**: No ads
-- ☐ **Content rating** (IARC questionnaire): answer alcohol references truthfully → expect Teen / PEGI 12–16 range; complete honestly — full answer grid in `docs/store/listing.md`
+- ☐ **Content rating** (IARC questionnaire): answer alcohol references truthfully (approach agreed by Sam Sep 15) → expect Teen / PEGI 12–16 range; complete honestly — full answer grid in `docs/store/listing.md`
 - ☐ **Target audience & content**: 18+ or 13+ audience (do **not** select under-13 — avoids Families policy); "not designed for children"
 - ☐ **News app**: No · ☐ **COVID-19**: No · ☐ **Data safety**: no data collected, no data shared (no push in v1, D-021); encryption in transit: yes; deletion request: N/A (no accounts) — full per-question answers, the `SCHEDULE_EXACT_ALARM` use-case declaration text, and the sensitive-permissions list are drafted in `docs/store/privacy-answers.md`
 - ☐ **Government app**: No · ☐ **Financial features**: None · ☐ **Health apps**: None

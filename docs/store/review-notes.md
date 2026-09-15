@@ -84,4 +84,4 @@ Third-party branding: this app is published with a signed authorization letter f
 
 - SBG Productions authorization letter — needed only if the store accounts are Sam's personal accounts rather than SBG's; not yet obtained (STORE-CHECKLIST §0/§1). If needed, append the sentence provided below each review-notes fence above.
 - Reviewer contact name/phone/email for App Store Connect's "App Review Information" (first/last name, phone, email) — not filled in here; use Sam's or SBG's real contact details when submitting, not a placeholder in the console itself.
-- Support email and support URL (`docs/store/listing.md`) — still undecided; both are required before either console submission can be completed.
+- Support email and support URL — decided Sep 15: `info@tellurideblues.com` and `https://www.tellurideblues.com/contact` (`docs/store/listing.md`).
