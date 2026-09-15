@@ -1,6 +1,6 @@
 {
   "meta": {
-    "contentVersion": "2026.09.14.4",
+    "contentVersion": "2026.09.14.5",
     "publishedAt": "2026-09-14T12:00:00-06:00",
     "publishedBy": "seed",
     "sources": [
@@ -95,6 +95,13 @@
       "shortName": "Juke",
       "color": "bloom",
       "sortOrder": 7
+    },
+    {
+      "id": "special",
+      "name": "Special Events",
+      "shortName": "Special",
+      "color": "sun-hot",
+      "sortOrder": 8
     }
   ],
   "artists": [
@@ -286,6 +293,41 @@
     {
       "id": "tasting-session-2-high-abv",
       "name": "Session 2 Special High ABV, Rare and Wild Tasting with 30 Breweries",
+      "tier": "lineup"
+    },
+    {
+      "id": "donny-morales",
+      "name": "Donny Morales",
+      "tier": "lineup"
+    },
+    {
+      "id": "dave-jordan",
+      "name": "Dave Jordan",
+      "tier": "lineup"
+    },
+    {
+      "id": "music-maker-foundation-artists",
+      "name": "Music Maker Foundation Artists",
+      "tier": "musicmaker"
+    },
+    {
+      "id": "blisters-blues-5k",
+      "name": "Blisters & Blues 5K Fundraiser Race",
+      "tier": "lineup"
+    },
+    {
+      "id": "telluride-blues-challenge",
+      "name": "Telluride Blues Challenge",
+      "tier": "lineup"
+    },
+    {
+      "id": "telluride-blues-challenge-runner-up-2026",
+      "name": "Telluride Blues Challenge 2026 Runner-Up",
+      "tier": "lineup"
+    },
+    {
+      "id": "yoga-sessions",
+      "name": "Yoga Sessions",
       "tier": "lineup"
     }
   ],
@@ -627,16 +669,6 @@
       "end": "2026-09-19T15:00:00-06:00"
     },
     {
-      "id": "sat-troy-walker-camp-1530",
-      "artistId": "troy-walker",
-      "stageId": "comedy",
-      "dayId": "sat",
-      "start": "2026-09-19T15:30:00-06:00",
-      "end": "2026-09-19T16:30:00-06:00",
-      "note": "with Baron Vaughn, Kiran Deol & Hannah Jones · campers only",
-      "venue": "Campground Sessions"
-    },
-    {
       "id": "sat-troy-walker-blues-1600",
       "artistId": "troy-walker",
       "stageId": "comedy",
@@ -815,6 +847,134 @@
       "end": "2026-09-20T23:55:00-06:00",
       "note": "Fais Do-Do closing show · separate ticket · doors 9:30 PM",
       "venue": "Sheridan Opera House"
+    },
+    {
+      "id": "fri-donny-morales-special-1100",
+      "artistId": "donny-morales",
+      "stageId": "special",
+      "dayId": "fri",
+      "start": "2026-09-18T11:00:00-06:00",
+      "end": "2026-09-18T11:45:00-06:00",
+      "note": "Heritage Plaza Shows · free",
+      "venue": "Heritage Plaza – Mountain Village"
+    },
+    {
+      "id": "fri-music-maker-foundation-artists-special-1200",
+      "artistId": "music-maker-foundation-artists",
+      "stageId": "special",
+      "dayId": "fri",
+      "start": "2026-09-18T12:00:00-06:00",
+      "end": "2026-09-18T12:45:00-06:00",
+      "note": "Heritage Plaza Shows · free",
+      "venue": "Heritage Plaza – Mountain Village"
+    },
+    {
+      "id": "sat-blisters-blues-5k-special-0715",
+      "artistId": "blisters-blues-5k",
+      "stageId": "special",
+      "dayId": "sat",
+      "start": "2026-09-19T07:15:00-06:00",
+      "end": "2026-09-19T08:50:00-06:00",
+      "note": "Registration 7:15–8:00 AM · race starts 8:30 AM",
+      "venue": "Elks Park"
+    },
+    {
+      "id": "sat-ken-valdez-special-0850",
+      "artistId": "ken-valdez",
+      "stageId": "special",
+      "dayId": "sat",
+      "start": "2026-09-19T08:50:00-06:00",
+      "end": "2026-09-19T09:30:00-06:00",
+      "note": "Blisters & Blues 5K after-race set",
+      "venue": "Elks Park"
+    },
+    {
+      "id": "sat-telluride-blues-challenge-special-0900",
+      "artistId": "telluride-blues-challenge",
+      "stageId": "special",
+      "dayId": "sat",
+      "start": "2026-09-19T09:00:00-06:00",
+      "end": "2026-09-19T12:00:00-06:00",
+      "note": "Blues For Breakfast",
+      "venue": "Elks Lodge"
+    },
+    {
+      "id": "sat-yoga-sessions-special-1000",
+      "artistId": "yoga-sessions",
+      "stageId": "special",
+      "dayId": "sat",
+      "start": "2026-09-19T10:00:00-06:00",
+      "end": "2026-09-19T11:00:00-06:00",
+      "venue": "Elks Park"
+    },
+    {
+      "id": "sat-dave-jordan-special-1100",
+      "artistId": "dave-jordan",
+      "stageId": "special",
+      "dayId": "sat",
+      "start": "2026-09-19T11:00:00-06:00",
+      "end": "2026-09-19T11:45:00-06:00",
+      "note": "Heritage Plaza Shows · free",
+      "venue": "Heritage Plaza – Mountain Village"
+    },
+    {
+      "id": "sat-alex-maryol-special-1200",
+      "artistId": "alex-maryol",
+      "stageId": "special",
+      "dayId": "sat",
+      "start": "2026-09-19T12:00:00-06:00",
+      "end": "2026-09-19T12:45:00-06:00",
+      "note": "Heritage Plaza Shows · free",
+      "venue": "Heritage Plaza – Mountain Village"
+    },
+    {
+      "id": "sun-telluride-blues-challenge-runner-up-2026-special-0900",
+      "artistId": "telluride-blues-challenge-runner-up-2026",
+      "stageId": "special",
+      "dayId": "sun",
+      "start": "2026-09-20T09:00:00-06:00",
+      "end": "2026-09-20T12:00:00-06:00",
+      "note": "Blues For Breakfast · with Alex Maryol",
+      "venue": "Elks Lodge"
+    },
+    {
+      "id": "sun-music-maker-foundation-artists-special-0900",
+      "artistId": "music-maker-foundation-artists",
+      "stageId": "special",
+      "dayId": "sun",
+      "start": "2026-09-20T09:00:00-06:00",
+      "end": "2026-09-20T10:00:00-06:00",
+      "note": "Blues For Breakfast · reserve your seat",
+      "venue": "Hotel Madeline"
+    },
+    {
+      "id": "sun-yoga-sessions-special-1000",
+      "artistId": "yoga-sessions",
+      "stageId": "special",
+      "dayId": "sun",
+      "start": "2026-09-20T10:00:00-06:00",
+      "end": "2026-09-20T11:00:00-06:00",
+      "venue": "Elks Park"
+    },
+    {
+      "id": "sun-katie-skene-special-1100",
+      "artistId": "katie-skene",
+      "stageId": "special",
+      "dayId": "sun",
+      "start": "2026-09-20T11:00:00-06:00",
+      "end": "2026-09-20T11:45:00-06:00",
+      "note": "Heritage Plaza Shows · free",
+      "venue": "Heritage Plaza – Mountain Village"
+    },
+    {
+      "id": "sun-david-jacobs-strain-special-1200",
+      "artistId": "david-jacobs-strain",
+      "stageId": "special",
+      "dayId": "sun",
+      "start": "2026-09-20T12:00:00-06:00",
+      "end": "2026-09-20T12:45:00-06:00",
+      "note": "Heritage Plaza Shows · free",
+      "venue": "Heritage Plaza – Mountain Village"
     }
   ]
 }

@@ -29,7 +29,7 @@ export function gridLayout(sets: FestivalSet[], pxPerHour: number) {
 }
 
 // block fill + text colour per stage: ink on the light fills (amber/bloom/leaf) for AA contrast
-const STAGE_BG = { sky: "bg-sky text-white", plum: "bg-plum text-white", pine: "bg-pine text-white", violet: "bg-violet text-white", amber: "bg-amber text-ink", bloom: "bg-bloom text-ink", leaf: "bg-leaf text-ink" } as const;
+const STAGE_BG = { sky: "bg-sky text-white", plum: "bg-plum text-white", pine: "bg-pine text-white", violet: "bg-violet text-white", amber: "bg-amber text-ink", bloom: "bg-bloom text-ink", leaf: "bg-leaf text-ink", "sun-hot": "bg-sun-hot text-ink" } as const;
 
 export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
   const content = useContent();

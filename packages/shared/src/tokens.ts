@@ -33,4 +33,5 @@ export const STAGE_COLOR_HEX: Record<StageColor, string> = {
   amber: PALETTE.amber,
   bloom: PALETTE.bloom,
   leaf: PALETTE.leaf,
+  "sun-hot": PALETTE["sun-hot"],
 };

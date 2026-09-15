@@ -22,10 +22,10 @@ describe("festivalState", () => {
 describe("day + stage grouping", () => {
   it("returns Saturday's sets in chronological order, grouped by stage sortOrder", () => {
     const sat = setsForDay(content.sets, "sat");
-    expect(sat.length).toBe(24); // 17 stage sets + 2 tasting sessions + 5 juke joints
-    expect(sat[0]?.id).toBe("sat-j-causeways-main-1200");
+    expect(sat.length).toBe(29); // 16 stage sets + 2 tasting + 5 juke joints + 6 special events
+    expect(sat[0]?.id).toBe("sat-blisters-blues-5k-special-0715");
     const groups = groupByStage(sat, content.stages);
-    expect(groups.map((g) => g.stage.id)).toEqual(["main", "blues", "truck", "camp", "tasting", "comedy", "juke"]);
+    expect(groups.map((g) => g.stage.id)).toEqual(["main", "blues", "truck", "camp", "tasting", "comedy", "juke", "special"]);
     expect(groups[0]?.sets.map((s) => s.artistId)).toEqual([
       "j-causeways", "judith-hill", "telluride-blues-challenge-winner-2026", "nether-hour", "charlie-musselwhite-ga20", "record-company", "taj-mahal-keb-mo",
     ]);
@@ -34,9 +34,9 @@ describe("day + stage grouping", () => {
 
 describe("now / next at Saturday 3:40 PM", () => {
   const sat = setsForDay(content.sets, "sat");
-  it("Nether Hour is on the Main Stage with 20 minutes left (alongside the Campground comedy set)", () => {
+  it("Nether Hour is on the Main Stage with 20 minutes left", () => {
     const on = nowPlaying(sat, SAT_340);
-    expect(on.map((s) => s.artistId)).toEqual(["nether-hour", "troy-walker"]);
+    expect(on.map((s) => s.artistId)).toEqual(["nether-hour"]);
     expect(progress(on[0]!, SAT_340)).toBeCloseTo(40 / 60, 2);
   });
   it("up next is Nigel Wearne (Truck 4:00) then the Blues Stage comedy set (4:00), one per stage", () => {

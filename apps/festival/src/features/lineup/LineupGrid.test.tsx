@@ -13,11 +13,11 @@ describe("gridLayout", () => {
   it("starts on the hour before the first set and positions blocks by minutes", () => {
     const sat = content.sets.filter((s) => s.dayId === "sat");
     const g = gridLayout(sat, 72);
-    expect(new Date(g.startMs).toISOString()).toBe("2026-09-19T18:00:00.000Z"); // 12:00 PM MDT
+    expect(new Date(g.startMs).toISOString()).toBe("2026-09-19T13:00:00.000Z"); // 7:00 AM MDT (5K registration at 7:15)
     const mussel = sat.find((s) => s.id === "sat-charlie-musselwhite-ga20-main-1630")!;
-    expect(g.left(mussel)).toBe(4.5 * 72);
+    expect(g.left(mussel)).toBe(9.5 * 72);
     expect(g.width(mussel)).toBeCloseTo((70 / 60) * 72 - 4, 5);
-    expect(g.hours.length).toBe(12); // 12 PM … 11 PM (juke joints run to 11:55 PM)
+    expect(g.hours.length).toBe(17); // 7 AM … 11 PM (5K at 7:15 AM, juke joints to 11:55 PM)
   });
 });
 
@@ -37,7 +37,7 @@ describe("LineupGrid", () => {
   it("renders a lane per stage, a now line, and favorited blocks", async () => {
     renderAt("/lineup");
     expect(await screen.findByTestId("now-line")).toBeInTheDocument();
-    expect(screen.getAllByTestId(/^lane-/).length).toBe(7);
+    expect(screen.getAllByTestId(/^lane-/).length).toBe(8);
     const block = screen.getByRole("button", { name: /Charlie Musselwhite & GA-20/ });
     expect(block).toHaveAttribute("data-favorite", "true");
     fireEvent.click(block);
