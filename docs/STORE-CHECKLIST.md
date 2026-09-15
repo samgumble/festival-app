@@ -34,7 +34,7 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 ### Google
 - ☑ Play Console developer account approved (Sam confirmed Sep 14). Personal accounts require identity verification; organization accounts need D-U-N-S and a verified org email/website/phone.
 - ☐ If personal: plan the **closed-testing** route for the 2026 festival (§7) and production access after.
-- ☐ Play App Signing accepted (default; Google holds the app signing key, you keep an **upload key**).
+- ☑ Sep 15: Play App Signing accepted (default; Google holds the app signing key, you keep an **upload key**).
 
 ### Firebase (needed for push before store builds)
 - ☐ Firebase project created on **Blaze** plan, budget alert at $10.
@@ -98,7 +98,7 @@ Drafts are written: listing copy in `docs/store/listing.md`, App Privacy / Data 
 - ☐ Pricing: Free, all territories (or U.S. + Canada only if SBG prefers).
 
 ### Play Console → Dashboard "Set up your app" tasks
-- ☐ App name · ☐ Default language en-US · ☐ App or game: App · ☐ Free
+- ☑ Sep 15: App name · ☑ Default language en-US · ☑ App or game: App · ☑ Free
 - ☐ Store listing: short description (≤ 80), full description (≤ 4000) — drafted in `docs/store/listing.md` · icon 512, feature graphic, phone screenshots — see `docs/store/screenshots.md` · category **Events** (decided by Sam Sep 15, reasoning in `docs/store/listing.md`) · contact email `info@tellurideblues.com`, website `https://www.tellurideblues.com`, privacy policy URL
 - ☐ **App access**: "All functionality is available without special access" (no login) — review text drafted in `docs/store/review-notes.md`
 - ☐ **Ads**: No ads
@@ -135,7 +135,7 @@ Drafts are written: listing copy in `docs/store/listing.md`, App Privacy / Data 
 - ☐ Avoid **external** TestFlight groups for 2026 unless time allows: they require a Beta App Review (usually < 24 h but it is another review).
 
 ### Google Play
-- ☐ Create an **Internal testing** release first (up to 100 testers by email list, available in minutes) for SBG staff and Sam.
+- ☑ Sep 15: Create an **Internal testing** release first (up to 100 testers by email list, available in minutes) for SBG staff and Sam — release 1.0.0 (1) live, tester list `SBG internal testers` (4).
 - ☐ Then a **Closed testing** track ("Festival 2026") with an opt-in link; if the account is personal this is the track that must hold ≥ 12 opted-in testers for 14 continuous days before production access can be requested (then a 3–7 business-day review of the questionnaire). Recruit SBG staff, volunteers, friends — ask them to actually open the app during the window.
 - ☐ Production release after production access is granted (organization accounts can go straight to production after review).
 
