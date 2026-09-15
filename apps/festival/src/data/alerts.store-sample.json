@@ -1,0 +1,29 @@
+[
+  {
+    "id": "store-003",
+    "title": "Schedule changes land here",
+    "body": "If a set time or stage changes, the organizer posts it here and the Lineup tab updates with it.",
+    "severity": "important",
+    "publishedAt": "2026-09-19T14:48:00-06:00",
+    "publishedBy": "sample",
+    "push": true
+  },
+  {
+    "id": "store-002",
+    "title": "Town Park sits at 8,750 ft",
+    "body": "Drink water, wear sunscreen, and take the altitude easy on your first day.",
+    "severity": "info",
+    "publishedAt": "2026-09-19T12:10:00-06:00",
+    "publishedBy": "sample",
+    "push": false
+  },
+  {
+    "id": "store-001",
+    "title": "Welcome to the 32nd annual Blues & Brews",
+    "body": "Set times are live in the Lineup tab. Tap the heart on any set to build your schedule.",
+    "severity": "info",
+    "publishedAt": "2026-09-18T11:30:00-06:00",
+    "publishedBy": "sample",
+    "push": false
+  }
+]

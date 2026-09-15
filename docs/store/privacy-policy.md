@@ -14,6 +14,7 @@ The app does not offer or require sign-in. There are no user accounts, usernames
 These are kept only on your own phone or browser, never on a server we control:
 - your favorited sets and the schedule built from them, including any conflict choices
 - your settings: appearance, reminder lead time, whether set reminders are on, and which alerts you have read
+- a cached copy of the lineup and alerts, so the app works offline
 
 Deleting the app, or clearing the website's data in your browser, erases all of it. We have no copy.
 
@@ -22,6 +23,7 @@ Deleting the app, or clearing the website's data in your browser, erases all of 
 - **The web version** is served from GitHub Pages, which receives ordinary web-server request information to deliver the page. There is no analytics or tracking on top of that.
 - **Set reminders** (iPhone and Android app only) are scheduled on your device with the operating system's local notifications. They are not sent through us or any push service.
 - **Links** to tellurideblues.com, to the ticket seller (telluride.frontgatetickets.com), and to maps open in your browser or maps app, which have their own privacy practices.
+- **Sharing** (web version only): if your browser does not support the native share sheet, sharing may instead copy the text to your clipboard.
 
 ## What we do not do
 - No analytics, advertising, or tracking software of any kind.

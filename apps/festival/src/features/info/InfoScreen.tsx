@@ -10,6 +10,7 @@ import { useUiStore } from "@/state/ui";
 import { InstallSheet } from "./InstallSheet";
 import { useInstall } from "@/platform/install";
 import { useUpdateStore } from "@/state/updates";
+import { runtime } from "@/platform/runtime";
 
 // Inline text buttons in an 18 px line: extend the hit area invisibly to the 44 px floor (18 + 13 + 13).
 const INLINE_LINK = "relative inline-block underline before:absolute before:inset-x-0 before:-inset-y-[13px] before:content-['']";
@@ -72,7 +73,7 @@ export function InfoScreen() {
         <Row label="Schedule" href={festival.links.schedule}>↗</Row>
         <Row label="FAQ" href={festival.links.faq}>↗</Row>
         <Row label="Festival guide" href={festival.links.guide}>↗</Row>
-        <Row label="Town Park in Maps" href={`https://maps.apple.com/?q=${encodeURIComponent(`${festival.venue}, ${festival.city}`)}`}>↗</Row>
+        <Row label="Town Park in Maps" href={`${runtime.platform() === "android" ? "https://maps.google.com/?q=" : "https://maps.apple.com/?q="}${encodeURIComponent(`${festival.venue}, ${festival.city}`)}`}>↗</Row>
       </Card>
 
       <Eyebrow tone="structure" className="mt-4 block px-0.5">Settings</Eyebrow>

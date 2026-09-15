@@ -7,7 +7,7 @@ import { defineConfig } from "@playwright/test";
 //
 // Each project's viewport x deviceScaleFactor equals the exact required output pixel size,
 // so a raw `page.screenshot()` in that project already is the store dimension (no upscale/
-// crop): iPhone 6.9" -> 1320x2868, Android phone -> 1080x2340.
+// crop): iPhone 6.9" -> 1320x2868, Android phone -> 1080x1920 (9:16; Play rejects long sides over 2x the short side).
 export default defineConfig({
   testDir: "./e2e",
   testMatch: /store-shots\.spec\.ts/,
@@ -17,13 +17,13 @@ export default defineConfig({
   use: { baseURL: "http://localhost:5173", browserName: "chromium" },
   projects: [
     { name: "ios-6.9", use: { viewport: { width: 440, height: 956 }, deviceScaleFactor: 3 } },
-    { name: "android-phone", use: { viewport: { width: 360, height: 780 }, deviceScaleFactor: 3 } },
+    { name: "android-phone", use: { viewport: { width: 360, height: 640 }, deviceScaleFactor: 3 } },
   ],
   webServer: {
     command: "npm run dev",
     url: "http://localhost:5173",
     reuseExistingServer: true,
     timeout: 60_000,
-    env: { ...process.env, VITE_DATA_SOURCE: "bundled" },
+    env: { ...process.env, VITE_DATA_SOURCE: "bundled", VITE_ALERTS_FIXTURE: "store" },
   },
 });

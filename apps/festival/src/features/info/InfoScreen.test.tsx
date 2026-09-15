@@ -72,7 +72,7 @@ describe("Info · get the app", () => {
 
   it("footer says offline-ready once the worker is active", async () => {
     renderAt("/info");
-    expect(await screen.findByText(/app 0\.1\.0$/)).toBeInTheDocument();
+    expect(await screen.findByText(/app 1\.0\.0$/)).toBeInTheDocument();
     act(() => useUpdateStore.getState().setOfflineReady());
     expect(screen.getByText(/offline-ready ✓$/)).toBeInTheDocument();
   });

@@ -22,7 +22,7 @@ export function useReminderSync(): void {
   const favorites = usePlanStore((s) => s.favorites);
   const leadMinutes = usePlanStore((s) => s.settings.leadMinutes);
   const remindersOn = usePlanStore((s) => s.remindersOn);
-  const devNow = useUiStore((s) => s.devNow);
+  const devNow = useUiStore((s) => (import.meta.env.DEV ? s.devNow : null)); // production never schedules against the dev clock
   const owned = useRef<Set<number>>(new Set());
   const chain = useRef<Promise<void>>(Promise.resolve());
 

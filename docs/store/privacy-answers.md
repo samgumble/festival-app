@@ -21,7 +21,7 @@ Apple's categories, answered against the actual binary:
 | Sensitive Info | Not Collected | Not applicable. |
 | Contacts | Not Collected | Not applicable. |
 | User Content | Not Collected | No photos, no user-authored text stored server-side; favorites/plan/settings never leave the device. |
-| Browsing History | Not Collected | External links open in the system browser/SFSafariViewController (STORE-CHECKLIST §5), not tracked by the app. |
+| Browsing History | Not Collected | Off-origin links are handed to the system browser by the native shell (STORE-CHECKLIST §5), not tracked by the app. |
 | Search History | Not Collected | The Lineup search box filters bundled/cached content client-side; nothing is sent anywhere. |
 | Identifiers | Not Collected | No accounts, no device ID collection, no advertising ID (Advertising Identifier declared **No**). No push tokens exist in this version — v1 has no Cloud Messaging registration (D-021). |
 | Purchases | Not Collected | Free app, no IAP. |
@@ -88,8 +88,11 @@ This app schedules a local, on-device reminder before each festival set the user
 
 | Permission | Platform | Why requested | When requested |
 |---|---|---|---|
-| `POST_NOTIFICATIONS` | Android 13+ | Required at runtime to show the local set-reminder notifications and the in-app Alerts (no push in v1; this is only for local notifications) | Only after the user turns on "Remind me before my sets" in Plan/Info, with in-app explanation first (STORE-CHECKLIST §5, Apple guideline 5.1.1) |
+| `POST_NOTIFICATIONS` | Android 13+ | Required at runtime to show the local set-reminder notifications and the in-app Alerts (no push in v1; this is only for local notifications) | Only after the user turns on "Remind me before my sets" in the Schedule tab's settings sheet, with in-app explanation first (STORE-CHECKLIST §5, Apple guideline 5.1.1) |
 | `SCHEDULE_EXACT_ALARM` | Android (merged by `@capacitor/local-notifications`) | See declaration above | Not user-facing; declared at install time, exercised only when reminders are turned on |
+| `VIBRATE` | Android (merged by `@capacitor/local-notifications`) | Plays the vibration pattern on a delivered local reminder notification | Not user-facing; exercised only when a scheduled reminder fires |
+| `WAKE_LOCK` | Android (merged by `@capacitor/local-notifications`) | Briefly wakes the device to deliver a scheduled reminder notification at the exact time | Not user-facing; exercised only when a scheduled reminder fires |
+| `RECEIVE_BOOT_COMPLETED` | Android (merged by `@capacitor/local-notifications`) | Re-registers already-scheduled reminders with the system alarm manager after the device reboots | Not user-facing; exercised only on device boot, and only if reminders were already turned on |
 | Local notification permission | iOS | Same reminder feature | Same trigger — after the switch is tapped, with an in-app explanation first, never on cold launch |
 
 No camera, microphone, contacts, storage, location, or SMS permissions are requested by this app.

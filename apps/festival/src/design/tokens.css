@@ -153,8 +153,10 @@
     letter-spacing: 0.1em;
     text-transform: uppercase;
   }
-  .safe-b { padding-bottom: env(safe-area-inset-bottom); }
-  .safe-t { padding-top: env(safe-area-inset-top); }
+  /* iOS/web report system bars through env(); Android WebView only reports cutouts, so MainActivity
+     publishes the real bar insets as --inset-t/--inset-b (D-029). */
+  .safe-b { padding-bottom: max(env(safe-area-inset-bottom), var(--inset-b, 0px)); }
+  .safe-t { padding-top: max(env(safe-area-inset-top), var(--inset-t, 0px)); }
 }
 
 @media (prefers-reduced-motion: reduce) {

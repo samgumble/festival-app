@@ -9,7 +9,7 @@ projects, doesn't touch `npm run screenshots` or `npm run e2e:offline`). It boot
 for both targets, composites the paper/caption frame around each raw capture in-browser, and writes:
 
 - `docs/store/shots/ios-6.9/01-now.png` … `06-offline.png` — 1320×2868 (iPhone 6.9")
-- `docs/store/shots/android-phone/01-now.png` … `06-offline.png` — 1080×2340 (Android phone)
+- `docs/store/shots/android-phone/01-now.png` … `06-offline.png` — 1080×1920 (Android phone, 9:16)
 - `docs/store/shots/play-feature-1024x500.png` — 1024×500 Play feature graphic (paper background, official lockup, no text)
 
 Re-run it any time the underlying screens or content change; the generated PNGs are committed
@@ -26,7 +26,7 @@ Confirmed against Apple's current App Store Connect screenshot spec (checked 202
 | iPhone 6.9" | **1320×2868** portrait (also accepted: 1290×2796, 1260×2736) | **Required.** This is now the only iPhone size Apple requires — supplying it lets Apple auto-scale down to every smaller iPhone size shown in the store. |
 | iPhone 6.5" | 1284×2778 or 1242×2688 portrait | **Optional.** Only becomes mandatory if the 6.9" set is not supplied. STORE-CHECKLIST §3 already lists it as optional — this plan follows that: skip 6.5" for v1 unless the 6.9" upload is rejected for some reason. |
 | iPad | — | Not needed — iPhone-only for v1 (`TARGETED_DEVICE_FAMILY = 1`, STORE-CHECKLIST §0). |
-| Android phone | **1080×2340** portrait, PNG/JPG ≤ 8 MB, 2–8 images | Required (STORE-CHECKLIST §3). |
+| Android phone | **1080×1920** portrait (9:16), PNG/JPG ≤ 8 MB, 2–8 images | Required (STORE-CHECKLIST §3). Play caps the long side at 2× the short side — 1080×2340 (2.167:1) is rejected. |
 | Play feature graphic | 1024×500, no transparency | Required for a featured/promoted listing (STORE-CHECKLIST §3). |
 
 ## Proposed frame

@@ -8,6 +8,7 @@ import { planToIcs, planToText } from "@/domain/ics";
 import { formatDuration, formatRange, formatTime, isoMs, minutesBetween, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
 import type { DayId } from "@bb/shared";
+import { runtime } from "@/platform/runtime";
 import { share } from "@/platform/share";
 import { PlanEmpty } from "./PlanEmpty";
 import { PlanSettings } from "./PlanSettings";
@@ -56,7 +57,8 @@ export function PlanScreen() {
         </Card>
       )}
       {daySets.length === 0 ? <p className="mt-6 text-center text-fg-soft">Nothing planned for this day yet.</p> : <PlanTimeline sets={daySets} now={now} />}
-      <div className="mt-2 flex gap-2"><Button size="sm" className="flex-1" onClick={exportIcs}>Add to calendar</Button><Button size="sm" className="flex-1" onClick={shareText}>Share as text</Button></div>
+      {/* .ics download is web-only in v1: native has no Filesystem plugin, so a "file share" would only paste raw calendar text (D-029) */}
+      <div className="mt-2 flex gap-2">{!runtime.isNative() && <Button size="sm" className="flex-1" onClick={exportIcs}>Add to calendar</Button>}<Button size="sm" className="flex-1" onClick={shareText}>Share as text</Button></div>
       {settingsOpen && <PlanSettings onClose={() => setSettingsOpen(false)} />}
     </div>
   );

@@ -4,6 +4,8 @@ import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
 import { fileURLToPath } from "node:url";
+import { readFileSync } from "node:fs";
+const APP_VERSION: string = JSON.parse(readFileSync(new URL("./package.json", import.meta.url), "utf8")).version;
 
 const base = process.env.BASE_PATH ?? "/";
 
@@ -46,7 +48,7 @@ export default defineConfig({
     }),
   ],
   resolve: { alias: { "@": fileURLToPath(new URL("./src", import.meta.url)) } },
-  define: { __APP_VERSION__: JSON.stringify(process.env.npm_package_version ?? "0.0.0") },
+  define: { __APP_VERSION__: JSON.stringify(APP_VERSION) }, // from package.json, not the npm env, so bare `vite build` matches
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test/setup.ts"],

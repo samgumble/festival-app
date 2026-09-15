@@ -27,6 +27,7 @@ export function PrivacyScreen() {
         <ul className="mt-1.5 list-disc space-y-1 pl-5">
           <li>your favorited sets and the schedule built from them, including any conflict choices</li>
           <li>your settings: appearance, reminder lead time, whether set reminders are on, and which alerts you have read</li>
+          <li>a cached copy of the lineup and alerts, so the app works offline</li>
         </ul>
         <p className="mt-1.5">Deleting the app, or clearing the website's data in your browser, erases all of it. We have no copy.</p>
       </Section>
@@ -37,6 +38,7 @@ export function PrivacyScreen() {
           <li><b className="text-fg">The web version</b> is served from GitHub Pages, which receives ordinary web-server request information to deliver the page. There is no analytics or tracking on top of that.</li>
           <li><b className="text-fg">Set reminders</b> (iPhone and Android app only) are scheduled on your device with the operating system's local notifications. They are not sent through us or any push service.</li>
           <li><b className="text-fg">Links</b> to tellurideblues.com, to the ticket seller (telluride.frontgatetickets.com), and to maps open in your browser or maps app, which have their own privacy practices.</li>
+          <li><b className="text-fg">Sharing</b> (web version only): if your browser does not support the native share sheet, sharing may instead copy the text to your clipboard.</li>
         </ul>
       </Section>
 

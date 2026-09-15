@@ -71,7 +71,7 @@ Verified against current store guidance on 2026-09-09; re-check anything marked 
 | ☐ | Android icons | adaptive fg/bg/mono 432×432; Play Store icon **512×512 PNG, 32-bit**, ≤ 1 MB |
 | ☐ | iPhone screenshots | **6.9"** set required: 1320×2868 (or 1290×2796 / 1260×2736), portrait, 1–10 images, PNG/JPG, no alpha, no device-frame transparency. 6.5" set optional (Apple scales the 6.9" set). Suggested six: Now (live state), Lineup grid, Artist sheet, Plan with a resolved conflict, Alerts, Now (countdown/dark mode). |
 | ☐ | iPad screenshots | not needed while iPhone-only |
-| ☐ | Play phone screenshots | 2–8 images, 16:9 or 9:16, each side 320–3840 px (use 1080×2340), PNG/JPG ≤ 8 MB |
+| ☐ | Play phone screenshots | 2–8 images, 9:16 portrait (use 1080×1920) — Play caps the long side at 2× the short side, so 1080×2340 is rejected, PNG/JPG ≤ 8 MB |
 | ☐ | Play feature graphic | 1024×500 PNG/JPG, no transparency, required to be featured/promoted; poster crop + lockup, no extra text |
 | ☐ | Play 7"/10" tablet screenshots | optional; skip for v1 |
 | ☐ | App preview video | optional; skip for v1 |
@@ -84,7 +84,7 @@ Generate screenshots from the real app with `npm run screenshots` (Playwright at
 Drafts are written: listing copy in `docs/store/listing.md`, App Privacy / Data safety answers in `docs/store/privacy-answers.md`, App Review / Play review notes in `docs/store/review-notes.md`. Nothing below is ticked yet — these are drafts to paste into the consoles, not confirmation the consoles have been filled in.
 
 ### App Store Connect → App Information / Version
-- ☐ Name (≤ 30) · ☐ Subtitle (≤ 30, e.g. "Official 2026 festival guide") · ☐ Primary category **Music**, secondary **Entertainment** ⚠ `docs/store/listing.md` drafted this the other way round (primary Entertainment, secondary Music) per its task instructions — pick one order and reconcile both docs before submitting, don't leave them contradicting each other.
+- ☐ Name (≤ 30) · ☐ Subtitle (≤ 30, e.g. "Official 2026 festival guide") · ☐ Primary category **Music**, secondary **Entertainment**, matching `docs/store/listing.md`.
 - ☐ Primary language English (U.S.) · ☐ Bundle ID selected · ☐ SKU (e.g. `bb-2026`) · ☐ Content rights: "Yes, contains third-party content; I have the rights" (SBG artwork, artist names)
 - ☐ Promotional text (≤ 170, editable without a new build) · ☐ Description (≤ 4000) · ☐ Keywords (≤ 100 chars) · ☐ Support URL · ☐ Marketing URL · ☐ Copyright — all drafted, ready to paste, in `docs/store/listing.md`
 - ☐ Version 1.0.0; What's New — drafted in `docs/store/listing.md`
@@ -110,16 +110,13 @@ Drafts are written: listing copy in `docs/store/listing.md`, App Privacy / Data 
 - ☐ Countries/regions: U.S. (+ Canada) or worldwide
 
 ## 5. In-app legal and content-rights items
-- ☐ Privacy policy draft written: `docs/store/privacy-policy.md` (plain language, under 600 words, placeholders for SBG's address, support email, and effective date). **Hosting location not yet decided** — two options, pick one:
-  - **The fan app's own `/privacy` route** (React Router, served by the existing GitHub Pages deploy) — recommended: no dependency on tellurideblues.com's CMS/access, ships with the same deploy pipeline that already builds the app, and keeps the policy versioned in this repo alongside the code it describes.
-  - **tellurideblues.com/privacy** (SBG's own site) — alternative if SBG wants the policy under their primary domain regardless of app changes, or if they want one privacy policy covering the whole festival brand (site + app) rather than an app-specific one.
-  This is a recommendation, not a decision — tick this row once Sam/SBG confirms, then update the URL placeholders in `docs/store/listing.md`, `docs/store/privacy-answers.md`, and `docs/store/review-notes.md`.
-- ☐ Privacy policy page live (plain language: no data collected; notifications optional; contact email). Linked from Info screen and both listings.
-- ☐ Font licenses (OFL) shipped in `docs/FONT_LICENSES.md` and listed under Info → Licenses.
-- ☐ Artwork/trademark: SBG's permission on file; official lockups unmodified; no artist photos.
-- ☐ No "Sign in with Apple" needed (no third-party login) and no account-deletion flow needed (no accounts) — keep it that way or both become mandatory.
-- ☐ Notification permission requested only after a user action, with an in-app explanation first (Apple guideline 5.1.1 and Android 13+ `POST_NOTIFICATIONS` runtime permission).
-- ☐ External links open in the system browser / SFSafariViewController; no in-app web browsing of arbitrary sites.
+- ☑ Privacy policy written and hosted at the fan app's own `/privacy` route (React Router, served by the existing GitHub Pages deploy) — live at https://samgumble.github.io/festival-app/privacy/ (D-025; matches §0). `docs/store/privacy-policy.md` mirrors the in-app text word-for-word.
+- ☑ Privacy policy page live (plain language: no data collected; notifications optional; contact email). Linked from Info screen and both listings.
+- ☑ Font licenses (OFL) shipped in `docs/FONT_LICENSES.md` and listed under Info → Licenses.
+- ☑ Artwork/trademark credits present: official lockups unmodified; no artist photos; poster/photography/Sierra Nevada® credits shown in Info → Licenses.
+- ☑ No "Sign in with Apple" needed (no third-party login) and no account-deletion flow needed (no accounts) — keep it that way or both become mandatory.
+- ☑ Notification permission requested only after a user action, with an in-app explanation first (Apple guideline 5.1.1 and Android 13+ `POST_NOTIFICATIONS` runtime permission).
+- ☑ External links open in the system browser (off-origin links are handed off by the native shell); no in-app web browsing of arbitrary sites.
 
 ## 6. Pre-submission QA gate (do not submit until all ✓)
 - ☐ Real-device test on iPhone and Android: cold launch in airplane mode, favorites → plan, reminders fire, push received (Android; iOS once APNs key exists), push tap opens Alerts, text size 200%, dark mode, VoiceOver/TalkBack pass on Lineup + Plan.

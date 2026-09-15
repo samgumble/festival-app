@@ -2,7 +2,12 @@ import { useSyncExternalStore } from "react";
 import { Alert } from "@bb/shared";
 import { z } from "zod";
 import { isoMs } from "@/domain/time";
-import fixture from "./alerts.fixture.json";
+import devFixture from "./alerts.fixture.json";
+import storeSample from "./alerts.store-sample.json";
+
+// Dev/test fixture exercises every severity and edge case; the store-screenshot run swaps in benign
+// organizer-style notices so no invented incident ever appears on a public listing (readiness review, 2026-09-14).
+const fixture = import.meta.env.VITE_ALERTS_FIXTURE === "store" ? storeSample : devFixture;
 import { useFirestore } from "./source";
 
 export interface AlertsRepository {

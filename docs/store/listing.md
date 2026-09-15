@@ -41,7 +41,7 @@ The official companion app for the 32nd Telluride Blues & Brews Festival, Septem
 
 Now shows what is happening at the festival right now: which stage is live, what is next, and any alerts from the festival organizer.
 
-Lineup is the full official schedule across all four stages (Main Stage, Blues Stage, Truck Stage, and Campground Sessions), organized by day. Search by artist, switch between a list view and a stage-by-stage timeline grid, and tap any set for details.
+Lineup is the full official schedule across all four stages (Main Stage, Blues Stage, Truck Stage by Sierra Nevada®, and Campground Sessions), organized by day. Search by artist, switch between a list view and a stage-by-stage timeline grid, and tap any set for details.
 
 Schedule lets you favorite the sets you do not want to miss. The app builds your personal festival schedule automatically, flags time conflicts between stages, and helps you decide what to see next. Turn on set reminders and your phone notifies you before each favorited set starts, using on-device local notifications.
 
@@ -53,7 +53,7 @@ The app is built to work at the festival grounds: the full lineup, your schedule
 
 There are no accounts and no sign-in. There is no analytics and no advertising. Your favorites, schedule, and settings stay on your device. Official Telluride Blues & Brews Festival artwork appears with the permission of SBG Productions.
 ```
-1474 characters. Paste as-is into both Apple's Description field and Play's Full description field.
+1504 characters. Paste as-is into both Apple's Description field and Play's Full description field.
 
 ## Keywords (Apple ≤ 100, comma-separated, no spaces after commas, no duplicates of the app name)
 
