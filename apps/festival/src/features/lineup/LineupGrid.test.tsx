@@ -48,13 +48,15 @@ describe("LineupGrid", () => {
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
   });
 
-  it("short sets get an invisible hit-area extension", async () => {
+  it("only sets narrower than a finger get the invisible hit-area extension", async () => {
     useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00", lineupView: "grid" });
     renderAt("/lineup");
-    const short = await screen.findByRole("button", { name: /Derrick Dove & The Peacekeepers, 5:40 PM/ });
-    expect(short.className).toMatch(/before:-inset-x-1\.5\b/);
-    expect(short.className).not.toMatch(/\boverflow-hidden\b/);
-    const long = screen.getByRole("button", { name: /Charlie Musselwhite & GA-20/ });
-    expect(long.className).not.toMatch(/before:-inset-x/);
+    // at 100px per hour a 30-minute set is already 46px wide, so it needs no extension
+    const half = await screen.findByRole("button", { name: /Derrick Dove & The Peacekeepers, 5:40 PM/ });
+    expect(half.className).not.toMatch(/before:-inset-x/);
+    expect(half.className).not.toMatch(/\boverflow-hidden\b/);
+    // a 20-minute set would be 29px and does get one
+    const tiny = { id: "x", artistId: "a", stageId: "main", dayId: "sat" as const, start: "2026-09-19T12:00:00-06:00", end: "2026-09-19T12:20:00-06:00" };
+    expect(gridLayout([tiny], 100).width(tiny)).toBeLessThan(44);
   });
 });
