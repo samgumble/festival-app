@@ -100,6 +100,7 @@ npm run cap:sync                     # build (BASE_PATH=/, firestore data source
 npm run cap:ios                      # open the iOS project in Xcode (apps/festival/ios/App/App.xcodeproj — SPM-only, no CocoaPods)
 npm run cap:android                  # open the Android project in Android Studio
 npm run cap:build:ios                # headless Debug build for iOS Simulator (no code signing)
+~/Library/Android/sdk/emulator/emulator -avd bb36 -gpu host   # Android emulator MUST use the host GPU: SwiftShader (-gpu swiftshader_indirect) leaves stale frames layered over the WebView (seen Sep 14); the AVD config now has hw.gpu.mode=host so Android Studio launches match
 npm run cap:build:android            # headless Debug .apk build via Gradle
 npm run splash:build                 # regenerate the native splash screen assets from assets-src/
 ```
