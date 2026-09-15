@@ -10,6 +10,7 @@ import { usePlanStore } from "@/state/plan";
 
 const PX_PER_HOUR = 72;
 const HEADER_H = 44;
+const COL_MIN = 112; // columns never squeeze below this; the day scrolls sideways instead
 const STAGE_BG = { sky: "bg-sky text-white", plum: "bg-plum text-white", pine: "bg-pine text-white", violet: "bg-violet text-white", amber: "bg-amber text-ink", bloom: "bg-bloom text-ink", leaf: "bg-leaf text-ink", "sun-hot": "bg-sun-hot text-ink" } as const;
 
 /**
@@ -42,7 +43,8 @@ export function PlanGrid({ sets, now }: { sets: FestivalSet[]; now: Date }) {
             ))}
           </div>
         </div>
-        <div className="grid min-w-0 flex-1" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(0, 1fr))` }}>
+        <div className="min-w-0 flex-1 overflow-x-auto">
+        <div className="grid" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(${COL_MIN}px, 1fr))`, minWidth: columns.length * COL_MIN }}>
           {columns.map((col) => (
             <div key={col.key} data-testid={`plan-col-${col.key}`} className="min-w-0 border-l border-hair first:border-l-0">
               <div style={{ height: HEADER_H }} className={`micro flex items-center justify-center border-b border-hair px-1 text-center leading-3 ${STAGE_BG[col.stage.color]}`}>{col.key === col.stage.id ? col.stage.shortName : shortVenue(col.label)}</div>
@@ -68,6 +70,7 @@ export function PlanGrid({ sets, now }: { sets: FestivalSet[]; now: Date }) {
               </div>
             </div>
           ))}
+        </div>
         </div>
       </div>
     </div>
