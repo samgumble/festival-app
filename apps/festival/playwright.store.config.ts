@@ -18,6 +18,9 @@ export default defineConfig({
   projects: [
     { name: "ios-6.9", use: { viewport: { width: 440, height: 956 }, deviceScaleFactor: 3 } },
     { name: "android-phone", use: { viewport: { width: 360, height: 640 }, deviceScaleFactor: 3 } },
+    // Play now requires 7" and 10" tablet screenshots (16:9 or 9:16, each side 320-3840 px)
+    { name: "android-tablet-7", use: { viewport: { width: 600, height: 1067 }, deviceScaleFactor: 2 } },
+    { name: "android-tablet-10", use: { viewport: { width: 800, height: 1422 }, deviceScaleFactor: 2 } },
   ],
   webServer: {
     command: "npm run dev",

@@ -90,9 +90,8 @@ const SCREENS: Screen[] = [
   { slug: "06-offline", caption: "Works offline, even at altitude.", path: "/", theme: "dark", devNow: CLOCK.pre },
 ];
 
-test.beforeAll(() => {
-  mkdirSync(resolve(SHOTS_ROOT, "ios-6.9"), { recursive: true });
-  mkdirSync(resolve(SHOTS_ROOT, "android-phone"), { recursive: true });
+test.beforeAll(({}, testInfo) => {
+  mkdirSync(resolve(SHOTS_ROOT, testInfo.project.name), { recursive: true });
 });
 
 interface Layout {
@@ -273,7 +272,7 @@ for (const screen of SCREENS) {
     await compositePage.setContent(compositeHtml(layout, screen.caption, screenshotDataUri));
     await fitAndPlace(compositePage, layout, viewportCssWidth);
 
-    const folder = testInfo.project.name; // "ios-6.9" | "android-phone"
+    const folder = testInfo.project.name; // "ios-6.9" | "android-phone" | "android-tablet-7" | "android-tablet-10"
     await compositePage.screenshot({ path: resolve(SHOTS_ROOT, folder, `${screen.slug}.png`) });
     await compositeContext.close();
   });
