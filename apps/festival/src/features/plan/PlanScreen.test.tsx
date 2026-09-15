@@ -32,7 +32,8 @@ describe("Plan", () => {
     expect(screen.getAllByText(/overlaps 10 min/i).length).toBe(2);
     expect(screen.queryByRole("button", { name: /swap/i })).not.toBeInTheDocument();
     // only the two stages with favorites, in lineup-grid order
-    expect(screen.getAllByTestId(/^plan-col-/).map((c) => c.dataset.testid)).toEqual(["plan-col-main", "plan-col-blues"]);
+    expect(screen.getAllByTestId(/^plan-col-(?!title)/).map((c) => c.dataset.testid)).toEqual(["plan-col-main", "plan-col-blues"]);
+    expect(screen.getByTestId("plan-col-title-main").textContent).toBe("Main\nStage"); // two rows
   });
 
   it("day control carries per-day counts", async () => {
@@ -50,14 +51,16 @@ describe("Plan", () => {
     expect(screen.getAllByText(/Kirk Fletcher/).length).toBeGreaterThan(0);
     expect(screen.getAllByText(/Katie Skene/).length).toBeGreaterThan(0);
     expect(screen.getAllByTestId("plan-block").filter((b) => b.dataset.conflict === "true").length).toBe(3);
-    expect(screen.getAllByTestId(/^plan-col-/).map((c) => c.dataset.testid)).toEqual(["plan-col-blues", "plan-col-truck", "plan-col-camp"]);
+    expect(screen.getAllByTestId(/^plan-col-(?!title)/).map((c) => c.dataset.testid)).toEqual(["plan-col-blues", "plan-col-truck", "plan-col-camp"]);
+    expect(screen.getByTestId("plan-col-title-truck").textContent).toBe("Truck\nStage"); // sponsor tail dropped
   });
 
   it("names Juke Joint columns by venue", async () => {
     usePlanStore.setState({ favorites: ["sat-tab-benoit-juke-2200", "sat-judith-hill-juke-2200"] });
     renderAt("/plan");
     await screen.findAllByText(/Tab Benoit/);
-    expect(screen.getAllByTestId(/^plan-col-/).map((c) => c.dataset.testid)).toEqual(["plan-col-juke:Sheridan Opera House", "plan-col-juke:Elks Lodge"]);
+    expect(screen.getAllByTestId(/^plan-col-(?!title)/).map((c) => c.dataset.testid)).toEqual(["plan-col-juke:Sheridan Opera House", "plan-col-juke:Elks Lodge"]);
+    expect(screen.getByTestId("plan-col-title-juke:Elks Lodge").textContent).toBe("Elks\nLodge");
     expect(screen.getByText("Sheridan Opera House")).toBeInTheDocument();
   });
 });

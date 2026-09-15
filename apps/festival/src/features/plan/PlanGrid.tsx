@@ -11,6 +11,13 @@ import { usePlanStore } from "@/state/plan";
 const PX_PER_HOUR = 72;
 const HEADER_H = 44;
 const COL_MIN = 112; // columns never squeeze below this; the day scrolls sideways instead
+
+/** Column title: the stage's full name without a sponsor tail ("Truck Stage by Sierra Nevada®" → "Truck Stage"), or the venue. Two-word titles break onto two rows. */
+function columnTitle(col: { key: string; label: string; stage: { id: string; name: string } }): string {
+  const raw = col.key === col.stage.id ? col.stage.name.replace(/\s+by\s.*$/u, "") : shortVenue(col.label);
+  const words = raw.split(" ");
+  return words.length === 2 ? words.join("\n") : raw;
+}
 const STAGE_BG = { sky: "bg-sky text-white", plum: "bg-plum text-white", pine: "bg-pine text-white", violet: "bg-violet text-white", amber: "bg-amber text-ink", bloom: "bg-bloom text-ink", leaf: "bg-leaf text-ink", "sun-hot": "bg-sun-hot text-ink" } as const;
 
 /**
@@ -47,7 +54,7 @@ export function PlanGrid({ sets, now }: { sets: FestivalSet[]; now: Date }) {
         <div className="grid" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(${COL_MIN}px, 1fr))`, minWidth: columns.length * COL_MIN }}>
           {columns.map((col) => (
             <div key={col.key} data-testid={`plan-col-${col.key}`} className="min-w-0 border-l border-hair first:border-l-0">
-              <div style={{ height: HEADER_H }} className={`micro flex items-center justify-center border-b border-hair px-1 text-center leading-3 ${STAGE_BG[col.stage.color]}`}>{col.key === col.stage.id ? col.stage.shortName : shortVenue(col.label)}</div>
+              <div style={{ height: HEADER_H }} data-testid={`plan-col-title-${col.key}`} className={`micro flex items-center justify-center whitespace-pre-line border-b border-hair px-1 text-center leading-3 ${STAGE_BG[col.stage.color]}`}>{columnTitle(col)}</div>
               <div className="relative" style={{ height: bodyH, ...hourLines }}>
                 {col.sets.map((s) => {
                   const artist = idx.artistsById.get(s.artistId)!;
