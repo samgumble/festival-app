@@ -12,7 +12,7 @@ import { runtime } from "@/platform/runtime";
 import { share } from "@/platform/share";
 import { PlanEmpty } from "./PlanEmpty";
 import { PlanSettings } from "./PlanSettings";
-import { PlanTimeline } from "./PlanTimeline";
+import { PlanGrid } from "./PlanGrid";
 import { placeOf } from "@/domain/place";
 
 export function PlanScreen() {
@@ -57,7 +57,7 @@ export function PlanScreen() {
           <div className="text-[13px] text-fg-soft tabular-nums">{formatRange(parseIso(next.start), parseIso(next.end))} · {placeOf(next, idx.stagesById.get(next.stageId))}{settings.bufferMinutes > 0 ? ` · leave by ${formatTime(leaveBy(next, settings.bufferMinutes))}` : ""}</div>
         </Card>
       )}
-      {daySets.length === 0 ? <p className="mt-6 text-center text-fg-soft">Nothing planned for this day yet.</p> : <PlanTimeline sets={daySets} now={now} />}
+      {daySets.length === 0 ? <p className="mt-6 text-center text-fg-soft">Nothing planned for this day yet.</p> : <PlanGrid sets={daySets} now={now} />}
       {/* .ics download is web-only in v1: native has no Filesystem plugin, so a "file share" would only paste raw calendar text (D-029) */}
       <div className="mt-2 flex gap-2">{!runtime.isNative() && <Button size="sm" className="flex-1" onClick={exportIcs}>Add to calendar</Button>}<Button size="sm" className="flex-1" onClick={shareText}>Share as text</Button></div>
       {settingsOpen && <PlanSettings onClose={() => setSettingsOpen(false)} />}

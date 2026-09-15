@@ -180,3 +180,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** Owner request: fans need to see which venue a late show is at on the timeline, and staff need a clean way to wipe a demo phone.
 
 **Consequences.** Saturday's grid has 14 rows. No undo after the second confirmation, by design.
+
+## D-033 — My Schedule is a day calendar: stage columns, time down the page, conflicts side by side (2026-09-14)
+
+**Decision.** `PlanGrid` replaces the braided `PlanTimeline`. Each festival day renders as a calendar: hours down the left, one column per stage that holds a favorite (ordered like the lineup grid's rows), blocks positioned and sized by real start/end so overlapping favorites sit next to each other. Overlaps (within the buffer) outline both blocks in ember with a ⚠ and a screen-reader note; there is no Swap control any more. Conflict resolution still exists in the store and drives Next Up and reminders with its default (the earlier set), so nothing else changed.
+
+**Why.** Owner request 2026-09-14: see conflicts at a glance with accurate durations, only the stages that matter, in the same order as the grid; the swap button was more control than fans need.
+
+**Consequences.** The plan settings sheet still carries the buffer setting, which now only affects which overlaps get flagged and Next Up. Tapping a block opens the artist sheet.
