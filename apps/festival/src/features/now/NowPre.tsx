@@ -17,9 +17,9 @@ export function NowPre({ now }: { now: Date }) {
   return (
     <>
       <Hero />
-      <Card className="mt-3 text-center">
+      <div className="mt-3 rounded-card bg-contrast px-4 py-3.5 text-center text-white shadow-card">
         <Countdown msUntil={gates.getTime() - now.getTime()} gatesLine={`${first.label.slice(0, 3)} Sep ${Number(first.date.slice(8))} · ${formatTime(gates)} · ${content.festival.venue.replace("Telluride ", "")}`} />
-      </Card>
+      </div>
       <div className="mt-4 flex flex-wrap items-baseline justify-between gap-x-3 px-0.5">
         <Eyebrow tone="structure">Headliners</Eyebrow>
         <Link to="/lineup" className="eyebrow text-fg-soft">See lineup →</Link>

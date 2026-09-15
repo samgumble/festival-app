@@ -144,3 +144,19 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** Owner request: a real festival image sells the plan better than an illustration.
 
 **Consequences.** `RainbowArch` stays in the design gallery only. Any further photos go through `npm run art:build` and must stay inside the art budget; the original 3 MB JPEG is not committed.
+
+## D-029 — Publish-readiness fixes: web-only calendar export, Android edge-to-edge, sample alerts for store shots (2026-09-14)
+
+**Decision.** From the pre-publish review (`.superpowers/sdd/publish-readiness-review.md`): "Add to calendar" renders only on the web (native has no Filesystem plugin, so a file share would only paste raw calendar text; "Share as text" stays everywhere). Android draws under both system bars: `MainActivity` calls `setDecorFitsSystemWindows(false)` and pushes the real bar insets into the page as `--inset-t`/`--inset-b`, which `.safe-t`/`.safe-b` combine with `env()` (iOS/web unchanged). Android is portrait-locked. Production never reads the dev clock for reminder scheduling. The Maps link opens Google Maps on Android. Version is 1.0.0 in package.json, iOS `MARKETING_VERSION`, and the Info footer. Play screenshots are 1080×1920, and the store-shot run swaps in `alerts.store-sample.json` (welcome, altitude, where updates appear) via `VITE_ALERTS_FIXTURE=store` so no invented incident appears on a listing. The privacy policy now names the offline cache and the web clipboard fallback.
+
+**Why.** Each was a blocker or should-fix a reviewer would hit; none changes what the app does for fans.
+
+**Consequences.** Real calendar export on native is a v1.1 item (needs `@capacitor/filesystem`, an approved-list decision). The Schedule tab column sizes to its label so 360dp phones do not truncate it.
+
+## D-030 — Home hero: lockup on the page, poster art in its own tile, white countdown on a contrast card (2026-09-14)
+
+**Decision.** The Now screen opens with the official lockup (Sam's `app-logo.png`, 1080 px, lossless WebP, art budget raised to 1.3 MB) on the page background, then the poster crop in a clean rounded tile with nothing overlaid (the "32nd annual" chip is gone), then the countdown in white on a solid `--color-contrast` card: navy in light mode, plum in dark mode (white text ≥ 7:1 on both).
+
+**Why.** Owner request 2026-09-14. The lockup reads better on a flat ground than over the busy poster, and the poster deserves an unobstructed tile.
+
+**Consequences.** `Hero` has no children/chip props. The live-day hero is the same layout with a 200 px poster tile.

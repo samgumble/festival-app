@@ -49,7 +49,8 @@ This is a **fresh start**. Two earlier prototypes exist in the old `samgumble/mu
 | Web beta live for SBG | ✅ Sep 9 | https://samgumble.github.io/festival-app/ — auto-deploys from `main` via `.github/workflows/pages.yml`; live Firestore content + alerts since Sep 10 |
 | Compliance | ✅ Sep 12 | `docs/COMPLIANCE.md`: privacy policy live at `/privacy` (in-app + web), third parties named, no fan data collected, rules default-deny (probed), staff email removed from public docs (D-025), axe-core clean in both themes; open: admin MFA (needs Blaze), store placeholders |
 | Native shell | ✅ Sep 10 | Capacitor 8 iOS/Android in `apps/festival/{ios,android}` (D-023); reminders = one switch over favorites via local notifications; haptics, status bar, splash, icons; simulator-verified. iOS template is SPM-only (no CocoaPods, no `.xcworkspace`; open `ios/App/App.xcodeproj`). Pending: Apple/Play accounts → TestFlight/closed track (STORE-CHECKLIST §1/§7); push needs Blaze (D-021) |
-| TestFlight / Play closed test | ⬜ | Mon Sep 14 |
+| Publish-readiness review | ✅ Sep 14 | `.superpowers/sdd/publish-readiness-review.md`: 6 blockers fixed (D-029); open for Sam: support email/URL, account ownership → authorization letter, Play category, `history/` docs carrying his email, real-device QA (§6) |
+| TestFlight / Play closed test | ⬜ | Play account approved Sep 14; needs Sam's upload key (`~/Keys/bb-upload.jks`) → `cap:bundle:android` → internal testing. Apple enrollment pending since Aug 31 |
 | iOS submitted | ⬜ | Mon Sep 14 — follow `STORE-CHECKLIST.md` §8 |
 | Store accounts / ownership decided | ⬜ | STORE-CHECKLIST §0 — urgent: SBG vs Sam accounts, Play account type, authorization letter |
 | Poster layers exported | ⬜ | Sam, in parallel — see ASSET-BRIEF |

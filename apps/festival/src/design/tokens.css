@@ -67,6 +67,8 @@
   --color-tint-urgent: var(--tint-urgent);
   /* plum accent for eyebrows/text: brand plum in light mode, a lifted plum in dark (7:1 on navy) */
   --color-accent-plum: var(--accent-plum);
+  /* solid card that stands out from the page: white text on navy (light) / plum (dark) */
+  --color-contrast: var(--contrast);
 }
 
 :root, [data-theme="light"] {
@@ -77,6 +79,7 @@
   --tint-important: color-mix(in oklab, var(--color-sun) 24%, var(--color-paper-light));
   --tint-urgent: color-mix(in oklab, var(--color-ember) 16%, var(--color-paper-light));
   --accent-plum: var(--color-plum);
+  --contrast: var(--color-night);
   --fg: var(--color-ink);
   --fg-soft: var(--color-ink-soft);
   --hair: rgba(30, 26, 26, 0.14);
@@ -97,6 +100,7 @@
   --tint-important: color-mix(in srgb, var(--color-sun-hot) 34%, var(--color-night-ink));
   --tint-urgent: color-mix(in srgb, var(--color-ember) 42%, var(--color-night-ink));
   --accent-plum: #D39BD5;
+  --contrast: var(--color-plum);
   --fg: var(--color-paper);
   --fg-soft: #DCC9A8; /* 4.6:1 on the dark info tint, 5.6:1 on night (axe, 2026-09-12) */
   --hair: rgba(235, 213, 179, 0.16);

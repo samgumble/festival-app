@@ -6,7 +6,7 @@ import { readdirSync, statSync } from "node:fs";
 import { basename, dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const ART_BUDGET_BYTES = 1_000_000;
+export const ART_BUDGET_BYTES = 1_300_000; // raised 2026-09-14 for the 1080px official lockup (lossless, 609 KB)
 
 export function checkBudget(sizes: Record<string, number>, budget: number = ART_BUDGET_BYTES): { total: number; ok: boolean } {
   const total = Object.values(sizes).reduce((a, b) => a + b, 0);
