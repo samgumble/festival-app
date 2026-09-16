@@ -196,3 +196,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** Owner decisions 2026-09-15. The app is SBG's official companion, so questions belong with the festival's existing contact channel; the in-app privacy policy already routes there. Events matches what the app does (schedule, plan, alerts for one real-world event); the app has no audio playback. Honest rating answers avoid a metadata-mismatch rejection.
 
 **Consequences.** `docs/store/listing.md`, `docs/STORE-CHECKLIST.md` §0/§4 and `docs/store/review-notes.md` updated. No code change: the in-app policy and Info screen already link tellurideblues.com. If SBG later wants a dedicated app mailbox, only the console fields change.
+
+## D-035 — Sheets dismiss by swipe and Android back; sheets are truly modal (2026-09-15)
+
+**Decision.** `design/Sheet` gains three behaviours: (1) swipe-to-dismiss via a `motion` vertical drag started from the handle, or from the body when its scroll position is at the top and the finger moves down; it closes past 110 px or on a fast flick, otherwise springs back; (2) an Android hardware/gesture back handler through a new `appLifecycle.onBackButton` adapter, registered only while a sheet is mounted so Capacitor's default back behaviour is untouched elsewhere; (3) real modality: focus moves into the dialog on open, Tab cycles inside, `#root` is `inert` behind the portal-rendered sheet, and focus returns to the opener on close. The sheet is now rendered in a portal on `document.body`.
+
+**Why.** An Android tester could not swipe the artist sheet away (2026-09-15); the handle looked draggable but was decorative. The accessibility review the same day found `aria-modal` declared without focus management (blocker F12). Same component, same fix; iOS gets the swipe for free.
+
+**Consequences.** Every sheet (artist, schedule settings, reset favorites, install) behaves the same. Long sheet bodies still scroll natively; only a downward swipe from the top dismisses. Tests cover the dismiss thresholds, focus trap/restore, and the back-button adapter lifecycle; Playwright verified the gesture in Chromium.

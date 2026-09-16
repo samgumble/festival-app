@@ -1,6 +1,7 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { describe, expect, it, vi } from "vitest";
 import { Badge, Button, buttonClasses, Card, Heart, SegmentedControl, Sheet, Toggle } from "./index";
+import { DISMISS_OFFSET, DISMISS_VELOCITY, shouldDismiss } from "./Sheet";
 
 describe("Heart", () => {
   it("exposes pressed state and calls onToggle", () => {
@@ -56,6 +57,33 @@ describe("Sheet", () => {
     fireEvent.keyDown(document, { key: "Escape" });
     fireEvent.click(screen.getByTestId("sheet-backdrop"));
     expect(onClose).toHaveBeenCalledTimes(2);
+  });
+
+  it("moves focus in, keeps Tab inside, makes the app inert, and restores focus on close", () => {
+    const root = document.createElement("div"); root.id = "root";
+    const trigger = document.createElement("button"); trigger.textContent = "open";
+    root.append(trigger); document.body.append(root); trigger.focus();
+    const { unmount } = render(<Sheet onClose={() => {}} title="Focus"><button>one</button><button>two</button></Sheet>);
+    const dialog = screen.getByRole("dialog", { name: "Focus" });
+    expect(document.activeElement).toBe(dialog);
+    expect(root.hasAttribute("inert")).toBe(true);
+    screen.getByText("two").focus();
+    fireEvent.keyDown(document, { key: "Tab" });
+    expect(document.activeElement).toBe(screen.getByText("one"));
+    fireEvent.keyDown(document, { key: "Tab", shiftKey: true });
+    expect(document.activeElement).toBe(screen.getByText("two"));
+    unmount();
+    expect(root.hasAttribute("inert")).toBe(false);
+    expect(document.activeElement).toBe(trigger);
+    root.remove();
+  });
+
+  it("dismisses on a long drag or a fast flick, springs back otherwise", () => {
+    expect(shouldDismiss(DISMISS_OFFSET + 1, 0)).toBe(true);
+    expect(shouldDismiss(40, DISMISS_VELOCITY + 1)).toBe(true);
+    expect(shouldDismiss(40, 100)).toBe(false);
+    expect(shouldDismiss(10, 5000)).toBe(false);
+    expect(shouldDismiss(-200, 0)).toBe(false);
   });
 });
 
