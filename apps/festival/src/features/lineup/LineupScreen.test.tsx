@@ -50,6 +50,16 @@ describe("Lineup list", () => {
     expect(within(juke).getByText("Blues Stage")).toBeInTheDocument();
     expect(within(blues).getByText("Samantha Fish")).toBeInTheDocument();
   });
+  it("a special event shows where it is held rather than the artist's tier label", async () => {
+    useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00" });
+    renderAt("/lineup");
+    fireEvent.click(await screen.findByRole("radio", { name: "Fri" }));
+    const special = await screen.findByTestId("stage-special");
+    const row = within(special).getByText("Music Maker Foundation Artists").closest("button")!;
+    expect(within(row).getByText("Heritage Plaza – Mountain Village")).toBeInTheDocument();
+    expect(within(row).queryByText("Music Maker Foundation")).toBeNull();
+    expect(within(row).getByText("free")).toBeInTheDocument();
+  });
   it("search also matches a comedy act with no sets", async () => {
     renderAt("/lineup");
     fireEvent.change(await screen.findByRole("searchbox"), { target: { value: "baron" } });
