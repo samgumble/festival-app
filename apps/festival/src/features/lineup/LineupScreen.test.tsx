@@ -58,6 +58,15 @@ describe("Lineup list", () => {
     expect(within(row).getByText("Heritage Plaza – Mountain Village")).toBeInTheDocument();
     expect(within(row).queryByText("Music Maker Foundation")).toBeNull();
     expect(within(row).getByText("free")).toBeInTheDocument();
+    // end times show on stage sets but not on Juke Joint shows (owner request 2026-09-15)
+    expect(within(row).getByText(/– 12:45 PM/)).toBeInTheDocument();
+  });
+  it("juke joint rows show the start time only", async () => {
+    useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00" });
+    renderAt("/lineup");
+    const juke = await screen.findByTestId("stage-juke");
+    expect(within(juke).queryByText(/– 11:55 PM/)).toBeNull();
+    expect(within(juke).getAllByText(/10:00 PM/).length).toBeGreaterThan(0);
   });
   it("search also matches a comedy act with no sets", async () => {
     renderAt("/lineup");
