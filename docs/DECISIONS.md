@@ -204,3 +204,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** An Android tester could not swipe the artist sheet away (2026-09-15); the handle looked draggable but was decorative. The accessibility review the same day found `aria-modal` declared without focus management (blocker F12). Same component, same fix; iOS gets the swipe for free.
 
 **Consequences.** Every sheet (artist, schedule settings, reset favorites, install) behaves the same. Long sheet bodies still scroll natively; only a downward swipe from the top dismisses. Tests cover the dismiss thresholds, focus trap/restore, and the back-button adapter lifecycle; Playwright verified the gesture in Chromium.
+
+## D-036 — Juke Joints section lists every juke show; organizer alerts surface as on-device notifications (2026-09-15)
+
+**Decision.** (1) `groupByHostStage` takes an `alsoListOwn` list; the lineup list passes `["juke"]`, so the Blues Stage juke shows appear under the Blues Stage (with the Juke tag, as before) *and* under Juke Joints (with "Blues Stage" as the place). The grid is unchanged. (2) `useAlertNotifications` (mounted in `TabShell`) turns each newly live organizer alert into an immediate local notification while the app is running, gated by the same reminders switch and OS permission as set reminders. Ids sit in a reserved range (`alertNotificationId`, 800M–900M) that `diffReminders` skips; a tap opens the Alerts tab (`extra.setId` prefixed `alert:`). On first arm the store records every existing alert as already seen so a fresh install never replays history.
+
+**Why.** Owner requests 2026-09-15: the late-night circuit should read in one place; alerts should behave like reminders. Push to a closed app is a separate mechanism (Cloud Messaging, native Firebase config, APNs key pending Apple enrollment) and stays out of v1 per D-021 unless the owner opts in.
+
+**Consequences.** Alerts published while the app is closed are notified on next launch, not at publish time. The `pushOptIn` flag in the alerts store remains unused. Data-safety answers are unaffected (still local notifications only).

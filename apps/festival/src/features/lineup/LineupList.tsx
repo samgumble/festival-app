@@ -7,8 +7,9 @@ import { SetRow } from "./SetRow";
 export function LineupList({ dayId, now }: { dayId: DayId; now: Date }) {
   const content = useContent();
   const idx = useContentIndex();
-  // comedy at the Blues Stage / Campground and the late Blues Stage Juke Joint show list under those stages
-  const groups = groupByHostStage(idx.setsByDay[dayId], content.stages);
+  // comedy at the Blues Stage / Campground and the late Blues Stage Juke Joint show list under those stages;
+  // the Juke Joints section also lists every juke show so the whole late-night circuit reads in one place
+  const groups = groupByHostStage(idx.setsByDay[dayId], content.stages, ["juke"]);
   // side tag: a set listed under a host stage shows its own stage; a comedian's set anywhere else (the
   // Juke Joint comedy nights) shows the Comedy tag
   const comedyStage = content.stages.find((st) => st.id === "comedy");

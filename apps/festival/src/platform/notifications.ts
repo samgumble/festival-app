@@ -89,13 +89,13 @@ export const notifications = {
     const { LocalNotifications } = await import("@capacitor/local-notifications");
     await LocalNotifications.cancel({ notifications: ids.map((id) => ({ id })) });
   },
-  /** Fires when the user taps a reminder. Returns an unsubscribe. */
-  onTap(handler: () => void): () => void {
+  /** Fires when the user taps one of our notifications, with the `extra` it was scheduled with. Returns an unsubscribe. */
+  onTap(handler: (extra?: { setId?: string }) => void): () => void {
     if (!runtime.isNative()) return () => {};
     let remove: (() => void) | undefined;
     let cancelled = false;
     void import("@capacitor/local-notifications").then(async ({ LocalNotifications }) => {
-      const h = await LocalNotifications.addListener("localNotificationActionPerformed", () => handler());
+      const h = await LocalNotifications.addListener("localNotificationActionPerformed", (e) => handler(e.notification.extra as { setId?: string } | undefined));
       if (cancelled) await h.remove();
       else remove = () => void h.remove();
     });

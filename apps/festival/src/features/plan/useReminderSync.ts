@@ -26,8 +26,8 @@ export function useReminderSync(): void {
   const owned = useRef<Set<number>>(new Set());
   const chain = useRef<Promise<void>>(Promise.resolve());
 
-  // Tap on a reminder → Plan tab.
-  useEffect(() => notifications.onTap(() => navigate("/plan")), [navigate]);
+  // Tap on a reminder → Plan tab; tap on an organizer alert → Alerts tab.
+  useEffect(() => notifications.onTap((extra) => navigate(extra?.setId?.startsWith("alert:") ? "/alerts" : "/plan")), [navigate]);
 
   // Re-validate the switch against the OS permission: a fan can revoke notifications in Settings
   // without ever touching the app, which would otherwise leave the switch silently lying. Checked

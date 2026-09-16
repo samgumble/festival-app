@@ -46,13 +46,23 @@ export function planReminders({ favorites, sets, artistsById, stagesById, leadMi
 /** Reserved id for the "Send a test reminder" button; the sync never cancels it. */
 export const TEST_REMINDER_ID = 999_000_001; // outside hashId's range of real set ids
 
+/** Organizer-alert notifications live in their own id range so the reminder sync never touches them. */
+export const ALERT_ID_BASE = 800_000_000;
+export const ALERT_ID_SPAN = 100_000_000;
+export function alertNotificationId(alertId: string): number {
+  return ALERT_ID_BASE + (hashId(alertId) % ALERT_ID_SPAN);
+}
+export function isAlertNotificationId(id: number): boolean {
+  return id >= ALERT_ID_BASE && id < ALERT_ID_BASE + ALERT_ID_SPAN;
+}
+
 export function diffReminders(desired: ReminderItem[], pending: Array<{ id: number; at?: number }>): { cancel: number[]; schedule: ReminderItem[] } {
   const want = new Map(desired.map((d) => [d.id, d]));
   const have = new Map(pending.map((p) => [p.id, p]));
   const cancel: number[] = [];
   const schedule: ReminderItem[] = [];
   for (const p of pending) {
-    if (p.id === TEST_REMINDER_ID) continue;
+    if (p.id === TEST_REMINDER_ID || isAlertNotificationId(p.id)) continue;
     const d = want.get(p.id);
     if (!d || (p.at !== undefined && p.at !== d.at)) cancel.push(p.id);
   }

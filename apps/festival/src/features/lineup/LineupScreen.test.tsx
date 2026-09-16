@@ -45,6 +45,10 @@ describe("Lineup list", () => {
     // the Juke Joint comedy night at Liz carries the Comedy tag too
     const juke = screen.getByTestId("stage-juke");
     expect(within(juke).getAllByText("Comedy").length).toBe(1);
+    // the Blues Stage juke show lists under Juke Joints as well, with its venue shown
+    expect(within(juke).getByText("Samantha Fish")).toBeInTheDocument();
+    expect(within(juke).getByText("Blues Stage")).toBeInTheDocument();
+    expect(within(blues).getByText("Samantha Fish")).toBeInTheDocument();
   });
   it("search also matches a comedy act with no sets", async () => {
     renderAt("/lineup");

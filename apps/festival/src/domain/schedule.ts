@@ -33,10 +33,20 @@ export function hostStageId(set: FestivalSet, stages: Stage[]): string {
 }
 
 /** Like groupByStage, but sets held at another stage's venue join that stage's group (their own stage colour still tags them). */
-export function groupByHostStage(sets: FestivalSet[], stages: Stage[]): StageGroup[] {
+/**
+ * Group sets under the stage that hosts them (a set with a venue that is itself a stage lists under that
+ * stage). Stages named in `alsoListOwn` additionally list every set that belongs to them even when it is
+ * hosted elsewhere, so e.g. the Juke Joints section shows the Blues Stage juke show as well.
+ */
+export function groupByHostStage(sets: FestivalSet[], stages: Stage[], alsoListOwn: string[] = []): StageGroup[] {
   return [...stages]
     .sort((a, b) => a.sortOrder - b.sortOrder)
-    .map((stage) => ({ stage, sets: sets.filter((s) => hostStageId(s, stages) === stage.id).sort(byStart) }))
+    .map((stage) => ({
+      stage,
+      sets: sets
+        .filter((s) => hostStageId(s, stages) === stage.id || (alsoListOwn.includes(stage.id) && s.stageId === stage.id))
+        .sort(byStart),
+    }))
     .filter((g) => g.sets.length > 0);
 }
 

@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { Content } from "@bb/shared";
 import bundled from "@/data/bundled.json";
 import { parseIso } from "./time";
-import { festivalState, groupByStage, headliners, isEnded, nowPlaying, progress, searchArtists, setsForDay, upNext } from "./schedule";
+import { festivalState, groupByStage, headliners, isEnded, nowPlaying, progress, searchArtists, setsForDay, upNext, groupByHostStage } from "./schedule";
 
 const content = Content.parse(bundled);
 const SAT_340 = parseIso("2026-09-19T15:40:00-06:00");
@@ -29,6 +29,19 @@ describe("day + stage grouping", () => {
     expect(groups[0]?.sets.map((s) => s.artistId)).toEqual([
       "j-causeways", "judith-hill", "telluride-blues-challenge-winner-2026", "nether-hour", "charlie-musselwhite-ga20", "record-company", "taj-mahal-keb-mo",
     ]);
+  });
+
+  it("host grouping lists the Blues Stage juke show under the Blues Stage, and also under Juke Joints when asked", () => {
+    const sat = setsForDay(content.sets, "sat");
+    const hosted = groupByHostStage(sat, content.stages);
+    const blues = hosted.find((g) => g.stage.id === "blues")!, juke = hosted.find((g) => g.stage.id === "juke")!;
+    expect(blues.sets.some((s) => s.id === "sat-samantha-fish-juke-2200")).toBe(true);
+    expect(juke.sets.some((s) => s.id === "sat-samantha-fish-juke-2200")).toBe(false);
+    const both = groupByHostStage(sat, content.stages, ["juke"]);
+    expect(both.find((g) => g.stage.id === "blues")!.sets.some((s) => s.id === "sat-samantha-fish-juke-2200")).toBe(true);
+    const jukeAll = both.find((g) => g.stage.id === "juke")!.sets;
+    expect(jukeAll.some((s) => s.id === "sat-samantha-fish-juke-2200")).toBe(true);
+    expect(jukeAll.length).toBe(juke.sets.length + 1);
   });
 });
 

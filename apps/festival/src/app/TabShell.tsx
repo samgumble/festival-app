@@ -7,10 +7,12 @@ import { DevClock } from "./DevClock";
 import { UpdateBanner } from "./UpdateBanner";
 import { useUpdateStore } from "@/state/updates";
 import { useReminderSync } from "@/features/plan/useReminderSync";
+import { useAlertNotifications } from "@/features/alerts/useAlertNotifications";
 
 export function TabShell() {
   useApplyTheme();
   useReminderSync();
+  useAlertNotifications();
   const needRefresh = useUpdateStore((s) => s.needRefresh);
   const dismissed = useUpdateStore((s) => s.dismissed);
   const bannerVisible = needRefresh && !dismissed;
