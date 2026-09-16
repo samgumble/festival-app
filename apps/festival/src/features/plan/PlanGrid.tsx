@@ -54,7 +54,7 @@ export function PlanGrid({ sets, now }: { sets: FestivalSet[]; now: Date }) {
         <div className="grid" style={{ gridTemplateColumns: `repeat(${columns.length}, minmax(${COL_MIN}px, 1fr))`, minWidth: columns.length * COL_MIN }}>
           {columns.map((col) => (
             <div key={col.key} data-testid={`plan-col-${col.key}`} className="min-w-0 border-l border-hair first:border-l-0">
-              <div style={{ height: HEADER_H }} data-testid={`plan-col-title-${col.key}`} className={`micro flex items-center justify-center whitespace-pre-line border-b border-hair px-1 text-center leading-3 ${STAGE_BG[col.stage.color]}`}>{columnTitle(col)}</div>
+              <div style={{ height: HEADER_H }} data-testid={`plan-col-title-${col.key}`} className={`micro flex items-center justify-center whitespace-pre-line border-b border-hair px-1 text-center font-bold leading-3 ${STAGE_BG[col.stage.color]}`}>{columnTitle(col)}</div>
               <div className="relative" style={{ height: bodyH, ...hourLines }}>
                 {col.sets.map((s) => {
                   const artist = idx.artistsById.get(s.artistId)!;
