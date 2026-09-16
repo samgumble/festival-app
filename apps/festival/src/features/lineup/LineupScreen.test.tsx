@@ -51,9 +51,8 @@ describe("Lineup list", () => {
     expect(within(blues).getByText("Samantha Fish")).toBeInTheDocument();
   });
   it("a special event shows where it is held rather than the artist's tier label", async () => {
-    useUiStore.setState({ devNow: "2026-09-19T15:40:00-06:00" });
+    useUiStore.setState({ devNow: "2026-09-18T09:00:00-06:00" }); // Friday morning: the set is upcoming, so the row shows its place, not "Ended"
     renderAt("/lineup");
-    fireEvent.click(await screen.findByRole("radio", { name: "Fri" }));
     const special = await screen.findByTestId("stage-special");
     const row = within(special).getByText("Music Maker Foundation Artists").closest("button")!;
     expect(within(row).getByText("Heritage Plaza – Mountain Village")).toBeInTheDocument();
