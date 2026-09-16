@@ -77,9 +77,10 @@ export function Sheet({ onClose, title, children }: { onClose: () => void; title
         drag="y" dragListener={false} dragControls={controls} dragConstraints={{ top: 0, bottom: 0 }}
         dragElastic={{ top: 0, bottom: 0.7 }} dragMomentum={false} onDragEnd={onDragEnd}
         className="absolute inset-x-0 bottom-0 flex max-h-[85dvh] flex-col rounded-t-sheet border border-b-0 border-hair bg-surface shadow-sheet outline-none safe-b">
+        {/* 44px grab strip (owner request 2026-09-15): the whole strip starts a dismiss drag, not just the bar. */}
         <div data-testid="sheet-handle" onPointerDown={(e) => controls.start(e)} style={{ touchAction: "none" }}
-          className="shrink-0 cursor-grab px-4 pb-2 pt-2.5 active:cursor-grabbing">
-          <div aria-hidden="true" className="mx-auto h-1.5 w-10 rounded-chip bg-hair" />
+          className="flex min-h-11 shrink-0 cursor-grab items-center px-4 active:cursor-grabbing">
+          <div aria-hidden="true" className="mx-auto h-1.5 w-12 rounded-chip bg-hair" />
         </div>
         <div ref={scrollRef} data-testid="sheet-body" onPointerDown={onBodyPointerDown} onPointerMove={onBodyPointerMove}
           onPointerUp={onBodyPointerEnd} onPointerCancel={onBodyPointerEnd}
