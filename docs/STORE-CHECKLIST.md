@@ -106,7 +106,7 @@ Drafts are written: listing copy in `docs/store/listing.md`, App Privacy / Data 
 - ☑ Sep 15: **Target audience & content**: 18 and over
 - ☑ Sep 15: **Data safety**: no data collected or shared (the form skipped straight to preview); **Government apps**: No; **Financial features**: none; **Health**: none. The exact-alarm use case is declared at release review if Play asks (text in `docs/store/privacy-answers.md`)
 - ☑ Sep 15: Government / Financial / Health all declared none (see above)
-- ☐ Advertising ID declaration: **No** — app does not use it; make sure the manifest has no `AD_ID` permission — Firebase Messaging alone doesn't add it, but verify the merged manifest (`docs/store/privacy-answers.md`)
+- ☑ Sep 16: Advertising ID declaration: **No** — the vc4 bundle manifest was checked (`unzip -p … base/manifest/AndroidManifest.xml | strings | grep AD_ID` → 0 hits); saved in Play Console from the Publishing overview pre-review check
 - ☐ Countries/regions: U.S. (+ Canada) or worldwide
 
 ## 5. In-app legal and content-rights items
@@ -137,7 +137,7 @@ Drafts are written: listing copy in `docs/store/listing.md`, App Privacy / Data 
 ### Google Play
 - ☑ Sep 15: Create an **Internal testing** release first (up to 100 testers by email list, available in minutes) for SBG staff and Sam — release 1.0.0 (1) live, tester list `SBG internal testers` (4).
 - ☐ Then a **Closed testing** track ("Festival 2026") with an opt-in link; if the account is personal this is the track that must hold ≥ 12 opted-in testers for 14 continuous days before production access can be requested (then a 3–7 business-day review of the questionnaire). Recruit SBG staff, volunteers, friends — ask them to actually open the app during the window.
-- ☐ Production release after production access is granted (organization accounts can go straight to production after review).
+- ☑ Sep 16: Production release **4 (1.0.0)** (versionCode 4, whole-card sheet drag) created as a saved change with countries = **United States only**; only warning is the optional deobfuscation file. Sam clicks **Submit 10 changes for review** on the Publishing overview once the quick checks finish (organization account, no closed-test gate).
 
 ## 8. Submission day (target Mon Sep 14)
 1. ☐ Freeze content in the admin console except via SBG; bump version numbers; tag `v1.0.0`.
