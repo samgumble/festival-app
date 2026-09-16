@@ -1,9 +1,8 @@
 import { useCallback } from "react";
 import { useNavigate, useParams } from "react-router";
 import { Button, buttonClasses, Chip, Eyebrow, Heart, Sheet } from "@/design";
-import { useFestivalClock } from "@/app/clock";
 import { useContent, useContentIndex } from "@/data/content";
-import { formatRange, formatTime, parseIso } from "@/domain/time";
+import { formatRange, parseIso } from "@/domain/time";
 import { usePlanStore } from "@/state/plan";
 import { placeOf } from "@/domain/place";
 
@@ -13,7 +12,6 @@ export function ArtistSheet() {
   const { id = "" } = useParams();
   const navigate = useNavigate();
   const onClose = useCallback(() => navigate("/lineup"), [navigate]);
-  const { now } = useFestivalClock();
   const content = useContent();
   const idx = useContentIndex();
   const { favorites, toggleFavorite } = usePlanStore();
@@ -61,7 +59,6 @@ export function ArtistSheet() {
         <Button size="sm" onClick={share}>Share ↗</Button>
         <a className={buttonClasses({ size: "sm" })} href={content.festival.links.lineup} target="_blank" rel="noreferrer">Official lineup ↗</a>
       </div>
-      <p className="mt-3 text-[12px] text-fg-soft">Times shown in Telluride (Mountain) time. Now: {formatTime(now)}</p>
     </Sheet>
   );
 }
