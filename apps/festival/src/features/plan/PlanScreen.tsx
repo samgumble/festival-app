@@ -34,7 +34,21 @@ export function PlanScreen() {
       <Button size="sm" aria-label="Schedule settings" onClick={() => setSettingsOpen(true)}>⚙</Button>
     </div>
   );
-  if (mine.length === 0) return <div>{title}<PlanEmpty />{settingsOpen && <PlanSettings onClose={() => setSettingsOpen(false)} />}</div>;
+  if (mine.length === 0) {
+    return (
+      <div>
+        {title}
+        <Link to="/lineup" data-testid="build-schedule-banner"
+          className="mt-3 flex items-center gap-3 rounded-card border border-structure/40 bg-tint-info px-4 py-3 text-[14px] leading-5 text-fg">
+          <span aria-hidden="true" className="text-[22px]">♥</span>
+          <span className="min-w-0 flex-1">Favorite your artists in the Lineup and your own schedule builds itself here.</span>
+          <span aria-hidden="true" className="text-structure">→</span>
+        </Link>
+        <PlanEmpty />
+        {settingsOpen && <PlanSettings onClose={() => setSettingsOpen(false)} />}
+      </div>
+    );
+  }
   const exportIcs = async () => {
     try { await share.shareFile("blues-and-brews-schedule.ics", "text/calendar", planToIcs(mine, idx.artistsById, idx.stagesById, content.festival)); }
     catch { /* user cancelled the share sheet */ }
@@ -47,7 +61,7 @@ export function PlanScreen() {
     <div>
       {title}
       <div className="mt-2 flex items-center gap-2">
-        <SegmentedControl label="Day" value={day} onChange={setDay} options={content.festival.days.map((d) => ({ value: d.id, label: `${d.label.slice(0, 3)} ${mine.filter((s) => s.dayId === d.id).length}` }))} />
+        <SegmentedControl label="Day" value={day} onChange={setDay} options={content.festival.days.map((d) => ({ value: d.id, label: d.label.slice(0, 3) }))} />
         <div className="flex-1" />
         {conflicts.length > 0 && <Chip tone="ember">{conflicts.length} conflict{conflicts.length > 1 ? "s" : ""}</Chip>}
       </div>

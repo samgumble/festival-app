@@ -28,10 +28,11 @@ for (const theme of THEMES) for (const [clockName, devNow] of Object.entries(CLO
 
 test("live light lineup-grid", async ({ page }) => {
   await page.addInitScript(() => {
-    localStorage.setItem("bb-ui", JSON.stringify({ state: { theme: "light", devNow: "2026-09-19T15:40:00-06:00", lineupView: "grid" }, version: 0 }));
+    localStorage.setItem("bb-ui", JSON.stringify({ state: { theme: "light", devNow: "2026-09-19T15:40:00-06:00" }, version: 1 }));
   });
   await page.goto("/lineup");
   await page.evaluate(() => document.fonts.ready);
+  await page.getByRole("radio", { name: "Grid" }).click();
   await page.getByRole("button", { name: /jump to now/i }).click();
   await page.waitForTimeout(600);
   await page.addStyleTag({ content: "[data-devclock]{display:none!important}" });

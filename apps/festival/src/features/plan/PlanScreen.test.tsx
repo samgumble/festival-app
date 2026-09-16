@@ -14,11 +14,18 @@ describe("Plan", () => {
     usePlanStore.setState({ favorites: [], resolutions: {}, settings: { leadMinutes: 15, bufferMinutes: 10 }, remindersOn: false });
   });
 
-  it("empty state invites the user with headliner quick-adds", async () => {
+  it("empty state invites the user with headliner quick-adds and a build-your-schedule banner", async () => {
     renderAt("/plan");
     expect(await screen.findByRole("heading", { name: /my schedule/i })).toBeInTheDocument();
+    const banner = screen.getByTestId("build-schedule-banner");
+    expect(banner).toHaveAttribute("href", "/lineup");
+    expect(banner).toHaveTextContent(/favorite your artists in the lineup/i);
     fireEvent.click(await screen.findByRole("button", { name: /favorite marcus king band/i }));
     expect(usePlanStore.getState().favorites).toEqual(["fri-marcus-king-band-main-2000"]);
+    expect(screen.queryByTestId("build-schedule-banner")).toBeNull();
+    // day switch shows plain day names, no favorite counts
+    expect(screen.getByRole("radio", { name: "Fri" })).toBeInTheDocument();
+    expect(screen.queryByRole("radio", { name: /Fri \d/ })).toBeNull();
   });
 
   it("marks the Saturday overlap as a conflict on both blocks, side by side", async () => {
@@ -36,12 +43,6 @@ describe("Plan", () => {
     expect(screen.getByTestId("plan-col-title-main").textContent).toBe("Main\nStage"); // two rows
   });
 
-  it("day control carries per-day counts", async () => {
-    usePlanStore.setState({ favorites: [MUSSEL, "fri-eggy-main-1500"] });
-    renderAt("/plan");
-    expect(await screen.findByRole("radio", { name: /fri 1/i })).toBeInTheDocument();
-    expect(screen.getByRole("radio", { name: /sat 1/i })).toBeChecked();
-  });
 
   it("renders every favorite in a three-way overlap as conflicts, columns in stage order", async () => {
     // Saturday 2:00–3:00 Camp, 2:30–3:30 Blues, 2:30–3:30 Truck — all three overlap each other

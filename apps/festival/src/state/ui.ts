@@ -23,6 +23,12 @@ export const useUiStore = create<UiState>()(
       setDevNow: (devNow) => set({ devNow }),
       setLineupView: (lineupView) => set({ lineupView }),
     }),
-    { name: "bb-ui" },
+    {
+      name: "bb-ui",
+      // The Lineup view is session-only: every launch opens in the list (owner request 2026-09-15).
+      partialize: (s) => ({ theme: s.theme, devNow: s.devNow }),
+      version: 1,
+      migrate: (persisted) => { const { lineupView: _drop, ...rest } = (persisted ?? {}) as { lineupView?: unknown; theme?: ThemeChoice; devNow?: string | null }; return { theme: rest.theme ?? "system", devNow: rest.devNow ?? null }; },
+    },
   ),
 );

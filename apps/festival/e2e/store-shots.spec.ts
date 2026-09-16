@@ -256,6 +256,8 @@ for (const screen of SCREENS) {
     await page.goto(screen.path);
     await page.evaluate(() => document.fonts.ready);
     await page.waitForTimeout(400);
+    // The lineup view is session-only (not persisted), so the grid is selected through the control.
+    if (screen.lineupView === "grid") { await page.getByRole("radio", { name: "Grid" }).click(); await page.waitForTimeout(300); }
     if (screen.afterGoto) await screen.afterGoto(page);
     await page.addStyleTag({ content: "[data-devclock]{display:none!important}" });
     const rawPng = await page.screenshot();
