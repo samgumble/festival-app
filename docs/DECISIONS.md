@@ -212,3 +212,11 @@ Format: **ID · Date · Status** — Decision. *Context.* *Alternatives.* *Conse
 **Why.** Owner requests 2026-09-15: the late-night circuit should read in one place; alerts should behave like reminders. Push to a closed app is a separate mechanism (Cloud Messaging, native Firebase config, APNs key pending Apple enrollment) and stays out of v1 per D-021 unless the owner opts in.
 
 **Consequences.** Alerts published while the app is closed are notified on next launch, not at publish time. The `pushOptIn` flag in the alerts store remains unused. Data-safety answers are unaffected (still local notifications only).
+
+## D-037 — Contrast fixes from the accessibility review; the axe gate scans the grid (2026-09-15)
+
+**Decision.** Stage blocks use ink text on sky (4.6:1) instead of white (3.75:1); ended sets are shown desaturated (`saturate-50`) rather than faded, because the 85% opacity fade was what pushed pine, violet and sky text under 4.5:1; block time rows lose their opacity. New themed tokens: `--danger-fg` (ember-deep in light 4.8:1, `#FFB4A6` in dark 5.3:1) for the notifications-off message, and `--on-structure-2` for the `ink` button variant (paper on night in light, ink on sky in dark). The destructive "Yes, reset" button is white on ember-deep (5.9:1); install-sheet step numerals are ink on sky; the active tab icon uses `text-structure` (4.6:1 in dark). Grid block names announce ", favorited" and ", ended". `e2e/a11y.spec.ts` adds a lineup-grid case so the gate covers `STAGE_BG`.
+
+**Why.** Owner chose the contrast fix as the first accessibility item (2026-09-15); see `docs/accessibility/wcag-review-2026-09-15.md` items 1–5 and 14.
+
+**Consequences.** 16/16 axe checks pass in both themes. Remaining from the review: outline rings vs fills and dark-mode block boundaries (1.4.11), per-screen titles, live regions, section headings, native text scaling.

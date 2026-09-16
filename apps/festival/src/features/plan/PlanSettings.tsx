@@ -24,7 +24,7 @@ export function PlanSettings({ onClose }: { onClose: () => void }) {
               </div>
               <Toggle on={remindersOn} onChange={(v) => void onToggle(v)} label="Remind me before my sets" />
             </div>
-            {showDenied && <p className="mt-1.5 text-[13px] text-ember">Notifications are off for this app in Settings. <button type="button" className="underline" onClick={openSettings}>Open Settings</button></p>}
+            {showDenied && <p className="mt-1.5 text-[13px] text-danger-fg">Notifications are off for this app in Settings. <button type="button" className="underline" onClick={openSettings}>Open Settings</button></p>}
             {inexact && (
               <p className="mt-1.5 text-[13px] text-fg-soft">
                 Reminders may arrive a few minutes late. <button type="button" className="underline" onClick={requestExact}>Allow exact timing in Settings</button>

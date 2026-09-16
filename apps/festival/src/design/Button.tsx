@@ -8,7 +8,7 @@ type Props = ButtonHTMLAttributes<HTMLButtonElement> & {
 
 const VARIANT = {
   sun: "bg-gradient-to-b from-sun to-sun-hot text-ink shadow-sun",
-  ink: "bg-structure-2 text-bg",
+  ink: "bg-structure-2 text-on-structure-2",
   ghost: "bg-transparent text-structure border-[1.5px] border-hair",
 };
 const SIZE = {

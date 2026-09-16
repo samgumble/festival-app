@@ -36,7 +36,7 @@ export function gridLayout(sets: FestivalSet[], pxPerHour: number) {
 }
 
 // block fill + text colour per stage: ink on the light fills (amber/bloom/leaf) for AA contrast
-const STAGE_BG = { sky: "bg-sky text-white", plum: "bg-plum text-white", pine: "bg-pine text-white", violet: "bg-violet text-white", amber: "bg-amber text-ink", bloom: "bg-bloom text-ink", leaf: "bg-leaf text-ink", "sun-hot": "bg-sun-hot text-ink" } as const;
+const STAGE_BG = { sky: "bg-sky text-ink", plum: "bg-plum text-white", pine: "bg-pine text-white", violet: "bg-violet text-white", amber: "bg-amber text-ink", bloom: "bg-bloom text-ink", leaf: "bg-leaf text-ink", "sun-hot": "bg-sun-hot text-ink" } as const;
 
 export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
   const content = useContent();
@@ -88,12 +88,12 @@ export function LineupGrid({ dayId, now }: { dayId: DayId; now: Date }) {
                   const width = g.width(s);
                   return (
                     <button key={s.id} type="button" data-favorite={fav} onClick={() => navigate(`/lineup/artist/${artist.id}`)}
-                      aria-label={`${artist.name}, ${time}, ${placeOf(s, grp.stage)}`}
+                      aria-label={`${artist.name}, ${time}, ${placeOf(s, grp.stage)}${fav ? ", favorited" : ""}${isEnded(s, now) ? ", ended" : ""}`}
                       style={{ left: g.left(s), width }}
-                      className={`absolute top-2 h-14 rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] ${STAGE_BG[own.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "opacity-85" : ""} ${width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : ""}`}>
+                      className={`absolute top-2 h-14 rounded-[10px] px-2 py-1 text-left text-[12px] font-semibold leading-[14px] ${STAGE_BG[own.color]} ${fav ? "outline outline-2 -outline-offset-2 outline-sun" : ""} ${isEnded(s, now) ? "saturate-50" : ""} ${width < 44 ? "before:absolute before:inset-y-0 before:-inset-x-1.5 before:content-['']" : ""}`}>
                       <span className="block h-full overflow-hidden">
                         <span className="line-clamp-2 break-words">{artist.name}</span>
-                        <span className="block whitespace-nowrap text-[10px] font-normal opacity-85 tabular-nums">{time}{fav ? " ♥" : ""}</span>
+                        <span className="block whitespace-nowrap text-[10px] font-normal tabular-nums">{time}{fav ? " ♥" : ""}</span>
                       </span>
                     </button>
                   );

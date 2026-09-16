@@ -12,7 +12,7 @@ export function InstallSheet({ onClose }: { onClose: () => void }) {
       <ol className="mt-4 space-y-3">
         {STEPS.map((step, i) => (
           <li key={step} className="flex items-center gap-3 text-[15px]">
-            <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-chip bg-structure-fill font-semibold text-structure-2">{i + 1}</span>
+            <span aria-hidden="true" className="grid h-8 w-8 shrink-0 place-items-center rounded-chip bg-structure-fill font-semibold text-ink">{i + 1}</span>
             <span>
               {i === 0 && <ShareGlyph />}
               {step}

@@ -26,7 +26,7 @@ export function ResetFavorites() {
             <>
               <h2 className="font-display text-[24px] leading-7">Are you sure?</h2>
               <p className="mt-2 text-[15px] text-fg-soft">Your schedule, conflict choices, and reminders for these sets will be removed. This can’t be undone.</p>
-              <div className="mt-4 flex gap-2"><Button className="flex-1" onClick={close}>Keep favorites</Button><Button variant="ink" className="flex-1 bg-ember-deep" onClick={() => { clear(); close(); }}>Yes, reset</Button></div>
+              <div className="mt-4 flex gap-2"><Button className="flex-1" onClick={close}>Keep favorites</Button><Button variant="ink" className="flex-1 bg-ember-deep text-white!" onClick={() => { clear(); close(); }}>Yes, reset</Button></div>
             </>
           )}
         </Sheet>

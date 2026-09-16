@@ -18,7 +18,7 @@ function columnTitle(col: { key: string; label: string; stage: { id: string; nam
   const words = raw.split(" ");
   return words.length === 2 ? words.join("\n") : raw;
 }
-const STAGE_BG = { sky: "bg-sky text-white", plum: "bg-plum text-white", pine: "bg-pine text-white", violet: "bg-violet text-white", amber: "bg-amber text-ink", bloom: "bg-bloom text-ink", leaf: "bg-leaf text-ink", "sun-hot": "bg-sun-hot text-ink" } as const;
+const STAGE_BG = { sky: "bg-sky text-ink", plum: "bg-plum text-white", pine: "bg-pine text-white", violet: "bg-violet text-white", amber: "bg-amber text-ink", bloom: "bg-bloom text-ink", leaf: "bg-leaf text-ink", "sun-hot": "bg-sun-hot text-ink" } as const;
 
 /**
  * The day as a calendar: time runs down the page, one column per stage that holds a favorite
@@ -65,10 +65,10 @@ export function PlanGrid({ sets, now }: { sets: FestivalSet[]; now: Date }) {
                   const top = g.left(s) + 2, height = Math.max(24, g.width(s)); // centred in its slot: 2px above and below
                   return (
                     <Link key={s.id} to={`/lineup/artist/${artist.id}`} data-testid="plan-block" data-conflict={conflict ? "true" : undefined} style={{ top, height }}
-                      className={`absolute inset-x-1.5 block overflow-hidden rounded-[10px] px-1.5 py-1 text-left ${STAGE_BG[own.color]} ${conflict ? "outline outline-2 -outline-offset-2 outline-ember" : ""} ${isEnded(s, now) ? "opacity-85" : ""}`}>
+                      className={`absolute inset-x-1.5 block overflow-hidden rounded-[10px] px-1.5 py-1 text-left ${STAGE_BG[own.color]} ${conflict ? "outline outline-2 -outline-offset-2 outline-ember" : ""} ${isEnded(s, now) ? "saturate-50" : ""}`}>
                       <span className={`line-clamp-2 text-[12px] leading-[14px] ${artist.tier === "headliner" ? "font-display" : "font-semibold"}`}>{conflict ? "⚠ " : ""}{artist.name}</span>
-                      <span className="block text-[10px] leading-3 opacity-85 tabular-nums">{formatRange(parseIso(s.start), parseIso(s.end))}</span>
-                      {s.venue && col.key === col.stage.id && <span className="block truncate text-[10px] leading-3 opacity-85">{placeOf(s, col.stage)}</span>}
+                      <span className="block text-[10px] leading-3 tabular-nums">{formatRange(parseIso(s.start), parseIso(s.end))}</span>
+                      {s.venue && col.key === col.stage.id && <span className="block truncate text-[10px] leading-3">{placeOf(s, col.stage)}</span>}
                       {conflict && <span className="sr-only">{conflict.bufferOnly ? `Under ${settings.bufferMinutes} min gap` : `Overlaps ${conflict.overlapMinutes} min`} with {otherName}</span>}
                     </Link>
                   );

@@ -8,7 +8,7 @@ import { expect, test } from "@playwright/test";
  */
 const AXE = "https://cdnjs.cloudflare.com/ajax/libs/axe-core/4.10.2/axe.min.js";
 const PAGES = [
-  ["now", "/"], ["lineup", "/lineup"], ["plan", "/plan"], ["alerts", "/alerts"], ["info", "/info"],
+  ["now", "/"], ["lineup", "/lineup"], ["lineup-grid", "/lineup"], ["plan", "/plan"], ["alerts", "/alerts"], ["info", "/info"],
   ["privacy", "/privacy"], ["artist", "/lineup/artist/charlie-musselwhite-ga20"],
 ] as const;
 const FAVORITES = ["sat-charlie-musselwhite-ga20-main-1630", "sat-taj-mahal-keb-mo-main-2000"];
@@ -24,6 +24,7 @@ for (const theme of ["light", "dark"] as const) for (const [name, path] of PAGES
     }, [theme, FAVORITES] as const);
     await page.goto(path);
     await page.evaluate(() => document.fonts.ready);
+    if (name === "lineup-grid") { await page.getByRole("radio", { name: "Grid" }).click(); await page.waitForTimeout(300); }
     await page.waitForTimeout(400);
     await page.addScriptTag({ url: AXE });
     const violations = await page.evaluate(async () => {

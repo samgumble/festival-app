@@ -4,6 +4,8 @@ Read-only review. Nothing in the app was changed. Companion document: `vpat-acr-
 
 ## Summary
 
+**Update, later on 2026-09-15:** items 1, 2 and 4 below and the sheet focus management (item 9) are fixed (D-035, D-037); the axe gate now scans the grid view and passes 16/16 in both themes. The VPAT reflects the new state.
+
 The app has a strong accessibility foundation: real HTML semantics everywhere, named icon buttons, reduced-motion fallbacks on every animation, a deliberate 44px touch-target system, and no information conveyed by colour alone. The problems are concentrated in five places, and all of them are fixable in a day or two of work without touching content or layout:
 
 | # | Problem | WCAG | Severity |

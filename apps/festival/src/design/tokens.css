@@ -69,6 +69,8 @@
   --color-accent-plum: var(--accent-plum);
   /* solid card that stands out from the page: white text on navy (light) / plum (dark) */
   --color-contrast: var(--contrast);
+  --color-danger-fg: var(--danger-fg);
+  --color-on-structure-2: var(--on-structure-2);
 }
 
 :root, [data-theme="light"] {
@@ -86,6 +88,8 @@
   --structure: var(--color-night);
   --structure-fill: var(--color-sky);
   --structure-2: var(--color-night);
+  --on-structure-2: var(--color-paper-light); /* text on structure-2: 6.3:1 */
+  --danger-fg: var(--color-ember-deep); /* 4.8:1 on paper-light (a11y review 2026-09-15) */
   --grain-blend: multiply;
   --grain-opacity: 0.10;
   --checker-a: var(--color-ink);
@@ -107,6 +111,8 @@
   --structure: var(--color-sky-light);
   --structure-fill: var(--color-sky);
   --structure-2: var(--color-sky);
+  --on-structure-2: var(--color-ink); /* 4.6:1 on sky */
+  --danger-fg: #FFB4A6; /* 5.3:1 on night */
   --grain-blend: screen;
   --grain-opacity: 0.06;
   --checker-a: var(--color-paper);
