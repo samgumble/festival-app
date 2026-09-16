@@ -45,18 +45,23 @@ if (published.exists() && process.env.SEED_FORCE !== "1") {
 }
 
 const now = new Date().toISOString();
+// Archive the outgoing published version unless that exact version is already in history (the admin
+// console archives on every publish, so a version republished from the console is already there).
+let archive = false;
 if (published.exists()) {
   const old = published.data() as { meta: { contentVersion: string } };
-  const historyDoc = await getDoc(doc(db, "history", old.meta.contentVersion));
-  if (historyDoc.exists()) {
-    console.error(`history/${old.meta.contentVersion} already exists — bump the content version first.`);
+  if (old.meta.contentVersion === content.meta.contentVersion) {
+    console.error(`content/published is already v${old.meta.contentVersion} — bump the content version first.`);
     process.exit(4);
   }
+  const historyDoc = await getDoc(doc(db, "history", old.meta.contentVersion));
+  archive = !historyDoc.exists();
+  if (!archive) console.log(`history/${old.meta.contentVersion} already archived — skipping the archive step.`);
 }
 
 try {
   const batch = writeBatch(db);
-  if (published.exists()) {
+  if (published.exists() && archive) {
     const old = published.data() as { meta: { contentVersion: string } };
     batch.set(doc(db, "history", old.meta.contentVersion), { ...published.data(), archivedAt: now });
   }
