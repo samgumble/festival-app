@@ -1,5 +1,5 @@
 import { motion, useDragControls, type PanInfo } from "motion/react";
-import { useEffect, useRef, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useRef, useState, type PointerEvent as ReactPointerEvent, type ReactNode } from "react";
 import { createPortal } from "react-dom";
 import { appLifecycle } from "@/platform/appLifecycle";
 import { SPRING_SHEET, useMotionOk } from "./motion";
@@ -24,6 +24,20 @@ export function Sheet({ onClose, title, children }: { onClose: () => void; title
   const dialogRef = useRef<HTMLDivElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
   const pending = useRef<{ y: number } | null>(null);
+  const [scrollable, setScrollable] = useState(false);
+
+  // When the content fits without scrolling (artist cards, settings), the whole sheet is the drag
+  // handle: touch-action none keeps the WebView from claiming the gesture as a scroll. Long sheets
+  // keep native scrolling and fall back to the handle plus the at-top downward-swipe heuristic.
+  useLayoutEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const measure = () => setScrollable(el.scrollHeight > el.clientHeight + 1);
+    measure();
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(measure) : null;
+    ro?.observe(el);
+    return () => ro?.disconnect();
+  }, [children]);
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -56,7 +70,10 @@ export function Sheet({ onClose, title, children }: { onClose: () => void; title
 
   // Body drag: only start a dismiss drag when the content is at its scroll top and the finger moves down,
   // so scrolling a long sheet keeps working natively.
-  const onBodyPointerDown = (e: ReactPointerEvent) => { pending.current = { y: e.clientY }; };
+  const onBodyPointerDown = (e: ReactPointerEvent) => {
+    if (!scrollable) { controls.start(e); return; }
+    pending.current = { y: e.clientY };
+  };
   const onBodyPointerMove = (e: ReactPointerEvent) => {
     if (!pending.current) return;
     const dy = e.clientY - pending.current.y;
@@ -82,8 +99,8 @@ export function Sheet({ onClose, title, children }: { onClose: () => void; title
           className="flex min-h-11 shrink-0 cursor-grab items-center px-4 active:cursor-grabbing">
           <div aria-hidden="true" className="mx-auto h-1.5 w-12 rounded-chip bg-hair" />
         </div>
-        <div ref={scrollRef} data-testid="sheet-body" onPointerDown={onBodyPointerDown} onPointerMove={onBodyPointerMove}
-          onPointerUp={onBodyPointerEnd} onPointerCancel={onBodyPointerEnd}
+        <div ref={scrollRef} data-testid="sheet-body" data-scrollable={scrollable ? "true" : "false"} onPointerDown={onBodyPointerDown} onPointerMove={onBodyPointerMove}
+          onPointerUp={onBodyPointerEnd} onPointerCancel={onBodyPointerEnd} style={{ touchAction: scrollable ? "pan-y" : "none" }}
           className="min-h-0 flex-1 overflow-y-auto overscroll-contain px-4 pb-8">
           {children}
         </div>
