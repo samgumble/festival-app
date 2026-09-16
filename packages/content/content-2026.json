@@ -1,6 +1,6 @@
 {
   "meta": {
-    "contentVersion": "2026.09.15.4",
+    "contentVersion": "2026.09.15.5",
     "publishedAt": "2026-09-14T12:00:00-06:00",
     "publishedBy": "seed",
     "sources": [
@@ -322,13 +322,13 @@
       "tier": "lineup"
     },
     {
-      "id": "telluride-blues-challenge-runner-up-2026",
-      "name": "Telluride Blues Challenge 2026 Runner-Up",
+      "id": "yoga-sessions",
+      "name": "Yoga Sessions",
       "tier": "lineup"
     },
     {
-      "id": "yoga-sessions",
-      "name": "Yoga Sessions",
+      "id": "blues-for-breakfast",
+      "name": "Blues For Breakfast",
       "tier": "lineup"
     }
   ],
@@ -931,14 +931,14 @@
       "note": "free"
     },
     {
-      "id": "sun-telluride-blues-challenge-runner-up-2026-special-0900",
-      "artistId": "telluride-blues-challenge-runner-up-2026",
+      "id": "sun-blues-for-breakfast-special-0900",
+      "artistId": "blues-for-breakfast",
       "stageId": "special",
       "dayId": "sun",
       "start": "2026-09-20T09:00:00-06:00",
       "end": "2026-09-20T12:00:00-06:00",
       "venue": "Elks Lodge",
-      "note": "Blues For Breakfast ($) · with Alex Maryol"
+      "note": "($) · with Alex Maryol"
     },
     {
       "id": "sun-music-maker-foundation-artists-special-0900",
